@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anime Sensei Competence Index | RankMint</title>
+<meta property="og:title" content="Anime Sensei Competence Index">
+<meta property="og:description" content="Gojo Satoru scores lower than the volleyball team manager from Haikyuu. This index explains why.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anime Sensei Competence Index">
+<meta name="twitter:description" content="Gojo Satoru scores lower than the volleyball team manager from Haikyuu. This index explains why.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #111a11; }
+  #chart { width: 100%; height: 92vh; min-height: 700px; }
+  .header { padding: 24px 32px 12px; background: #111a11; }
+  .header h1 { font-size: 1.4rem; color: #c8e6a0; }
+  .header p { font-size: 0.85rem; color: #7aaa5a; margin-top: 4px; }
+  .legend { display: flex; gap: 20px; flex-wrap: wrap; padding: 6px 32px 12px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: #b0c8a0; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+  a.back { color: #7aaa5a; font-size: 0.8rem; text-decoration: none; padding: 6px 32px; display: inline-block; }
+  a.back:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Anime Sensei Competence Index — All 30 Teachers Ranked</h1>
+  <p>Scored on: Curriculum Coherence, Student Survival, Emotional Intelligence, Availability, Outcome Delta, Equitable Attention | RankMint 2026</p>
+</div>
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#6abf40"></div> S-Tier: The Model Educators (8.5+)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#a8d878"></div> A-Tier: Actually Good Teachers (7.0–8.49)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#d4e89a"></div> B-Tier: Mixed Results (5.5–6.99)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#e8c87a"></div> C-Tier: The Overrated (3.5–5.49)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#d4785a"></div> D-Tier: The Coattail Legends (0–3.49)</div>
+</div>
+<div id="chart"></div>
+<a class="back" href="index.html">Back to full report</a>
+<script>
+const DATA = [
+  { rank:1,  name:"Koro-sensei",       series:"Assassination Classroom",  curriculum:10, survival:10, emotional:10, availability:10, delta:8,  equity:10, score:9.70, tier:"S" },
+  { rank:2,  name:"Biscuit Krueger",   series:"Hunter x Hunter",          curriculum:9,  survival:10, emotional:7,  availability:9,  delta:9,  equity:8,  score:8.74, tier:"S" },
+  { rank:3,  name:"Izumi Curtis",      series:"Fullmetal Alchemist",      curriculum:9,  survival:9,  emotional:7,  availability:9,  delta:10, equity:8,  score:8.69, tier:"S" },
+  { rank:4,  name:"Wing",              series:"Hunter x Hunter",          curriculum:9,  survival:10, emotional:7,  availability:8,  delta:9,  equity:8,  score:8.57, tier:"S" },
+  { rank:5,  name:"Coach Anzai",       series:"Slam Dunk",                curriculum:7,  survival:10, emotional:8,  availability:8,  delta:7,  equity:9,  score:8.15, tier:"A" },
+  { rank:6,  name:"Coach Ukai",        series:"Haikyuu!!",                curriculum:7,  survival:10, emotional:7,  availability:9,  delta:6,  equity:9,  score:7.99, tier:"A" },
+  { rank:7,  name:"Might Guy",         series:"Naruto",                   curriculum:5,  survival:10, emotional:8,  availability:9,  delta:8,  equity:7,  score:7.87, tier:"A" },
+  { rank:8,  name:"Aizawa Shouta",     series:"My Hero Academia",         curriculum:7,  survival:9,  emotional:7,  availability:9,  delta:6,  equity:8,  score:7.69, tier:"A" },
+  { rank:9,  name:"Iruka Umino",       series:"Naruto",                   curriculum:4,  survival:10, emotional:9,  availability:10, delta:4,  equity:9,  score:7.62, tier:"A" },
+  { rank:10, name:"Bang",              series:"One-Punch Man",            curriculum:7,  survival:10, emotional:7,  availability:7,  delta:7,  equity:7,  score:7.60, tier:"A" },
+  { rank:11, name:"Sakonji Urokodaki", series:"Demon Slayer",             curriculum:7,  survival:8,  emotional:5,  availability:8,  delta:9,  equity:6,  score:7.21, tier:"A" },
+  { rank:12, name:"Onizuka Eikichi",   series:"Great Teacher Onizuka",    curriculum:4,  survival:9,  emotional:9,  availability:8,  delta:6,  equity:7,  score:7.18, tier:"A" },
+  { rank:13, name:"Genkai",            series:"Yu Yu Hakusho",            curriculum:7,  survival:7,  emotional:6,  availability:7,  delta:9,  equity:7,  score:7.12, tier:"A" },
+  { rank:14, name:"Takeda Ittetsu",    series:"Haikyuu!!",                curriculum:3,  survival:10, emotional:8,  availability:10, delta:2,  equity:9,  score:6.94, tier:"B" },
+  { rank:15, name:"Piccolo",           series:"Dragon Ball Z",            curriculum:5,  survival:8,  emotional:7,  availability:7,  delta:8,  equity:5,  score:6.75, tier:"B" },
+  { rank:16, name:"Reborn",            series:"Katekyo Hitman Reborn",    curriculum:6,  survival:8,  emotional:4,  availability:7,  delta:8,  equity:6,  score:6.51, tier:"B" },
+  { rank:17, name:"Urahara Kisuke",    series:"Bleach",                   curriculum:5,  survival:7,  emotional:5,  availability:5,  delta:8,  equity:5,  score:5.85, tier:"B" },
+  { rank:18, name:"Silvers Rayleigh",  series:"One Piece",                curriculum:4,  survival:8,  emotional:5,  availability:5,  delta:8,  equity:5,  score:5.85, tier:"B" },
+  { rank:19, name:"Jiraiya",           series:"Naruto",                   curriculum:5,  survival:5,  emotional:5,  availability:6,  delta:8,  equity:7,  score:5.82, tier:"B" },
+  { rank:20, name:"Kakashi Hatake",    series:"Naruto",                   curriculum:4,  survival:7,  emotional:5,  availability:6,  delta:7,  equity:3,  score:5.47, tier:"C" },
+  { rank:21, name:"Master Roshi",      series:"Dragon Ball",              curriculum:4,  survival:7,  emotional:3,  availability:6,  delta:7,  equity:6,  score:5.41, tier:"C" },
+  { rank:22, name:"Makarov Dreyar",    series:"Fairy Tail",               curriculum:2,  survival:6,  emotional:7,  availability:6,  delta:4,  equity:5,  score:4.98, tier:"C" },
+  { rank:23, name:"Gildarts Clive",    series:"Fairy Tail",               curriculum:2,  survival:7,  emotional:4,  availability:4,  delta:5,  equity:4,  score:4.35, tier:"C" },
+  { rank:24, name:"All Might",         series:"My Hero Academia",         curriculum:2,  survival:4,  emotional:6,  availability:5,  delta:6,  equity:2,  score:4.23, tier:"C" },
+  { rank:25, name:"Yami Sukehiro",     series:"Black Clover",             curriculum:2,  survival:6,  emotional:3,  availability:6,  delta:5,  equity:2,  score:4.11, tier:"C" },
+  { rank:26, name:"Gojo Satoru",       series:"Jujutsu Kaisen",           curriculum:2,  survival:4,  emotional:3,  availability:3,  delta:5,  equity:2,  score:3.20, tier:"D" },
+  { rank:27, name:"Shanks",            series:"One Piece",                curriculum:1,  survival:6,  emotional:4,  availability:1,  delta:3,  equity:2,  score:2.94, tier:"D" },
+  { rank:28, name:"Endeavor",          series:"My Hero Academia",         curriculum:1,  survival:5,  emotional:1,  availability:2,  delta:5,  equity:1,  score:2.57, tier:"D" },
+  { rank:29, name:"Ging Freecss",      series:"Hunter x Hunter",          curriculum:1,  survival:5,  emotional:1,  availability:1,  delta:4,  equity:2,  score:2.35, tier:"D" },
+  { rank:30, name:"Kamina",            series:"Gurren Lagann",            curriculum:1,  survival:1,  emotional:3,  availability:1,  delta:3,  equity:5,  score:2.06, tier:"D" },
+];
+
+const TIER_COLORS = { S: "#6abf40", A: "#a8d878", B: "#d4e89a", C: "#e8c87a", D: "#d4785a" };
+
+const sorted = [...DATA].sort((a, b) => b.score - a.score);
+const names = sorted.map(d => d.name).reverse();
+const scores = sorted.map(d => d.score).reverse();
+const tiers = sorted.map(d => d.tier).reverse();
+const colors = tiers.map(t => TIER_COLORS[t]);
+
+const chart = echarts.init(document.getElementById("chart"));
+chart.setOption({
+  backgroundColor: "#111a11",
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    backgroundColor: "#1e2e1a",
+    borderColor: "#4a7a30",
+    textStyle: { color: "#d4eab0" },
+    formatter: params => {
+      const idx = params[0].dataIndex;
+      const d = sorted[scores.length - 1 - idx];
+      return `<b style="color:#c8e6a0">${d.name}</b> <span style="color:#888">(${d.series})</span><br/>
+        <span style="color:#6abf40">Score: ${d.score.toFixed(2)}</span> — Tier ${d.tier}<br/>
+        <span style="color:#aaa">Curriculum: ${d.curriculum}/10 &nbsp; Survival: ${d.survival}/10</span><br/>
+        <span style="color:#aaa">Emotional IQ: ${d.emotional}/10 &nbsp; Availability: ${d.availability}/10</span><br/>
+        <span style="color:#aaa">Outcome Delta: ${d.delta}/10 &nbsp; Equitable Attn: ${d.equity}/10</span>`;
+    }
+  },
+  grid: { left: "24%", right: "12%", top: 20, bottom: 30 },
+  xAxis: {
+    type: "value",
+    name: "Competence Score",
+    nameTextStyle: { color: "#7aaa5a", fontSize: 11 },
+    max: 11,
+    axisLabel: { color: "#7aaa5a" },
+    splitLine: { lineStyle: { color: "#1e2e1a" } },
+    axisLine: { lineStyle: { color: "#2e4e20" } },
+  },
+  yAxis: {
+    type: "category",
+    data: names,
+    axisLabel: { color: "#c8e6a0", fontSize: 11.5 },
+    axisLine: { lineStyle: { color: "#2e4e20" } },
+  },
+  dataZoom: [
+    { type: "slider", yAxisIndex: 0, start: 0, end: 100, width: 16, right: 4,
+      borderColor: "#2e4e20", fillerColor: "rgba(100,180,60,0.15)", handleStyle: { color: "#6abf40" } },
+    { type: "inside", yAxisIndex: 0, filterMode: "none" }
+  ],
+  series: [{
+    type: "bar",
+    data: scores.map((v, i) => ({ value: v, itemStyle: { color: colors[i], borderRadius: [0, 4, 4, 0] } })),
+    barWidth: "55%",
+    label: {
+      show: true,
+      position: "right",
+      formatter: p => p.value.toFixed(2),
+      color: "#c8e6a0",
+      fontSize: 11,
+    },
+    animationDuration: 1600,
+    animationEasing: "elasticOut",
+    animationDelay: (idx) => idx * 30,
+  }],
+  graphic: [
+    { type: "text", right: 18, bottom: 8, style: { text: "RankMint", fontSize: 11, fill: "#3a5a2a", fontStyle: "italic" } },
+  ],
+});
+
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

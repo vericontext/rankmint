@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anime Sensei Competence Index | RankMint</title>
+<!-- OG Meta Tags -->
+<meta property="og:title" content="Anime Sensei Competence Index">
+<meta property="og:description" content="Gojo Satoru has the most powerful students in jujutsu history. He also scores lower than the volleyball team manager from Haikyuu. This index explains why.">
+<meta property="og:image" content="card.png">
+<meta property="og:url" content="https://rankmint.io/anime-sensei-competence-index/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anime Sensei Competence Index">
+<meta name="twitter:description" content="Gojo Satoru has the most powerful students in jujutsu history. He also scores lower than the volleyball team manager from Haikyuu.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1a10; --bg2: #1a2e18; --text: #d4e8b0; --muted: #6aaa50;
+    --accent: #6abf40; --accent2: #a8d878; --card-bg: #162414; --border: #2a4a20;
+    --s-color: #3da642; --a-color: #78b840; --b-color: #b8cc50; --c-color: #e8a840; --d-color: #d05030;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+  /* Hero */
+  .hero { text-align: center; padding: 56px 20px 44px; background: linear-gradient(160deg, #0a120a 0%, #0f2010 60%, #1a3010 100%); color: #fff; position: relative; overflow: hidden; }
+  .hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(100,190,60,0.12) 0%, transparent 70%); }
+  .hero h1 { font-size: 2.1rem; margin-bottom: 14px; line-height: 1.25; font-weight: 800; letter-spacing: -0.5px; position: relative; }
+  .hero .hook { font-size: 1.05rem; color: #8aca6a; max-width: 600px; margin: 0 auto 28px; position: relative; }
+  .hero .counter { font-size: 3.8rem; font-weight: 900; color: var(--accent); position: relative; }
+  .hero .counter-label { font-size: 0.9rem; color: #5a8a40; margin-top: 6px; position: relative; }
+  .hero-nav { display: flex; gap: 10px; justify-content: center; margin-top: 24px; flex-wrap: wrap; position: relative; }
+  .hero-nav a { padding: 8px 18px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; text-decoration: none;
+    background: rgba(100,190,60,0.15); color: #a8d878; border: 1px solid rgba(100,190,60,0.25); transition: all 0.2s; }
+  .hero-nav a:hover { background: rgba(100,190,60,0.3); color: #c8e890; }
+
+  /* Surprise Callout */
+  .surprise { background: linear-gradient(135deg, #2a5e18 0%, #1e4a14 100%);
+    border: 1px solid rgba(100,190,60,0.3); color: #c8e6a0;
+    padding: 28px 32px; border-radius: 14px; margin: -26px auto 36px; max-width: 720px;
+    position: relative; z-index: 1; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+  .surprise h2 { font-size: 1.1rem; margin-bottom: 10px; color: #a8e060; }
+  .surprise p { font-size: 0.92rem; color: #9acc7a; line-height: 1.65; }
+
+  /* Chart Section */
+  .chart-section { margin: 36px 0; }
+  .section-title { font-size: 1.2rem; color: var(--accent2); margin-bottom: 14px; font-weight: 700; }
+  #main-chart { width: 100%; height: 520px; background: var(--card-bg); border-radius: 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .chart-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+  .chart-link { padding: 7px 16px; border-radius: 7px; font-size: 0.8rem; font-weight: 600;
+    text-decoration: none; background: var(--card-bg); color: var(--accent); border: 1px solid var(--border);
+    transition: all 0.2s; }
+  .chart-link:hover { background: var(--bg2); border-color: var(--accent); }
+
+  /* Taxonomy */
+  .taxonomy { margin: 36px 0; }
+  .tax-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+  .tax-card { background: var(--card-bg); border-radius: 12px; padding: 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    border: 1px solid var(--border); }
+  .tax-card h3 { font-size: 0.95rem; margin-bottom: 4px; font-weight: 700; }
+  .tax-card .tax-desc { font-size: 0.8rem; color: var(--muted); margin-bottom: 12px; }
+  .tax-card table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  .tax-card th, .tax-card td { padding: 5px 7px; text-align: left; border-bottom: 1px solid var(--border); }
+  .tax-card th { color: var(--muted); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  .tax-card td { color: var(--text); }
+  .tax-card .rank-num { color: var(--accent); font-weight: 700; }
+
+  /* Find Yourself */
+  .find-yourself { margin: 36px 0; text-align: center; padding: 36px 20px;
+    background: var(--card-bg); border-radius: 14px; border: 1px solid var(--border); }
+  .find-yourself h2 { font-size: 1.2rem; color: var(--accent2); margin-bottom: 8px; }
+  .find-yourself p { font-size: 0.85rem; color: var(--muted); margin-bottom: 18px; }
+  .find-yourself select { padding: 10px 20px; font-size: 0.95rem; border: 2px solid var(--border);
+    border-radius: 9px; background: var(--bg); color: var(--text); min-width: 260px; cursor: pointer; }
+  .find-yourself select:focus { outline: none; border-color: var(--accent); }
+  .result-card { display: none; margin: 22px auto 0; max-width: 420px; padding: 24px;
+    background: linear-gradient(135deg, #1a3018 0%, #0f2010 100%); border: 1px solid rgba(100,190,60,0.3);
+    color: #fff; border-radius: 12px; text-align: center; }
+  .result-card .r-rank { font-size: 2.8rem; font-weight: 900; color: var(--accent); }
+  .result-card .r-name { font-size: 1.2rem; margin: 6px 0 4px; color: #c8e6a0; }
+  .result-card .r-series { font-size: 0.8rem; color: #6aaa4a; margin-bottom: 10px; }
+  .result-card .r-score { font-size: 1.1rem; font-weight: 700; color: var(--accent2); }
+  .result-card .r-metrics { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 12px; }
+  .result-card .metric-chip { background: rgba(100,190,60,0.1); border: 1px solid rgba(100,190,60,0.2);
+    border-radius: 20px; padding: 3px 10px; font-size: 0.72rem; color: #8aca6a; }
+
+  /* Surprise / findings section */
+  .findings { margin: 36px 0; }
+  .finding-item { background: var(--card-bg); border-radius: 12px; padding: 22px 24px; margin-bottom: 14px;
+    border-left: 4px solid var(--accent); border-right: none; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .finding-item h3 { font-size: 1rem; color: var(--accent2); margin-bottom: 8px; }
+  .finding-item p { font-size: 0.88rem; color: #9acc7a; line-height: 1.65; }
+  .finding-item .score-highlight { color: var(--accent); font-weight: 700; }
+
+  /* Full Table */
+  .full-table { margin: 36px 0; }
+  .table-search { width: 100%; padding: 10px 16px; border: 1px solid var(--border); border-radius: 9px;
+    font-size: 0.9rem; margin-bottom: 12px; background: var(--card-bg); color: var(--text); }
+  .table-search::placeholder { color: var(--muted); }
+  .full-table table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: var(--card-bg);
+    border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+  .full-table th { background: #0d1e0c; color: #8acc6a; padding: 10px 12px; text-align: left;
+    cursor: pointer; user-select: none; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  .full-table th:hover { background: #1a3018; color: var(--accent); }
+  .full-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text); }
+  .full-table tr:hover td { background: rgba(100,190,60,0.05); }
+  .tier-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem;
+    font-weight: 700; color: #fff; }
+  .tier-S { background: #3da642; } .tier-A { background: #78b840; } .tier-B { background: #8c9e30; }
+  .tier-C { background: #c08020; } .tier-D { background: #c04020; }
+
+  /* Methodology */
+  .methodology { margin: 36px 0; padding: 24px; background: var(--card-bg); border-radius: 12px;
+    font-size: 0.83rem; color: var(--muted); border: 1px solid var(--border); }
+  .methodology h2 { font-size: 1rem; color: var(--accent2); margin-bottom: 12px; }
+  .methodology p, .methodology li { margin-bottom: 8px; }
+  .methodology ul { padding-left: 20px; }
+
+  /* Share Bar */
+  .share-bar { display: flex; justify-content: center; gap: 10px; padding: 28px 0; flex-wrap: wrap; }
+  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px;
+    border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600;
+    color: #fff; transition: transform 0.2s; }
+  .share-btn:hover { transform: translateY(-2px); }
+  .share-twitter { background: #1DA1F2; } .share-linkedin { background: #0A66C2; }
+  .share-copy { background: #2e4e20; cursor: pointer; border: none; font-size: 0.85rem; font-weight: 600; color: #fff; }
+
+  .footer { text-align: center; padding: 18px; color: #2a4a20; font-size: 0.75rem; font-style: italic; }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 1.4rem; }
+    .hero .counter { font-size: 2.5rem; }
+    .tax-grid { grid-template-columns: 1fr; }
+    .full-table table { font-size: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <h1>Anime Sensei Competence Index</h1>
+    <p class="hook">Gojo Satoru has the most powerful students in jujutsu history. He also scores lower than the volleyball team manager from Haikyuu. This index explains why.</p>
+    <div class="counter" id="hero-counter">0.0</div>
+    <div class="counter-label">#1: Koro-sensei — 9.70 / 10.0</div>
+    <nav class="hero-nav">
+      <a href="chart.html">Full Bar Chart</a>
+      <a href="chart_tier.html">Tier List</a>
+      <a href="chart_radar.html">Head-to-Head Radar</a>
+      <a href="#find-section">Find Your Sensei</a>
+    </nav>
+  </div>
+</section>
+
+<!-- Surprise Callout -->
+<section class="container">
+  <div class="surprise">
+    <h2>The Fan-Favorite Inversion</h2>
+    <p>The expected top 3 by fan perception: Gojo Satoru, All Might, Kakashi Hatake. The actual top 3 by formula: Koro-sensei (9.70), Biscuit Krueger (8.74), Izumi Curtis (8.69). The formula weights curriculum design and availability most heavily — two dimensions where the most powerful characters systematically score near-zero. Gojo: 3.20. All Might: 4.23. Kakashi: 5.47. Iruka Umino, the chunin Academy teacher with no famous battles: 7.62.</p>
+  </div>
+</section>
+
+<!-- Chart -->
+<section class="chart-section container">
+  <div class="section-title">The Full Rankings</div>
+  <div id="main-chart"></div>
+  <div class="chart-links">
+    <a class="chart-link" href="chart.html">Full interactive bar chart</a>
+    <a class="chart-link" href="chart_tier.html">S/A/B/C/D tier list</a>
+    <a class="chart-link" href="chart_radar.html">Head-to-head radar comparison</a>
+  </div>
+</section>
+
+<!-- Taxonomy -->
+<section class="taxonomy container">
+  <div class="section-title">The Taxonomy</div>
+  <div class="tax-grid" id="tax-grid">
+    <div class="tax-card">
+      <h3 style="color:#3da642">S-Tier: The Model Educators</h3>
+      <div class="tax-desc">Intentional curriculum, full presence, zero student deaths, equitable investment. These teachers did the work before the student walked in the door.</div>
+      <table>
+        <tr><th>Rank</th><th>Teacher</th><th>Score</th></tr>
+        <tr><td class="rank-num">#1</td><td>Koro-sensei</td><td>9.70</td></tr>
+        <tr><td class="rank-num">#2</td><td>Biscuit Krueger</td><td>8.74</td></tr>
+        <tr><td class="rank-num">#3</td><td>Izumi Curtis</td><td>8.69</td></tr>
+        <tr><td class="rank-num">#4</td><td>Wing</td><td>8.57</td></tr>
+      </table>
+    </div>
+    <div class="tax-card">
+      <h3 style="color:#78b840">A-Tier: Actually Good Teachers</h3>
+      <div class="tax-desc">Present, emotionally intelligent, and doing real instructional work. The Iruka Umino tier — unglamorous, consistent, effective.</div>
+      <table>
+        <tr><th>Rank</th><th>Teacher</th><th>Score</th></tr>
+        <tr><td class="rank-num">#5</td><td>Coach Anzai</td><td>8.15</td></tr>
+        <tr><td class="rank-num">#7</td><td>Might Guy</td><td>7.87</td></tr>
+        <tr><td class="rank-num">#9</td><td>Iruka Umino</td><td>7.62</td></tr>
+        <tr><td class="rank-num">#13</td><td>Genkai</td><td>7.12</td></tr>
+      </table>
+    </div>
+    <div class="tax-card">
+      <h3 style="color:#b8cc50">B-Tier: Mixed Results</h3>
+      <div class="tax-desc">Genuine skills in one dimension, structural gaps in another. Kakashi-adjacent — talented but incomplete.</div>
+      <table>
+        <tr><th>Rank</th><th>Teacher</th><th>Score</th></tr>
+        <tr><td class="rank-num">#15</td><td>Piccolo</td><td>6.75</td></tr>
+        <tr><td class="rank-num">#16</td><td>Reborn</td><td>6.51</td></tr>
+        <tr><td class="rank-num">#19</td><td>Jiraiya</td><td>5.82</td></tr>
+      </table>
+    </div>
+    <div class="tax-card">
+      <h3 style="color:#e8a840">C-Tier: The Overrated</h3>
+      <div class="tax-desc">Iconic characters, systematic gaps. Favoritism, chronic absence, or no curriculum beneath the inspiration.</div>
+      <table>
+        <tr><th>Rank</th><th>Teacher</th><th>Score</th></tr>
+        <tr><td class="rank-num">#20</td><td>Kakashi Hatake</td><td>5.47</td></tr>
+        <tr><td class="rank-num">#24</td><td>All Might</td><td>4.23</td></tr>
+        <tr><td class="rank-num">#25</td><td>Yami Sukehiro</td><td>4.11</td></tr>
+      </table>
+    </div>
+    <div class="tax-card">
+      <h3 style="color:#d05030">D-Tier: The Coattail Legends</h3>
+      <div class="tax-desc">Their students are iconic. The teaching was not. Absent, dead, imprisoned, or present for a single conversation.</div>
+      <table>
+        <tr><th>Rank</th><th>Teacher</th><th>Score</th></tr>
+        <tr><td class="rank-num">#26</td><td>Gojo Satoru</td><td>3.20</td></tr>
+        <tr><td class="rank-num">#27</td><td>Shanks</td><td>2.94</td></tr>
+        <tr><td class="rank-num">#30</td><td>Kamina</td><td>2.06</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Key Findings -->
+<section class="findings container">
+  <div class="section-title">The Surprising Findings</div>
+
+  <div class="finding-item">
+    <h3>Might Guy (#7) outranks Kakashi (#20) — by 2.4 points</h3>
+    <p>The joke character turns out to have been doing the real work. Guy scores <span class="score-highlight">10/10 on student survival</span>, <span class="score-highlight">8/10 on emotional intelligence</span> (the Rock Lee recovery arc is one of the most attentive teacher moments in Naruto), and <span class="score-highlight">9/10 on availability</span>. Kakashi: 3/10 on equitable attention. The formula is not impressed by a Sharingan.</p>
+  </div>
+
+  <div class="finding-item">
+    <h3>Iruka Umino (#9) outranks Gojo, All Might, and Kakashi — combined average</h3>
+    <p>Iruka's <span class="score-highlight">7.62</span> beats the combined average of Gojo (3.20), All Might (4.23), and Kakashi (5.47) — which is 4.30. He has no Sharingan, no Six Eyes, no One For All. He has <span class="score-highlight">10/10 availability</span>, <span class="score-highlight">10/10 student survival</span>, and <span class="score-highlight">9/10 emotional intelligence</span>. He is the first adult in Naruto who treats Naruto like a child. That is measurable. That is pedagogy.</p>
+  </div>
+
+  <div class="finding-item">
+    <h3>Gojo Satoru (3.20) scores below Takeda Ittetsu (6.94) — the Haikyuu faculty advisor who cannot play volleyball</h3>
+    <p>Takeda's direct contribution to skill development is minimal (outcome delta: <span class="score-highlight">2/10</span>). He secures match schedules and finds coaches. But he scores <span class="score-highlight">10/10 on availability</span>, <span class="score-highlight">10/10 on student survival</span>, <span class="score-highlight">9/10 on equitable attention</span>. Gojo: imprisoned, no curriculum, extreme favoritism. Reliable presence for every student beats intermittent genius for one. That is the thesis of this entire index.</p>
+  </div>
+</section>
+
+<!-- Find Yourself -->
+<section class="find-yourself container" id="find-section">
+  <h2>Find Your Sensei</h2>
+  <p>Select a teacher to see their full competence profile</p>
+  <select id="find-select">
+    <option value="">-- Select a teacher --</option>
+  </select>
+  <div class="result-card" id="result-card">
+    <div class="r-rank" id="result-rank"></div>
+    <div class="r-name" id="result-name"></div>
+    <div class="r-series" id="result-series"></div>
+    <div class="r-score" id="result-score"></div>
+    <div class="r-metrics" id="result-metrics"></div>
+  </div>
+</section>
+
+<!-- Full Table -->
+<section class="full-table container">
+  <div class="section-title">Full Rankings</div>
+  <input type="text" class="table-search" id="table-search" placeholder="Search teachers, series...">
+  <table id="ranking-table">
+    <thead id="table-head"></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</section>
+
+<!-- Methodology -->
+<section class="methodology container" id="methodology">
+  <h2>Methodology</h2>
+  <p><strong>Formula:</strong> CompetenceScore = (0.20 x CurriculumCoherence) + (0.20 x StudentSurvivalRate) + (0.18 x EmotionalIntelligence) + (0.17 x AvailabilityPresence) + (0.15 x StudentOutcomeDelta) + (0.10 x EquitableAttention)</p>
+  <p>All metrics scored 0-10 using a four-anchor rubric applied to canonical anime and manga source material. Scores reflect analyst judgment applied consistently to the defined rubric.</p>
+  <ul>
+    <li><strong>Data sources:</strong> Anime canon and manga source material. Verification via fandom wikis (naruto.fandom.com, myheroacademia.fandom.com, hunterxhunter.fandom.com) and episode guides (AniList, IMDb).</li>
+    <li><strong>Collection date:</strong> March 2026</li>
+    <li><strong>Sample size:</strong> 30 teachers across shonen, seinen, sports, and mecha genres</li>
+    <li><strong>Note:</strong> This is a qualitative pop culture index. Individual scores may vary by +/-1 depending on interpretation of edge cases. Formula and rubric published in full in plan.md.</li>
+  </ul>
+</section>
+
+<!-- Share Bar -->
+<div class="share-bar">
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on Twitter</a>
+  <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">Share on LinkedIn</a>
+  <button class="share-btn share-copy" id="share-copy">Copy Link</button>
+</div>
+
+<div class="footer">Generated by RankMint</div>
+
+<script>
+const DATA = [
+  { rank:1,  name:"Koro-sensei",       series:"Assassination Classroom",  curriculum:10, survival:10, emotional:10, availability:10, delta:8,  equity:10, score:9.70, tier:"S" },
+  { rank:2,  name:"Biscuit Krueger",   series:"Hunter x Hunter",          curriculum:9,  survival:10, emotional:7,  availability:9,  delta:9,  equity:8,  score:8.74, tier:"S" },
+  { rank:3,  name:"Izumi Curtis",      series:"Fullmetal Alchemist",      curriculum:9,  survival:9,  emotional:7,  availability:9,  delta:10, equity:8,  score:8.69, tier:"S" },
+  { rank:4,  name:"Wing",              series:"Hunter x Hunter",          curriculum:9,  survival:10, emotional:7,  availability:8,  delta:9,  equity:8,  score:8.57, tier:"S" },
+  { rank:5,  name:"Coach Anzai",       series:"Slam Dunk",                curriculum:7,  survival:10, emotional:8,  availability:8,  delta:7,  equity:9,  score:8.15, tier:"A" },
+  { rank:6,  name:"Coach Ukai",        series:"Haikyuu!!",                curriculum:7,  survival:10, emotional:7,  availability:9,  delta:6,  equity:9,  score:7.99, tier:"A" },
+  { rank:7,  name:"Might Guy",         series:"Naruto",                   curriculum:5,  survival:10, emotional:8,  availability:9,  delta:8,  equity:7,  score:7.87, tier:"A" },
+  { rank:8,  name:"Aizawa Shouta",     series:"My Hero Academia",         curriculum:7,  survival:9,  emotional:7,  availability:9,  delta:6,  equity:8,  score:7.69, tier:"A" },
+  { rank:9,  name:"Iruka Umino",       series:"Naruto",                   curriculum:4,  survival:10, emotional:9,  availability:10, delta:4,  equity:9,  score:7.62, tier:"A" },
+  { rank:10, name:"Bang",              series:"One-Punch Man",            curriculum:7,  survival:10, emotional:7,  availability:7,  delta:7,  equity:7,  score:7.60, tier:"A" },
+  { rank:11, name:"Sakonji Urokodaki", series:"Demon Slayer",             curriculum:7,  survival:8,  emotional:5,  availability:8,  delta:9,  equity:6,  score:7.21, tier:"A" },
+  { rank:12, name:"Onizuka Eikichi",   series:"Great Teacher Onizuka",    curriculum:4,  survival:9,  emotional:9,  availability:8,  delta:6,  equity:7,  score:7.18, tier:"A" },
+  { rank:13, name:"Genkai",            series:"Yu Yu Hakusho",            curriculum:7,  survival:7,  emotional:6,  availability:7,  delta:9,  equity:7,  score:7.12, tier:"A" },
+  { rank:14, name:"Takeda Ittetsu",    series:"Haikyuu!!",                curriculum:3,  survival:10, emotional:8,  availability:10, delta:2,  equity:9,  score:6.94, tier:"B" },
+  { rank:15, name:"Piccolo",           series:"Dragon Ball Z",            curriculum:5,  survival:8,  emotional:7,  availability:7,  delta:8,  equity:5,  score:6.75, tier:"B" },
+  { rank:16, name:"Reborn",            series:"Katekyo Hitman Reborn",    curriculum:6,  survival:8,  emotional:4,  availability:7,  delta:8,  equity:6,  score:6.51, tier:"B" },
+  { rank:17, name:"Urahara Kisuke",    series:"Bleach",                   curriculum:5,  survival:7,  emotional:5,  availability:5,  delta:8,  equity:5,  score:5.85, tier:"B" },
+  { rank:18, name:"Silvers Rayleigh",  series:"One Piece",                curriculum:4,  survival:8,  emotional:5,  availability:5,  delta:8,  equity:5,  score:5.85, tier:"B" },
+  { rank:19, name:"Jiraiya",           series:"Naruto",                   curriculum:5,  survival:5,  emotional:5,  availability:6,  delta:8,  equity:7,  score:5.82, tier:"B" },
+  { rank:20, name:"Kakashi Hatake",    series:"Naruto",                   curriculum:4,  survival:7,  emotional:5,  availability:6,  delta:7,  equity:3,  score:5.47, tier:"C" },
+  { rank:21, name:"Master Roshi",      series:"Dragon Ball",              curriculum:4,  survival:7,  emotional:3,  availability:6,  delta:7,  equity:6,  score:5.41, tier:"C" },
+  { rank:22, name:"Makarov Dreyar",    series:"Fairy Tail",               curriculum:2,  survival:6,  emotional:7,  availability:6,  delta:4,  equity:5,  score:4.98, tier:"C" },
+  { rank:23, name:"Gildarts Clive",    series:"Fairy Tail",               curriculum:2,  survival:7,  emotional:4,  availability:4,  delta:5,  equity:4,  score:4.35, tier:"C" },
+  { rank:24, name:"All Might",         series:"My Hero Academia",         curriculum:2,  survival:4,  emotional:6,  availability:5,  delta:6,  equity:2,  score:4.23, tier:"C" },
+  { rank:25, name:"Yami Sukehiro",     series:"Black Clover",             curriculum:2,  survival:6,  emotional:3,  availability:6,  delta:5,  equity:2,  score:4.11, tier:"C" },
+  { rank:26, name:"Gojo Satoru",       series:"Jujutsu Kaisen",           curriculum:2,  survival:4,  emotional:3,  availability:3,  delta:5,  equity:2,  score:3.20, tier:"D" },
+  { rank:27, name:"Shanks",            series:"One Piece",                curriculum:1,  survival:6,  emotional:4,  availability:1,  delta:3,  equity:2,  score:2.94, tier:"D" },
+  { rank:28, name:"Endeavor",          series:"My Hero Academia",         curriculum:1,  survival:5,  emotional:1,  availability:2,  delta:5,  equity:1,  score:2.57, tier:"D" },
+  { rank:29, name:"Ging Freecss",      series:"Hunter x Hunter",          curriculum:1,  survival:5,  emotional:1,  availability:1,  delta:4,  equity:2,  score:2.35, tier:"D" },
+  { rank:30, name:"Kamina",            series:"Gurren Lagann",            curriculum:1,  survival:1,  emotional:3,  availability:1,  delta:3,  equity:5,  score:2.06, tier:"D" },
+];
+
+const TIER_COLORS = { S: "#3da642", A: "#78b840", B: "#8c9e30", C: "#c08020", D: "#c04020" };
+
+// Counter animation
+const counterEl = document.getElementById("hero-counter");
+let count = 0;
+const target = 9.70;
+const step = target / 70;
+function animateCounter() {
+  count = Math.min(count + step, target);
+  counterEl.textContent = count.toFixed(2);
+  if (count < target) requestAnimationFrame(animateCounter);
+}
+animateCounter();
+
+// Bar chart
+const sorted = [...DATA].sort((a, b) => b.score - a.score);
+const names = sorted.map(d => d.name).reverse();
+const scores = sorted.map(d => d.score).reverse();
+const tiers = sorted.map(d => d.tier).reverse();
+const barColors = tiers.map(t => TIER_COLORS[t]);
+
+const chart = echarts.init(document.getElementById("main-chart"));
+chart.setOption({
+  backgroundColor: "#162414",
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    backgroundColor: "#1a2e18",
+    borderColor: "#3a6a28",
+    textStyle: { color: "#c8e6a0" },
+    formatter: params => {
+      const idx = params[0].dataIndex;
+      const d = sorted[scores.length - 1 - idx];
+      return `<b style="color:#a8e060">${d.name}</b> (${d.series})<br/>
+        Score: <b style="color:#6abf40">${d.score.toFixed(2)}</b><br/>
+        <span style="color:#888">Curriculum: ${d.curriculum} | Survival: ${d.survival}<br/>
+        Emotional: ${d.emotional} | Availability: ${d.availability}<br/>
+        Delta: ${d.delta} | Equity: ${d.equity}</span>`;
+    }
+  },
+  grid: { left: "24%", right: "12%", top: 10, bottom: 20 },
+  xAxis: {
+    type: "value", max: 11,
+    axisLabel: { color: "#6aaa50" }, splitLine: { lineStyle: { color: "#1e3e18" } },
+    axisLine: { lineStyle: { color: "#2e4e20" } },
+  },
+  yAxis: {
+    type: "category", data: names,
+    axisLabel: { color: "#c8e6a0", fontSize: 10.5 },
+    axisLine: { lineStyle: { color: "#2e4e20" } },
+  },
+  dataZoom: [
+    { type: "slider", yAxisIndex: 0, start: 0, end: 100, width: 14, right: 2,
+      borderColor: "#2e4e20", fillerColor: "rgba(100,180,60,0.12)", handleStyle: { color: "#6abf40" } },
+    { type: "inside", yAxisIndex: 0 }
+  ],
+  series: [{
+    type: "bar",
+    data: scores.map((v, i) => ({ value: v, itemStyle: { color: barColors[i], borderRadius: [0,4,4,0] } })),
+    barWidth: "55%",
+    label: { show: true, position: "right", formatter: p => p.value.toFixed(2), color: "#8acc6a", fontSize: 10.5 },
+    animationDuration: 1600,
+    animationEasing: "elasticOut",
+    animationDelay: idx => idx * 28,
+  }],
+  graphic: [{ type: "text", right: 16, bottom: 6, style: { text: "RankMint", fontSize: 10, fill: "#2a4a20", fontStyle: "italic" } }],
+});
+window.addEventListener("resize", () => chart.resize());
+
+// Find Yourself
+const findSelect = document.getElementById("find-select");
+DATA.forEach(d => {
+  const opt = document.createElement("option");
+  opt.value = d.rank; opt.textContent = `${d.name} (${d.series})`;
+  findSelect.appendChild(opt);
+});
+findSelect.addEventListener("change", () => {
+  const selected = DATA.find(d => d.rank === parseInt(findSelect.value));
+  if (!selected) { document.getElementById("result-card").style.display = "none"; return; }
+  document.getElementById("result-card").style.display = "block";
+  document.getElementById("result-rank").textContent = `#${selected.rank}`;
+  document.getElementById("result-name").textContent = selected.name;
+  document.getElementById("result-series").textContent = selected.series;
+  document.getElementById("result-score").textContent = `${selected.score.toFixed(2)} / 10.0`;
+  document.getElementById("result-metrics").innerHTML = [
+    `Curriculum: ${selected.curriculum}/10`, `Survival: ${selected.survival}/10`,
+    `Emotional IQ: ${selected.emotional}/10`, `Availability: ${selected.availability}/10`,
+    `Outcome Delta: ${selected.delta}/10`, `Equity: ${selected.equity}/10`,
+  ].map(m => `<span class="metric-chip">${m}</span>`).join("");
+  // Scroll chart to item
+  const idx = names.indexOf(selected.name);
+  if (idx >= 0) {
+    chart.dispatchAction({ type: "highlight", seriesIndex: 0, dataIndex: idx });
+    chart.dispatchAction({ type: "showTip", seriesIndex: 0, dataIndex: idx });
+  }
+});
+
+// Full Table
+const thead = document.getElementById("table-head");
+const tbody = document.getElementById("table-body");
+const COLS = ["rank","name","series","score","curriculum","survival","emotional","availability","delta","equity","tier"];
+const HEADERS = ["#","Teacher","Series","Score","Curr.","Surv.","EQ","Avail.","Delta","Equity","Tier"];
+const headerRow = document.createElement("tr");
+HEADERS.forEach((h, i) => {
+  const th = document.createElement("th");
+  th.textContent = h;
+  th.addEventListener("click", () => sortTable(i));
+  headerRow.appendChild(th);
+});
+thead.appendChild(headerRow);
+
+let tableData = [...DATA];
+function renderTable(data) {
+  tbody.innerHTML = "";
+  data.forEach(d => {
+    const tr = document.createElement("tr");
+    COLS.forEach(col => {
+      const td = document.createElement("td");
+      if (col === "tier") {
+        td.innerHTML = `<span class="tier-badge tier-${d[col]}">${d[col]}</span>`;
+      } else {
+        const v = d[col];
+        td.textContent = col === "score" ? v.toFixed(2) : v;
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+renderTable(tableData);
+
+let sortDir = {};
+function sortTable(colIdx) {
+  const col = COLS[colIdx];
+  sortDir[col] = !(sortDir[col] || false);
+  tableData.sort((a, b) => {
+    const va = a[col], vb = b[col];
+    const cmp = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb));
+    return sortDir[col] ? cmp : -cmp;
+  });
+  renderTable(tableData);
+}
+
+document.getElementById("table-search").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  renderTable(DATA.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q))));
+});
+
+// Share
+const shareUrl = window.location.href;
+const shareText = "Gojo Satoru scores lower than the volleyball manager from Haikyuu. The Anime Sensei Competence Index is brutal and backed by data.";
+document.getElementById("share-twitter").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}&hashtags=RankMint,AnimeSensei`;
+document.getElementById("share-linkedin").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+document.getElementById("share-copy").addEventListener("click", () => {
+  navigator.clipboard.writeText(shareUrl).then(() => {
+    document.getElementById("share-copy").textContent = "Copied!";
+    setTimeout(() => document.getElementById("share-copy").textContent = "Copy Link", 2000);
+  });
+});
+</script>
+</body>
+</html>

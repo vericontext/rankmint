@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Head-to-Head: Koro-sensei vs Gojo vs All Might vs Kakashi | RankMint</title>
+<meta property="og:title" content="Anime Sensei Head-to-Head Radar">
+<meta property="og:description" content="Six dimensions. Four teachers. The gap is devastating.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Anime Sensei Head-to-Head Radar">
+<meta name="twitter:description" content="Six dimensions. Four teachers. The gap is devastating.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1a10; color: #c8e6a0; }
+  .header { padding: 28px 32px 10px; }
+  .header h1 { font-size: 1.5rem; color: #c8e6a0; }
+  .header p { font-size: 0.85rem; color: #6aaa4a; margin-top: 6px; }
+  .controls {
+    padding: 10px 32px 6px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center;
+  }
+  .control-group { display: flex; align-items: center; gap: 8px; }
+  .control-group label { font-size: 0.82rem; color: #8aca6a; }
+  .controls select {
+    padding: 7px 14px; border: 1px solid #2e5e20; border-radius: 7px; font-size: 0.85rem;
+    background: #1a2e18; color: #c8e6a0; cursor: pointer;
+  }
+  .controls select:focus { outline: none; border-color: #6abf40; }
+  .mode-toggle { display: flex; gap: 4px; background: #1a2e18; border-radius: 8px; padding: 3px; }
+  .mode-btn {
+    padding: 6px 14px; border-radius: 6px; border: none; cursor: pointer;
+    font-size: 0.8rem; transition: all 0.2s; background: transparent; color: #8aca6a;
+  }
+  .mode-btn.active { background: #3a7a28; color: #fff; }
+  #chart { width: 100%; height: 80vh; min-height: 580px; }
+  .watermark { text-align: right; padding: 6px 28px 16px; color: #2a4a20; font-size: 0.75rem; font-style: italic; }
+  a.back { color: #6aaa4a; font-size: 0.8rem; text-decoration: none; padding: 4px 20px; display: inline-block; }
+  a.back:hover { text-decoration: underline; }
+  .stat-bar {
+    display: flex; gap: 20px; flex-wrap: wrap; padding: 8px 32px 6px;
+  }
+  .stat-chip {
+    background: rgba(100,180,60,0.1); border: 1px solid rgba(100,180,60,0.2);
+    border-radius: 20px; padding: 4px 14px; font-size: 0.78rem; color: #8aca6a;
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Head-to-Head: Teaching Profile Comparison</h1>
+  <p>Select any two (or four) teachers to compare across all six competence dimensions | RankMint 2026</p>
+</div>
+<div class="stat-bar" id="stat-bar"></div>
+<div class="controls">
+  <div class="control-group">
+    <label>Mode:</label>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="btn-duo" onclick="setMode('duo')">2-Way</button>
+      <button class="mode-btn" id="btn-quad" onclick="setMode('quad')">4-Way</button>
+    </div>
+  </div>
+  <div class="control-group">
+    <label>Teacher 1:</label>
+    <select id="sel1"></select>
+  </div>
+  <div class="control-group">
+    <label>Teacher 2:</label>
+    <select id="sel2"></select>
+  </div>
+  <div id="extra-selects" style="display:none; display:flex; gap:14px; flex-wrap:wrap; display:none;">
+    <div class="control-group">
+      <label>Teacher 3:</label>
+      <select id="sel3"></select>
+    </div>
+    <div class="control-group">
+      <label>Teacher 4:</label>
+      <select id="sel4"></select>
+    </div>
+  </div>
+</div>
+<div id="chart"></div>
+<a class="back" href="index.html">Back to full report</a>
+<div class="watermark">RankMint</div>
+
+<script>
+const DATA = [
+  { name:"Koro-sensei",       series:"Assassination Classroom",  curriculum:10, survival:10, emotional:10, availability:10, delta:8,  equity:10, score:9.70 },
+  { name:"Biscuit Krueger",   series:"Hunter x Hunter",          curriculum:9,  survival:10, emotional:7,  availability:9,  delta:9,  equity:8,  score:8.74 },
+  { name:"Izumi Curtis",      series:"Fullmetal Alchemist",      curriculum:9,  survival:9,  emotional:7,  availability:9,  delta:10, equity:8,  score:8.69 },
+  { name:"Wing",              series:"Hunter x Hunter",          curriculum:9,  survival:10, emotional:7,  availability:8,  delta:9,  equity:8,  score:8.57 },
+  { name:"Coach Anzai",       series:"Slam Dunk",                curriculum:7,  survival:10, emotional:8,  availability:8,  delta:7,  equity:9,  score:8.15 },
+  { name:"Coach Ukai",        series:"Haikyuu!!",                curriculum:7,  survival:10, emotional:7,  availability:9,  delta:6,  equity:9,  score:7.99 },
+  { name:"Might Guy",         series:"Naruto",                   curriculum:5,  survival:10, emotional:8,  availability:9,  delta:8,  equity:7,  score:7.87 },
+  { name:"Aizawa Shouta",     series:"My Hero Academia",         curriculum:7,  survival:9,  emotional:7,  availability:9,  delta:6,  equity:8,  score:7.69 },
+  { name:"Iruka Umino",       series:"Naruto",                   curriculum:4,  survival:10, emotional:9,  availability:10, delta:4,  equity:9,  score:7.62 },
+  { name:"Bang",              series:"One-Punch Man",            curriculum:7,  survival:10, emotional:7,  availability:7,  delta:7,  equity:7,  score:7.60 },
+  { name:"Sakonji Urokodaki", series:"Demon Slayer",             curriculum:7,  survival:8,  emotional:5,  availability:8,  delta:9,  equity:6,  score:7.21 },
+  { name:"Onizuka Eikichi",   series:"Great Teacher Onizuka",    curriculum:4,  survival:9,  emotional:9,  availability:8,  delta:6,  equity:7,  score:7.18 },
+  { name:"Genkai",            series:"Yu Yu Hakusho",            curriculum:7,  survival:7,  emotional:6,  availability:7,  delta:9,  equity:7,  score:7.12 },
+  { name:"Takeda Ittetsu",    series:"Haikyuu!!",                curriculum:3,  survival:10, emotional:8,  availability:10, delta:2,  equity:9,  score:6.94 },
+  { name:"Piccolo",           series:"Dragon Ball Z",            curriculum:5,  survival:8,  emotional:7,  availability:7,  delta:8,  equity:5,  score:6.75 },
+  { name:"Reborn",            series:"Katekyo Hitman Reborn",    curriculum:6,  survival:8,  emotional:4,  availability:7,  delta:8,  equity:6,  score:6.51 },
+  { name:"Urahara Kisuke",    series:"Bleach",                   curriculum:5,  survival:7,  emotional:5,  availability:5,  delta:8,  equity:5,  score:5.85 },
+  { name:"Silvers Rayleigh",  series:"One Piece",                curriculum:4,  survival:8,  emotional:5,  availability:5,  delta:8,  equity:5,  score:5.85 },
+  { name:"Jiraiya",           series:"Naruto",                   curriculum:5,  survival:5,  emotional:5,  availability:6,  delta:8,  equity:7,  score:5.82 },
+  { name:"Kakashi Hatake",    series:"Naruto",                   curriculum:4,  survival:7,  emotional:5,  availability:6,  delta:7,  equity:3,  score:5.47 },
+  { name:"Master Roshi",      series:"Dragon Ball",              curriculum:4,  survival:7,  emotional:3,  availability:6,  delta:7,  equity:6,  score:5.41 },
+  { name:"Makarov Dreyar",    series:"Fairy Tail",               curriculum:2,  survival:6,  emotional:7,  availability:6,  delta:4,  equity:5,  score:4.98 },
+  { name:"Gildarts Clive",    series:"Fairy Tail",               curriculum:2,  survival:7,  emotional:4,  availability:4,  delta:5,  equity:4,  score:4.35 },
+  { name:"All Might",         series:"My Hero Academia",         curriculum:2,  survival:4,  emotional:6,  availability:5,  delta:6,  equity:2,  score:4.23 },
+  { name:"Yami Sukehiro",     series:"Black Clover",             curriculum:2,  survival:6,  emotional:3,  availability:6,  delta:5,  equity:2,  score:4.11 },
+  { name:"Gojo Satoru",       series:"Jujutsu Kaisen",           curriculum:2,  survival:4,  emotional:3,  availability:3,  delta:5,  equity:2,  score:3.20 },
+  { name:"Shanks",            series:"One Piece",                curriculum:1,  survival:6,  emotional:4,  availability:1,  delta:3,  equity:2,  score:2.94 },
+  { name:"Endeavor",          series:"My Hero Academia",         curriculum:1,  survival:5,  emotional:1,  availability:2,  delta:5,  equity:1,  score:2.57 },
+  { name:"Ging Freecss",      series:"Hunter x Hunter",          curriculum:1,  survival:5,  emotional:1,  availability:1,  delta:4,  equity:2,  score:2.35 },
+  { name:"Kamina",            series:"Gurren Lagann",            curriculum:1,  survival:1,  emotional:3,  availability:1,  delta:3,  equity:5,  score:2.06 },
+];
+
+const METRICS = ["curriculum","survival","emotional","availability","delta","equity"];
+const METRIC_LABELS = ["Curriculum\nCoherence","Student\nSurvival","Emotional\nIntelligence","Availability\n& Presence","Outcome\nDelta","Equitable\nAttention"];
+const COLORS = ["#6abf40","#e85050","#5090e8","#e8a030","#a060e8","#50c8b0"];
+
+const chart = echarts.init(document.getElementById("chart"));
+let mode = "duo";
+
+// Populate selects
+const selects = ["sel1","sel2","sel3","sel4"];
+const defaults = [0, 25, 23, 19]; // Koro, Gojo, All Might, Kakashi
+selects.forEach((id, sIdx) => {
+  const sel = document.getElementById(id);
+  DATA.forEach((d, i) => {
+    const opt = document.createElement("option");
+    opt.value = i; opt.textContent = `${d.name} (${d.score.toFixed(2)})`;
+    sel.appendChild(opt);
+  });
+  sel.value = defaults[sIdx];
+  sel.addEventListener("change", render);
+});
+
+function setMode(m) {
+  mode = m;
+  document.getElementById("btn-duo").classList.toggle("active", m === "duo");
+  document.getElementById("btn-quad").classList.toggle("active", m === "quad");
+  document.getElementById("extra-selects").style.display = m === "quad" ? "flex" : "none";
+  render();
+}
+
+function render() {
+  const idxs = [
+    parseInt(document.getElementById("sel1").value),
+    parseInt(document.getElementById("sel2").value),
+  ];
+  if (mode === "quad") {
+    idxs.push(parseInt(document.getElementById("sel3").value));
+    idxs.push(parseInt(document.getElementById("sel4").value));
+  }
+
+  const selected = idxs.map(i => DATA[i]);
+  updateStatBar(selected);
+
+  chart.setOption({
+    backgroundColor: "#0f1a10",
+    legend: {
+      data: selected.map(d => d.name),
+      top: 8,
+      textStyle: { color: "#c8e6a0", fontSize: 12 },
+    },
+    radar: {
+      indicator: METRICS.map((m, i) => ({ name: METRIC_LABELS[i], max: 10 })),
+      shape: "polygon",
+      center: ["50%", "52%"],
+      radius: "62%",
+      splitNumber: 5,
+      axisName: {
+        color: "#a8c890",
+        fontSize: 12,
+        backgroundColor: "rgba(15,26,16,0.5)",
+        borderRadius: 4,
+        padding: [3, 6],
+      },
+      splitArea: { areaStyle: { color: ["rgba(255,255,255,0.02)","rgba(255,255,255,0.04)"] } },
+      splitLine: { lineStyle: { color: "#1e3e18" } },
+      axisLine: { lineStyle: { color: "#2a5020" } },
+    },
+    tooltip: {
+      trigger: "item",
+      backgroundColor: "#1a2e18",
+      borderColor: "#3a6a28",
+      textStyle: { color: "#c8e6a0" },
+      formatter: p => {
+        let tip = `<b style="color:#a8e060">${p.name}</b>`;
+        p.value.forEach((v, i) => {
+          tip += `<br/><span style="color:#888">${METRIC_LABELS[i].replace("\n"," ")}: </span><b>${v}</b>/10`;
+        });
+        return tip;
+      },
+    },
+    series: [{
+      type: "radar",
+      data: selected.map((d, i) => ({
+        name: d.name,
+        value: METRICS.map(m => d[m]),
+        areaStyle: { opacity: 0.12 },
+        lineStyle: { color: COLORS[i], width: 2.5 },
+        itemStyle: { color: COLORS[i] },
+        symbol: "circle",
+        symbolSize: 6,
+      })),
+      animationDuration: 1400,
+      animationEasing: "cubicOut",
+    }],
+    graphic: [{
+      type: "text", right: 16, bottom: 8,
+      style: { text: "RankMint", fontSize: 11, fill: "#2a4a20", fontStyle: "italic" },
+    }],
+  }, true);
+}
+
+function updateStatBar(teachers) {
+  const bar = document.getElementById("stat-bar");
+  bar.innerHTML = teachers.map((d, i) => `
+    <span class="stat-chip" style="border-color:${COLORS[i]}40; color:${COLORS[i]}">
+      ${d.name}: ${d.score.toFixed(2)} pts
+    </span>
+  `).join("");
+}
+
+// Default: 4-way view to show the key contrast
+setMode("quad");
+render();
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

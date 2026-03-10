@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 630px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .card {
+    width: 1200px; height: 630px;
+    background: linear-gradient(135deg, #0a120a 0%, #0f2010 45%, #1a3a10 100%);
+    color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 60px 80px;
+    position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: ""; position: absolute; top: -120px; right: -120px;
+    width: 480px; height: 480px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(100,190,60,0.15) 0%, transparent 70%);
+  }
+  .card::after {
+    content: ""; position: absolute; bottom: -80px; left: 200px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(60,160,40,0.08) 0%, transparent 70%);
+  }
+  .accent-line {
+    position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+    background: linear-gradient(90deg, #6abf40, #a8d878, #d4e89a, #6abf40);
+  }
+  .eyebrow {
+    font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    color: #6abf40; margin-bottom: 14px;
+  }
+  .title { font-size: 46px; font-weight: 900; line-height: 1.15; margin-bottom: 14px; max-width: 760px; }
+  .hook { font-size: 18px; color: #8acc6a; margin-bottom: 44px; max-width: 680px; line-height: 1.5; }
+  .top3 { display: flex; gap: 20px; }
+  .top-item {
+    background: rgba(100,190,60,0.1); border-radius: 12px; padding: 18px 26px;
+    border: 1px solid rgba(100,190,60,0.2); min-width: 190px;
+  }
+  .medal { font-size: 26px; font-weight: 900; margin-bottom: 5px; }
+  .medal.gold { color: #FFD700; }
+  .medal.silver { color: #C0C0C0; }
+  .medal.bronze { color: #CD7F32; }
+  .item-name { font-size: 17px; font-weight: 700; color: #d4e8b0; }
+  .item-series { font-size: 11px; color: #6aaa4a; margin-top: 2px; }
+  .item-score { font-size: 13px; color: #8acc6a; margin-top: 6px; font-weight: 600; }
+  .watermark {
+    position: absolute; bottom: 28px; right: 38px;
+    font-size: 15px; color: rgba(100,190,60,0.3); font-weight: 800; letter-spacing: 3px;
+  }
+  .stat-badge {
+    position: absolute; top: 28px; right: 40px;
+    background: rgba(100,190,60,0.15); border: 1px solid rgba(100,190,60,0.3);
+    border-radius: 20px; padding: 6px 18px; font-size: 13px; color: #8acc6a; font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="accent-line"></div>
+  <div class="stat-badge">30 teachers ranked</div>
+  <div class="eyebrow">RankMint Original Index</div>
+  <div class="title">Anime Sensei Competence Index</div>
+  <div class="hook">Gojo Satoru scores lower than the volleyball team manager from Haikyuu. The data explains why.</div>
+  <div class="top3">
+    <div class="top-item">
+      <div class="medal gold">#1</div>
+      <div class="item-name">Koro-sensei</div>
+      <div class="item-series">Assassination Classroom</div>
+      <div class="item-score">9.70 / 10.0</div>
+    </div>
+    <div class="top-item">
+      <div class="medal silver">#2</div>
+      <div class="item-name">Biscuit Krueger</div>
+      <div class="item-series">Hunter x Hunter</div>
+      <div class="item-score">8.74 / 10.0</div>
+    </div>
+    <div class="top-item">
+      <div class="medal bronze">#3</div>
+      <div class="item-name">Izumi Curtis</div>
+      <div class="item-series">Fullmetal Alchemist</div>
+      <div class="item-score">8.69 / 10.0</div>
+    </div>
+    <div class="top-item" style="border-color:rgba(200,80,30,0.3); background:rgba(200,80,30,0.08);">
+      <div class="medal" style="color:#d05030">#26</div>
+      <div class="item-name">Gojo Satoru</div>
+      <div class="item-series">Jujutsu Kaisen</div>
+      <div class="item-score" style="color:#c04020">3.20 / 10.0</div>
+    </div>
+  </div>
+  <div class="watermark">RANKMINT</div>
+</div>
+</body>
+</html>
