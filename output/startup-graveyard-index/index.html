@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Startup Graveyard Index — Avoidable Death Score | RankMint</title>
+<!-- OG Meta Tags -->
+<meta property="og:title" content="Startup Graveyard Index — Avoidable Death Score">
+<meta property="og:description" content="Juicero beats Theranos. WeWork is #17. We ranked 30 startup failures by stupidity, not losses.">
+<meta property="og:image" content="card.png">
+<meta property="og:url" content="https://rankmint.co/startup-graveyard-index/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Startup Graveyard Index — Avoidable Death Score">
+<meta name="twitter:description" content="Juicero beats Theranos. WeWork is #17. We ranked 30 startup failures by stupidity, not losses.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #0d0d1a;
+    --bg2: #111128;
+    --text: #e0e0e0;
+    --muted: #666;
+    --accent: #E91E63;
+    --accent2: #FF6D00;
+    --accent3: #FFD600;
+    --card-bg: #161630;
+    --border: #1e1e3a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+
+  /* Top accent bar */
+  .top-bar {
+    height: 5px;
+    background: linear-gradient(90deg, #E91E63, #FF6D00, #FFD600, #7C4DFF);
+  }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 64px 24px 48px;
+    background: linear-gradient(160deg, #0d0d1a 0%, #1a0a22 60%, #0f0f2e 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 440px; height: 440px;
+    background: radial-gradient(circle, rgba(233,30,99,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -60px; left: -60px;
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, rgba(124,77,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero .eyebrow {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(233,30,99,0.12);
+    border: 1px solid rgba(233,30,99,0.25);
+    border-radius: 20px;
+    padding: 4px 14px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero .hook {
+    font-size: 1.05rem;
+    color: #999;
+    max-width: 580px;
+    margin: 0 auto 32px;
+  }
+  .hero .counter-wrap { margin-bottom: 8px; }
+  .hero .counter { font-size: 4rem; font-weight: 900; color: var(--accent3); line-height: 1; }
+  .hero .counter-label { font-size: 0.85rem; color: #777; margin-top: 6px; }
+
+  /* Surprise Callout */
+  .surprise-wrap { padding: 0 24px; margin-top: -24px; position: relative; z-index: 2; }
+  .surprise {
+    background: linear-gradient(135deg, #1e0a28 0%, #280a1e 100%);
+    border: 1px solid rgba(233,30,99,0.3);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 28px 32px;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 8px 32px rgba(233,30,99,0.12);
+  }
+  .surprise .tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .surprise h2 { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 10px; }
+  .surprise p { font-size: 0.9rem; color: #aaa; line-height: 1.6; }
+  .surprise p strong { color: #e0e0e0; }
+
+  /* Section styles */
+  section { padding: 48px 0; }
+  section h2 { font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 20px; }
+  section h2 span { color: var(--accent); }
+
+  /* Chart section */
+  .chart-links { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .chart-link {
+    display: inline-block;
+    padding: 7px 18px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: #aaa;
+    transition: all 0.2s;
+  }
+  .chart-link:hover, .chart-link.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(233,30,99,0.08);
+    text-decoration: none;
+  }
+  #main-chart { width: 100%; height: 560px; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); }
+
+  /* Taxonomy */
+  .tax-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .tax-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s;
+  }
+  .tax-card:hover { border-color: rgba(233,30,99,0.3); }
+  .tax-card .tier-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .tax-card h3 { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .tax-card .desc { font-size: 0.82rem; color: #666; margin-bottom: 14px; line-height: 1.5; }
+  .tax-card table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  .tax-card th { color: var(--muted); font-weight: 600; text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--border); }
+  .tax-card td { padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.04); color: #ccc; }
+  .tax-card tr:last-child td { border-bottom: none; }
+  .tax-card td.score { color: var(--accent); font-weight: 700; }
+
+  /* Find yourself */
+  .find-section {
+    text-align: center;
+    padding: 48px 24px;
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+  }
+  .find-section h2 { margin-bottom: 8px; }
+  .find-section .sub { font-size: 0.87rem; color: var(--muted); margin-bottom: 24px; }
+  .find-section select {
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+    color: #e0e0e0;
+    min-width: 280px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+  }
+  .find-section select:focus { outline: none; border-color: var(--accent); }
+  .result-card {
+    display: none;
+    margin: 28px auto 0;
+    max-width: 420px;
+    padding: 28px;
+    background: linear-gradient(135deg, #1a0a22 0%, #0f0f2e 100%);
+    border: 1px solid rgba(233,30,99,0.3);
+    color: #fff;
+    border-radius: 14px;
+    text-align: center;
+  }
+  .result-card .r-rank { font-size: 3.5rem; font-weight: 900; color: var(--accent3); line-height: 1; }
+  .result-card .r-name { font-size: 1.3rem; font-weight: 700; margin: 10px 0 4px; }
+  .result-card .r-score { font-size: 0.9rem; color: #777; }
+  .result-card .r-tier { font-size: 0.78rem; font-weight: 700; margin-top: 8px; padding: 4px 12px; border-radius: 20px; display: inline-block; }
+  .result-card .r-note { font-size: 0.8rem; color: #666; margin-top: 12px; line-height: 1.5; font-style: italic; }
+
+  /* Full Table */
+  .table-search {
+    width: 100%;
+    padding: 11px 18px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.88rem;
+    margin-bottom: 14px;
+    background: var(--card-bg);
+    color: var(--text);
+  }
+  .table-search:focus { outline: none; border-color: var(--accent); }
+  .table-wrap { overflow-x: auto; }
+  .ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .ranking-table th {
+    background: #0d0d1a;
+    color: #aaa;
+    padding: 11px 14px;
+    text-align: left;
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border);
+  }
+  .ranking-table th:hover { color: var(--accent); }
+  .ranking-table td { padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); color: #ccc; }
+  .ranking-table tr:last-child td { border-bottom: none; }
+  .ranking-table tr:hover td { background: rgba(233,30,99,0.05); }
+  .ranking-table .rank-num { color: var(--muted); font-weight: 700; }
+  .ranking-table .startup-name { color: #fff; font-weight: 600; }
+  .ranking-table .ads-score { color: var(--accent); font-weight: 700; }
+  .tier-pill {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Methodology */
+  .methodology {
+    padding: 28px 32px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    font-size: 0.83rem;
+    color: var(--muted);
+  }
+  .methodology h2 { font-size: 1rem; color: var(--text); margin-bottom: 14px; }
+  .methodology p, .methodology li { margin-bottom: 8px; line-height: 1.6; }
+  .methodology ul { padding-left: 20px; }
+  .methodology code {
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.8rem;
+    color: #aaa;
+  }
+
+  /* Share Bar */
+  .share-bar { display: flex; justify-content: center; gap: 12px; padding: 32px 0 16px; flex-wrap: wrap; }
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 11px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: #fff;
+    transition: transform 0.2s, opacity 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+  .share-btn:hover { transform: translateY(-2px); opacity: 0.92; text-decoration: none; }
+  .share-twitter { background: #1DA1F2; }
+  .share-linkedin { background: #0A66C2; }
+  .share-copy { background: #333; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 24px; color: #333; font-size: 0.72rem; font-style: italic; border-top: 1px solid var(--border); }
+
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 1.9rem; }
+    .hero .counter { font-size: 2.8rem; }
+    .tax-grid { grid-template-columns: 1fr; }
+    .surprise { padding: 20px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">RankMint — Startup Graveyard Index</div>
+    <h1>The <span>Stupidest</span> Startup Deaths. Ranked.</h1>
+    <p class="hook">Not by money lost — by how preventable the failure was. 30 startups. Five tiers. One formula that separates genuine tragedy from pure avoidable stupidity.</p>
+    <div class="counter-wrap">
+      <div class="counter" id="hero-counter">0.0</div>
+      <div class="counter-label">#1: Juicero — ADS 8.25 / 10 — $699 Wi-Fi juice press for bags you could squeeze by hand</div>
+    </div>
+  </div>
+</section>
+
+<!-- Surprise Callout -->
+<div class="surprise-wrap container">
+  <div class="surprise">
+    <div class="tag">The Biggest Surprise</div>
+    <h2>WeWork is #17. Theranos is #4. A $120M juice machine is #1.</h2>
+    <p>
+      <strong>WeWork</strong> is the most-discussed startup failure of the 2010s — but it had $1.8 billion in real annual revenue and operated in a genuine market. Its failure was governance, not product. <strong>Theranos</strong> was a 15-year fraud, but blood diagnostics is a real, enormous market. <strong>Juicero</strong> invented its own problem, built a $699 machine to solve it, and a reporter exposed the entire concept by squeezing a bag with their hands. That is a different category of avoidable.
+    </p>
+  </div>
+</div>
+
+<!-- Chart Section -->
+<section class="container">
+  <h2>The Rankings <span style="font-weight:400;font-size:0.9rem;color:#666">— Avoidable Death Score, all 30 startups</span></h2>
+  <div class="chart-links">
+    <a href="chart.html" class="chart-link active" target="_blank">Full Bar Chart</a>
+    <a href="chart_tier.html" class="chart-link" target="_blank">Tier List (S/A/B/C/D)</a>
+    <a href="chart_matrix.html" class="chart-link" target="_blank">Funding vs Stupidity Quadrant</a>
+  </div>
+  <div id="main-chart"></div>
+</section>
+
+<!-- Taxonomy -->
+<section class="container">
+  <h2>The Taxonomy — <span>Five Tiers of Failure</span></h2>
+  <div class="tax-grid" id="tax-grid">
+
+    <div class="tax-card">
+      <div class="tier-badge" style="background:rgba(233,30,99,0.15);color:#E91E63;">S — Hall of Shame</div>
+      <h3>ADS 7.5 and above</h3>
+      <p class="desc">Failures so preventable that any honest weekend of user research would have caught them. The problem was imaginary, the fraud was obvious, or the founder was untethered from physical reality.</p>
+      <table>
+        <tr><th>Rank</th><th>Startup</th><th class="score">ADS</th></tr>
+        <tr><td>1</td><td>Juicero</td><td class="score">8.25</td></tr>
+        <tr><td>2</td><td>Lily Robotics</td><td class="score">8.10</td></tr>
+        <tr><td>3</td><td>Color Labs</td><td class="score">8.00</td></tr>
+        <tr><td>4</td><td>Theranos</td><td class="score">7.95</td></tr>
+        <tr><td>5</td><td>Segway</td><td class="score">7.95</td></tr>
+        <tr><td>6</td><td>Clinkle</td><td class="score">7.75</td></tr>
+        <tr><td>7</td><td>Quibi</td><td class="score">7.55</td></tr>
+      </table>
+    </div>
+
+    <div class="tax-card">
+      <div class="tier-badge" style="background:rgba(255,109,0,0.15);color:#FF6D00;">A — Spectacular Own Goals</div>
+      <h3>ADS 6.0–7.49</h3>
+      <p class="desc">Had real advantages — working tech, real markets, or serious founders — and still died in ways that required sustained willful blindness to the obvious.</p>
+      <table>
+        <tr><th>Rank</th><th>Startup</th><th class="score">ADS</th></tr>
+        <tr><td>8</td><td>Fire Phone</td><td class="score">7.30</td></tr>
+        <tr><td>10</td><td>Zume Pizza</td><td class="score">7.30</td></tr>
+        <tr><td>9</td><td>Google+</td><td class="score">7.25</td></tr>
+        <tr><td>11</td><td>Better Place</td><td class="score">7.15</td></tr>
+        <tr><td>13</td><td>Webvan</td><td class="score">6.20</td></tr>
+        <tr><td>16</td><td>Jawbone</td><td class="score">6.00</td></tr>
+      </table>
+    </div>
+
+    <div class="tax-card">
+      <div class="tier-badge" style="background:rgba(255,214,0,0.12);color:#FFD600;">B — Forgivably Stupid</div>
+      <h3>ADS 5.0–5.99</h3>
+      <p class="desc">You can trace a plausible path from reasonable idea to catastrophic outcome. Real products, real markets — failure required a chain of bad decisions, not a single obvious miss.</p>
+      <table>
+        <tr><th>Rank</th><th>Startup</th><th class="score">ADS</th></tr>
+        <tr><td>17</td><td>WeWork</td><td class="score">5.70</td></tr>
+        <tr><td>18</td><td>Pets.com</td><td class="score">5.55</td></tr>
+        <tr><td>19</td><td>Brandless</td><td class="score">5.45</td></tr>
+        <tr><td>20</td><td>Beepi</td><td class="score">5.35</td></tr>
+        <tr><td>21</td><td>Yik Yak</td><td class="score">5.15</td></tr>
+        <tr><td>22</td><td>Doppler Labs</td><td class="score">5.15</td></tr>
+      </table>
+    </div>
+
+    <div class="tax-card">
+      <div class="tier-badge" style="background:rgba(124,77,255,0.12);color:#7C4DFF;">C / D — Mostly Unlucky & Wrong Time</div>
+      <h3>ADS below 5.0</h3>
+      <p class="desc">Market forces, legal rulings, or corporate indifference did most of the damage. The lowest two tiers include a Supreme Court ruling, Chinese manufacturing cost curves, and one corporate murder.</p>
+      <table>
+        <tr><th>Rank</th><th>Startup</th><th class="score">ADS</th></tr>
+        <tr><td>23</td><td>Solyndra</td><td class="score">4.90</td></tr>
+        <tr><td>24</td><td>MySpace</td><td class="score">4.85</td></tr>
+        <tr><td>28</td><td>Aereo</td><td class="score">3.55</td></tr>
+        <tr><td>29</td><td>Rdio</td><td class="score">2.95</td></tr>
+        <tr><td>30</td><td>Vine</td><td class="score">2.15</td></tr>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- Find Yourself -->
+<section class="container">
+  <div class="find-section">
+    <h2>Find Your Startup</h2>
+    <p class="sub">Select a startup to see where it lands in the Graveyard.</p>
+    <select id="find-select">
+      <option value="">-- Select a startup --</option>
+    </select>
+    <div class="result-card" id="result-card">
+      <div class="r-rank" id="result-rank"></div>
+      <div class="r-name" id="result-name"></div>
+      <div class="r-score" id="result-score"></div>
+      <div class="r-tier" id="result-tier"></div>
+      <div class="r-note" id="result-note"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Full Table -->
+<section class="container">
+  <h2>Full Rankings</h2>
+  <input type="text" class="table-search" id="table-search" placeholder="Search startups...">
+  <div class="table-wrap">
+    <table class="ranking-table" id="ranking-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">#</th>
+          <th onclick="sortTable(1)">Startup</th>
+          <th onclick="sortTable(2)">ADS</th>
+          <th onclick="sortTable(3)">Delusion</th>
+          <th onclick="sortTable(4)">PMF Gap</th>
+          <th onclick="sortTable(5)">Burn</th>
+          <th onclick="sortTable(6)">Warnings</th>
+          <th onclick="sortTable(7)">Hype</th>
+          <th>Tier</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Methodology -->
+<section class="container">
+  <div class="methodology">
+    <h2>Methodology</h2>
+    <p><strong>Index name:</strong> Startup Graveyard Index — Avoidable Death Score (ADS)</p>
+    <p><strong>Formula:</strong> <code>ADS = (Delusion × 0.30) + (PMF_Gap × 0.25) + (Burn × 0.20) + (Warnings × 0.15) + (Hype × 0.10)</code></p>
+    <p><strong>Sample:</strong> 30 startups spanning dot-com collapse (1999–2001) through 2020s unicorn era. Selection criteria: companies with documented post-mortem coverage in major tech press.</p>
+    <p><strong>Scoring:</strong> All five sub-metrics scored 1–10 using defined 4-anchor rubrics. Full rubric published in plan.md. Scoring is qualitative and reflects editorial judgment.</p>
+    <p><strong>Data sources:</strong></p>
+    <ul>
+      <li>Funding and valuations: Crunchbase, Tracxn, CB Insights, TechCrunch round coverage</li>
+      <li>Shutdown dates: Crunchbase, Wikipedia, press archives</li>
+      <li>First red flag dates: TechCrunch, WSJ, Bloomberg archival reporting (IgnoredWarnings metric)</li>
+      <li>Revenue figures: SEC filings, annual reports, press estimates</li>
+    </ul>
+    <p><strong>Collection date:</strong> March 2026</p>
+    <p><strong>Weighting rationale:</strong> Delusion (30%) and PMF_Gap (25%) are primary drivers because they measure structural preventability. BurnRecklessness (20%) normalizes capital destruction against output (not absolute losses). IgnoredWarnings (15%) captures time-to-act after public red flags. HypeMultiplier (10%) adds valuation-to-reality ratio context.</p>
+  </div>
+</section>
+
+<!-- Share Bar -->
+<div class="share-bar">
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on X</a>
+  <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">Share on LinkedIn</a>
+  <button class="share-btn share-copy" id="share-copy">Copy Link</button>
+</div>
+
+<div class="footer">Generated by RankMint — March 2026</div>
+
+<script>
+const DATA = [
+  { rank: 1,  name: "Juicero",       ads: 8.25, delusion: 9,  pmf: 10, burn: 9,  warnings: 3,  hype: 8,  funding: "$120M",   note: "$699 Wi-Fi juice press for bags you could squeeze by hand" },
+  { rank: 2,  name: "Lily Robotics", ads: 8.10, delusion: 9,  pmf: 9,  burn: 8,  warnings: 5,  hype: 8,  funding: "$34M",    note: "Took $15M in pre-order deposits, used competitor footage in ads, never shipped" },
+  { rank: 3,  name: "Color Labs",    ads: 8.00, delusion: 8,  pmf: 9,  burn: 10, warnings: 3,  hype: 9,  funding: "$41M",    note: "$41M from Sequoia pre-launch; sold to Apple for $7M 18 months later" },
+  { rank: 4,  name: "Theranos",      ads: 7.95, delusion: 10, pmf: 5,  burn: 6,  warnings: 10, hype: 10, funding: "$945M",   note: "15 years of blood-test fraud. Perfect 10 on delusion — but the market was real." },
+  { rank: 5,  name: "Segway",        ads: 7.95, delusion: 9,  pmf: 9,  burn: 5,  warnings: 8,  hype: 8,  funding: "$80M+",   note: '"Bigger than the internet." 140K units in 19 years vs 100K/year forecast.' },
+  { rank: 6,  name: "Clinkle",       ads: 7.75, delusion: 8,  pmf: 8,  burn: 9,  warnings: 5,  hype: 8,  funding: "$30M",    note: "Raised $30M in a room, spent on office luxuries, produced nothing in 2 years" },
+  { rank: 7,  name: "Quibi",         ads: 7.55, delusion: 7,  pmf: 9,  burn: 10, warnings: 2,  hype: 9,  funding: "$1.75B",  note: "$1.75B for mobile-only 10-minute premium content. Shut in 6 months." },
+  { rank: 8,  name: "Fire Phone",    ads: 7.30, delusion: 8,  pmf: 10, burn: 7,  warnings: 2,  hype: 7,  funding: "$170M",   note: "Bezos's gimmick phone. <35K units sold. $170M write-down." },
+  { rank: 9,  name: "Google+",       ads: 7.25, delusion: 6,  pmf: 9,  burn: 6,  warnings: 10, hype: 5,  funding: "~$500M",  note: "Forced on YouTube users for 8 years. Nobody wanted it organically." },
+  { rank: 10, name: "Zume Pizza",    ads: 7.30, delusion: 7,  pmf: 7,  burn: 8,  warnings: 7,  hype: 8,  funding: "$375M",   note: "$375M SoftBank robot pizza. Pivoted to 'sustainable packaging.'" },
+  { rank: 11, name: "Better Place",  ads: 7.15, delusion: 8,  pmf: 6,  burn: 7,  warnings: 7,  hype: 8,  funding: "$850M",   note: "Forecast 100K battery-swap EVs in Israel by 2010. Sold fewer than 1,000." },
+  { rank: 12, name: "Essential",     ads: 6.55, delusion: 7,  pmf: 7,  burn: 7,  warnings: 4,  hype: 7,  funding: "$330M",   note: "$330M for an undifferentiated Android phone. ~150K units sold." },
+  { rank: 13, name: "Webvan",        ads: 6.20, delusion: 6,  pmf: 5,  burn: 8,  warnings: 5,  hype: 8,  funding: "$800M",   note: "$1B Bechtel contract before proving Bay Area grocery market." },
+  { rank: 14, name: "Secret",        ads: 6.10, delusion: 6,  pmf: 7,  burn: 7,  warnings: 3,  hype: 7,  funding: "$35M",    note: "Founders pocketed $3M each on exit. Anonymous social imploded from harassment." },
+  { rank: 15, name: "MoviePass",     ads: 6.10, delusion: 7,  pmf: 3,  burn: 8,  warnings: 7,  hype: 6,  funding: "$68.7M",  note: "Lost $21.7M/month at $9.95 unlimited. CEO called it 'not a charity.'" },
+  { rank: 16, name: "Jawbone",       ads: 6.00, delusion: 7,  pmf: 3,  burn: 7,  warnings: 7,  hype: 7,  funding: "$930M",   note: "17 funding rounds across 10 years while losing market to Apple Watch." },
+  { rank: 17, name: "WeWork",        ads: 5.70, delusion: 8,  pmf: 4,  burn: 5,  warnings: 6,  hype: 4,  funding: "$12.8B",  note: "$47B valuation for a real estate company — had $1.8B real revenue." },
+  { rank: 18, name: "Pets.com",      ads: 5.55, delusion: 5,  pmf: 6,  burn: 7,  warnings: 3,  hype: 7,  funding: "$82M",    note: "IPO to shutdown in 268 days. Chewy later proved the concept." },
+  { rank: 19, name: "Brandless",     ads: 5.45, delusion: 5,  pmf: 5,  burn: 7,  warnings: 4,  hype: 7,  funding: "$240M",   note: "$240M for 'unbranded' D2C with no differentiator and no path to profit." },
+  { rank: 20, name: "Beepi",         ads: 5.35, delusion: 6,  pmf: 4,  burn: 6,  warnings: 5,  hype: 6,  funding: "$150M",   note: "Online used cars (real market); execs paid lavishly as unit economics failed." },
+  { rank: 21, name: "Yik Yak",       ads: 5.15, delusion: 5,  pmf: 4,  burn: 6,  warnings: 5,  hype: 7,  funding: "$73.5M",  note: "$400M peak valuation. Moderation failure, not market failure." },
+  { rank: 22, name: "Doppler Labs",  ads: 5.15, delusion: 5,  pmf: 6,  burn: 6,  warnings: 3,  hype: 5,  funding: "$50M",    note: "Smart earbuds. AirPods launched 6 months before their bankruptcy." },
+  { rank: 23, name: "Solyndra",      ads: 4.90, delusion: 5,  pmf: 4,  burn: 5,  warnings: 6,  hype: 5,  funding: "$850M",   note: "Real clean energy mission destroyed by Chinese manufacturing costs." },
+  { rank: 24, name: "MySpace",       ads: 4.85, delusion: 6,  pmf: 4,  burn: 3,  warnings: 7,  hype: 4,  funding: "$580M",   note: "Missed mobile entirely. Acquired for $580M, sold for $35M." },
+  { rank: 25, name: "Zune",          ads: 4.55, delusion: 4,  pmf: 6,  burn: 4,  warnings: 5,  hype: 3,  funding: "~$300M",  note: "Honest iPod competitor. Real market, completely owned by Apple's ecosystem." },
+  { rank: 26, name: "Friendster",    ads: 4.40, delusion: 5,  pmf: 4,  burn: 3,  warnings: 6,  hype: 4,  funding: "$48.5M",  note: "Declined Google's $30M offer in 2003. Scale failures let Facebook outrun them." },
+  { rank: 27, name: "Homejoy",       ads: 4.00, delusion: 4,  pmf: 4,  burn: 4,  warnings: 4,  hype: 4,  funding: "$38M",    note: "On-demand cleaning killed by contractor misclassification lawsuits, not product." },
+  { rank: 28, name: "Aereo",         ads: 3.55, delusion: 3,  pmf: 3,  burn: 4,  warnings: 4,  hype: 5,  funding: "$97M",    note: "Antenna-rental TV streaming. Supreme Court ended a legitimate legal bet." },
+  { rank: 29, name: "Rdio",          ads: 2.95, delusion: 2,  pmf: 3,  burn: 3,  warnings: 4,  hype: 4,  funding: "$126M",   note: "Good product, good team. Simply couldn't match Spotify's licensing power." },
+  { rank: 30, name: "Vine",          ads: 2.15, delusion: 2,  pmf: 2,  burn: 2,  warnings: 3,  hype: 2,  funding: "$30M",    note: "Twitter killed a working product with 200M users. TikTok proved it was right." },
+];
+
+function getTier(ads) {
+  if (ads >= 7.5) return { label: "S", color: "#E91E63", bg: "rgba(233,30,99,0.15)", name: "Hall of Shame" };
+  if (ads >= 6.0) return { label: "A", color: "#FF6D00", bg: "rgba(255,109,0,0.15)", name: "Spectacular Own Goal" };
+  if (ads >= 5.0) return { label: "B", color: "#FFD600", bg: "rgba(255,214,0,0.12)", name: "Forgivably Stupid" };
+  if (ads >= 3.5) return { label: "C", color: "#7C4DFF", bg: "rgba(124,77,255,0.12)", name: "Mostly Unlucky" };
+  return { label: "D", color: "#546E7A", bg: "rgba(84,110,122,0.12)", name: "Wrong Place Wrong Time" };
+}
+
+// ===== Counter Animation =====
+const counterEl = document.getElementById("hero-counter");
+let count = 0;
+const target = 8.25;
+const step = target / 80;
+function animateCounter() {
+  count += step;
+  if (count >= target) { counterEl.textContent = target.toFixed(2); return; }
+  counterEl.textContent = count.toFixed(2);
+  requestAnimationFrame(animateCounter);
+}
+animateCounter();
+
+// ===== Embedded Bar Chart =====
+const sorted = [...DATA].sort((a, b) => b.ads - a.ads);
+const names = sorted.map(d => d.name).reverse();
+const scores = sorted.map(d => d.ads).reverse();
+const barColors = sorted.map(d => getTier(d.ads).color).reverse();
+
+const chart = echarts.init(document.getElementById("main-chart"));
+chart.setOption({
+  backgroundColor: "#161630",
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    backgroundColor: "#0d0d1a",
+    borderColor: "#333",
+    textStyle: { color: "#e0e0e0", fontSize: 12 },
+    formatter: params => {
+      const idx = params[0].dataIndex;
+      const d = sorted[sorted.length - 1 - idx];
+      const tier = getTier(d.ads);
+      return `<b style="font-size:13px">${d.name}</b> <span style="color:#666">#${d.rank}</span><br/>
+              <span style="color:${tier.color}">ADS: ${d.ads.toFixed(2)} — ${tier.label} Tier: ${tier.name}</span><br/>
+              <span style="color:#777;font-size:11px">${d.note}</span>`;
+    }
+  },
+  grid: { left: "20%", right: "9%", top: 12, bottom: 36 },
+  xAxis: {
+    type: "value", max: 10,
+    axisLine: { lineStyle: { color: "#333" } },
+    axisLabel: { color: "#555", fontSize: 10 },
+    splitLine: { lineStyle: { color: "#1e1e3a" } },
+  },
+  yAxis: {
+    type: "category", data: names,
+    axisLabel: { fontSize: 10, color: "#ccc" },
+    axisLine: { lineStyle: { color: "#333" } },
+  },
+  dataZoom: [
+    { type: "inside", yAxisIndex: 0, filterMode: "none" },
+    { type: "slider", yAxisIndex: 0, width: 14, right: 2,
+      borderColor: "#333", fillerColor: "rgba(233,30,99,0.2)", handleStyle: { color: "#E91E63" } }
+  ],
+  series: [{
+    type: "bar",
+    data: scores.map((v, i) => ({
+      value: v,
+      itemStyle: { color: barColors[i], borderRadius: [0, 3, 3, 0], opacity: 0.85 }
+    })),
+    barWidth: "60%",
+    label: {
+      show: true, position: "right",
+      formatter: p => p.value.toFixed(2),
+      fontSize: 9.5, color: "#777"
+    },
+    animationDuration: 1500, animationEasing: "cubicOut",
+  }],
+  graphic: [{
+    type: "text", right: 8, bottom: 8,
+    style: { text: "RankMint", fontSize: 10, fill: "#333", fontStyle: "italic" }
+  }]
+});
+window.addEventListener("resize", () => chart.resize());
+
+// ===== Find Yourself Select =====
+const findSelect = document.getElementById("find-select");
+[...DATA].sort((a, b) => a.rank - b.rank).forEach(d => {
+  const opt = document.createElement("option");
+  opt.value = d.name; opt.textContent = `#${d.rank} ${d.name}`;
+  findSelect.appendChild(opt);
+});
+findSelect.addEventListener("change", () => {
+  const d = DATA.find(x => x.name === findSelect.value);
+  const rc = document.getElementById("result-card");
+  if (!d) { rc.style.display = "none"; return; }
+  rc.style.display = "block";
+  const tier = getTier(d.ads);
+  document.getElementById("result-rank").textContent = `#${d.rank}`;
+  document.getElementById("result-name").textContent = d.name;
+  document.getElementById("result-score").textContent = `ADS: ${d.ads.toFixed(2)} / 10`;
+  const tierEl = document.getElementById("result-tier");
+  tierEl.textContent = `${tier.label}-Tier: ${tier.name}`;
+  tierEl.style.background = tier.bg;
+  tierEl.style.color = tier.color;
+  document.getElementById("result-note").textContent = d.note;
+});
+
+// ===== Full Table =====
+let tableData = [...DATA].sort((a, b) => a.rank - b.rank);
+const tbody = document.getElementById("table-body");
+
+function renderTable(data) {
+  tbody.innerHTML = "";
+  data.forEach(d => {
+    const tier = getTier(d.ads);
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="rank-num">${d.rank}</td>
+      <td class="startup-name">${d.name}</td>
+      <td class="ads-score">${d.ads.toFixed(2)}</td>
+      <td>${d.delusion}</td>
+      <td>${d.pmf}</td>
+      <td>${d.burn}</td>
+      <td>${d.warnings}</td>
+      <td>${d.hype}</td>
+      <td><span class="tier-pill" style="background:${tier.bg};color:${tier.color}">${tier.label}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+renderTable(tableData);
+
+let sortDir = {};
+function sortTable(colIdx) {
+  const keys = ["rank", "name", "ads", "delusion", "pmf", "burn", "warnings", "hype"];
+  const col = keys[colIdx];
+  if (!col) return;
+  sortDir[col] = !sortDir[col];
+  tableData.sort((a, b) => {
+    const va = a[col], vb = b[col];
+    const cmp = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb));
+    return sortDir[col] ? cmp : -cmp;
+  });
+  renderTable(tableData);
+}
+
+document.getElementById("table-search").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  renderTable(tableData.filter(d =>
+    d.name.toLowerCase().includes(q) || d.note.toLowerCase().includes(q)
+  ));
+});
+
+// ===== Share =====
+const shareUrl = "https://rankmint.co/startup-graveyard-index/";
+const shareText = "Juicero beats Theranos. WeWork is #17. The Startup Graveyard Index ranks 30 failures by how avoidable they actually were. #RankMint";
+document.getElementById("share-twitter").href =
+  `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+document.getElementById("share-linkedin").href =
+  `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+document.getElementById("share-copy").addEventListener("click", () => {
+  navigator.clipboard.writeText(shareUrl).then(() => {
+    const btn = document.getElementById("share-copy");
+    btn.textContent = "Copied!";
+    setTimeout(() => btn.textContent = "Copy Link", 2000);
+  });
+});
+</script>
+</body>
+</html>

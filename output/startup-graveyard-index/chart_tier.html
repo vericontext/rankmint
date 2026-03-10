@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Startup Graveyard Tier List — Hall of Shame to Wrong Place Wrong Time | RankMint</title>
+<meta property="og:title" content="Startup Graveyard Tier List">
+<meta property="og:description" content="S-tier to D-tier: which startup failures were truly stupid vs just unlucky?">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Startup Graveyard Tier List">
+<meta name="twitter:description" content="S-tier to D-tier: which startup failures were truly stupid vs just unlucky?">
+<meta name="twitter:image" content="card.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0d0d1a;
+    color: #e0e0e0;
+    min-height: 100vh;
+  }
+  .header {
+    padding: 32px 40px 16px;
+    border-bottom: 1px solid #1e1e3a;
+  }
+  .header h1 {
+    font-size: 1.7rem;
+    color: #fff;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .header .sub {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 6px;
+  }
+  .header .sub span {
+    color: #E91E63;
+    font-weight: 600;
+  }
+
+  .tier-container {
+    max-width: 1060px;
+    margin: 24px auto 40px;
+    padding: 0 24px;
+  }
+
+  .tier-row {
+    display: flex;
+    margin-bottom: 6px;
+    min-height: 80px;
+    border-radius: 10px;
+    overflow: visible;
+    position: relative;
+  }
+
+  .tier-label-wrap {
+    width: 90px;
+    min-width: 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px 0 0 10px;
+    padding: 12px 0;
+  }
+  .tier-letter {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    line-height: 1;
+  }
+  .tier-name {
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+    text-align: center;
+    padding: 0 6px;
+    line-height: 1.2;
+  }
+
+  .tier-items {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 0 10px 10px 0;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-left: none;
+  }
+
+  .tier-item {
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: default;
+    transition: all 0.2s ease;
+    position: relative;
+    border: 1px solid transparent;
+    background: rgba(255,255,255,0.07);
+  }
+  .tier-item:hover {
+    transform: translateY(-3px);
+    z-index: 10;
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.14);
+  }
+  .tier-item .score-badge {
+    font-size: 0.68rem;
+    color: #aaa;
+    margin-top: 3px;
+    font-weight: 400;
+  }
+
+  /* Tooltip */
+  .tooltip-box {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e1e3a;
+    border: 1px solid #333;
+    color: #e0e0e0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    white-space: nowrap;
+    z-index: 100;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    min-width: 240px;
+    max-width: 320px;
+    white-space: normal;
+    text-align: left;
+  }
+  .tooltip-box::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #333;
+  }
+  .tier-item:hover .tooltip-box { display: block; }
+  .tooltip-name { font-weight: 700; font-size: 0.9rem; color: #fff; margin-bottom: 6px; }
+  .tooltip-note { color: #aaa; font-size: 0.75rem; margin-bottom: 8px; line-height: 1.4; }
+  .tooltip-scores { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 12px; }
+  .tooltip-scores span { font-size: 0.73rem; }
+
+  .watermark {
+    text-align: right;
+    padding: 16px 40px;
+    color: #333;
+    font-size: 0.75rem;
+    font-style: italic;
+  }
+
+  /* Tier-specific accent colors on item hover */
+  .tier-s .tier-item:hover { box-shadow: 0 4px 20px rgba(233,30,99,0.3); }
+  .tier-a .tier-item:hover { box-shadow: 0 4px 20px rgba(255,109,0,0.3); }
+  .tier-b .tier-item:hover { box-shadow: 0 4px 20px rgba(255,214,0,0.3); }
+  .tier-c .tier-item:hover { box-shadow: 0 4px 20px rgba(124,77,255,0.3); }
+  .tier-d .tier-item:hover { box-shadow: 0 4px 20px rgba(84,110,122,0.3); }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 0 40px 20px;
+    font-size: 0.78rem;
+    color: #666;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Startup Graveyard — Tier List</h1>
+  <div class="sub">Ranked by <span>Avoidable Death Score (ADS)</span> — how stupid, preventable, and inexcusable each failure was. Hover any card for the full breakdown.</div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#E91E63"></div> S — Hall of Shame (ADS 7.5+)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#FF6D00"></div> A — Spectacular Own Goals (6.0–7.49)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#FFD600"></div> B — Forgivably Stupid (5.0–5.99)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7C4DFF"></div> C — Mostly Unlucky (3.5–4.99)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#546E7A"></div> D — Wrong Place Wrong Time (&lt;3.5)</div>
+</div>
+
+<div class="tier-container" id="tier-container"></div>
+<div class="watermark">RankMint — startup-graveyard-index — March 2026</div>
+
+<script>
+const DATA = [
+  { rank: 1,  name: "Juicero",       ads: 8.25, delusion: 9, pmf: 10, burn: 9, warnings: 3, hype: 8, funding: "120M",  note: "$699 Wi-Fi juice press for bags you could squeeze by hand. The problem was invented by the company." },
+  { rank: 2,  name: "Lily Robotics", ads: 8.10, delusion: 9, pmf: 9,  burn: 8, warnings: 5, hype: 8, funding: "34M",   note: "Took $15M in pre-order deposits, used competitor drone footage in ads, never shipped a single unit." },
+  { rank: 3,  name: "Color Labs",    ads: 8.00, delusion: 8, pmf: 9,  burn: 10, warnings: 3, hype: 9, funding: "41M",  note: "$41M from Sequoia pre-launch for a photo app with zero users. Sold to Apple for $7M 18 months later." },
+  { rank: 4,  name: "Theranos",      ads: 7.95, delusion: 10, pmf: 5, burn: 6, warnings: 10, hype: 10, funding: "945M", note: "Blood test fraud sustained for 15 years. Physics-defying claims. $9B valuation on zero verifiable revenue." },
+  { rank: 5,  name: "Segway",        ads: 7.95, delusion: 9, pmf: 9,  burn: 5, warnings: 8, hype: 8, funding: "80M+",  note: "Inventor told Steve Jobs it would be bigger than the internet. Sold 140K units in 19 years vs 100K/year projection." },
+  { rank: 6,  name: "Clinkle",       ads: 7.75, delusion: 8, pmf: 8,  burn: 9, warnings: 5, hype: 8, funding: "30M",   note: "Raised $30M in a room, spent it on office luxuries, produced nothing in 2 years, then quietly dissolved." },
+  { rank: 7,  name: "Quibi",         ads: 7.55, delusion: 7, pmf: 9,  burn: 10, warnings: 2, hype: 9, funding: "1.75B", note: "$1.75B for mobile-only 10-minute premium content. Refused to add TV support. Shut 6 months after launch." },
+  { rank: 8,  name: "Fire Phone",    ads: 7.30, delusion: 8, pmf: 10, burn: 7, warnings: 2, hype: 7, funding: "170M",  note: "Jeff Bezos personally championed 'Dynamic Perspective' 3D gimmicks. Zero consumer demand signal. <35K units sold." },
+  { rank: 10, name: "Zume Pizza",    ads: 7.30, delusion: 7, pmf: 7,  burn: 8, warnings: 7, hype: 8, funding: "375M",  note: "$375M SoftBank bet on robot pizza-making. Mediocre pizza. Pivoted to 'sustainable packaging innovation.'" },
+  { rank: 9,  name: "Google+",       ads: 7.25, delusion: 6, pmf: 9,  burn: 6, warnings: 10, hype: 5, funding: "500M", note: "Forced G+ logins on YouTube users for 8 years. Nobody organically wanted another social network from Google." },
+  { rank: 11, name: "Better Place",  ads: 7.15, delusion: 8, pmf: 6,  burn: 7, warnings: 7, hype: 8, funding: "850M",  note: "Forecasted 100K battery-swap EVs in Israel by 2010. Sold fewer than 1,000. Assets sold for $450K." },
+  { rank: 12, name: "Essential",     ads: 6.55, delusion: 7, pmf: 7,  burn: 7, warnings: 4, hype: 7, funding: "330M",  note: "$330M for a 'differentiated' premium Android phone that had no differentiator. ~150K phones sold total." },
+  { rank: 13, name: "Webvan",        ads: 6.20, delusion: 6, pmf: 5,  burn: 8, warnings: 5, hype: 8, funding: "800M",  note: "Signed $1B Bechtel infrastructure contract before proving the Bay Area market. Instacart later proved the concept." },
+  { rank: 14, name: "Secret",        ads: 6.10, delusion: 6, pmf: 7,  burn: 7, warnings: 3, hype: 7, funding: "35M",   note: "Founders pocketed $3M each while 'returning' remaining funds. Anonymous social imploded from harassment." },
+  { rank: 15, name: "MoviePass",     ads: 6.10, delusion: 7, pmf: 3,  burn: 8, warnings: 7, hype: 6, funding: "68.7M", note: "Lost $21.7M/month at $9.95 unlimited. CEO publicly called it 'not a charity.' 3M subscribers proved demand existed." },
+  { rank: 16, name: "Jawbone",       ads: 6.00, delusion: 7, pmf: 3,  burn: 7, warnings: 7, hype: 7, funding: "930M",  note: "17 funding rounds across 10 years while losing the fitness wearables market to Fitbit and then Apple Watch." },
+  { rank: 17, name: "WeWork",        ads: 5.70, delusion: 8, pmf: 4,  burn: 5, warnings: 6, hype: 4, funding: "12.8B", note: "Spectacular governance failure and overvaluation — but co-working is real and WeWork had $1.8B in real revenue." },
+  { rank: 18, name: "Pets.com",      ads: 5.55, delusion: 5, pmf: 6,  burn: 7, warnings: 3, hype: 7, funding: "82M",   note: "IPO to shutdown in 268 days. The concept was right (Chewy proved it) but unit economics were impossible in 2000." },
+  { rank: 19, name: "Brandless",     ads: 5.45, delusion: 5, pmf: 5,  burn: 7, warnings: 4, hype: 7, funding: "240M",  note: "$240M SoftBank-backed 'unbranded' D2C startup that had no brand differentiation and no path to profitability." },
+  { rank: 20, name: "Beepi",         ads: 5.35, delusion: 6, pmf: 4,  burn: 6, warnings: 5, hype: 6, funding: "150M",  note: "Online used car marketplace with real market (Carvana proved it) but executives paid lavishly as unit economics imploded." },
+  { rank: 21, name: "Yik Yak",       ads: 5.15, delusion: 5, pmf: 4,  burn: 6, warnings: 5, hype: 7, funding: "73.5M", note: "Anonymous campus app with $400M peak valuation. Killed by moderation failures, not a bad market." },
+  { rank: 22, name: "Doppler Labs",  ads: 5.15, delusion: 5, pmf: 6,  burn: 6, warnings: 3, hype: 5, funding: "50M",   note: "Smart earbuds that were first to market — until AirPods launched 6 months before their bankruptcy filing." },
+  { rank: 23, name: "Solyndra",      ads: 4.90, delusion: 5, pmf: 4,  burn: 5, warnings: 6, hype: 5, funding: "850M",  note: "Genuine clean energy mission destroyed by Chinese solar panel cost competition they saw coming." },
+  { rank: 24, name: "MySpace",       ads: 4.85, delusion: 6, pmf: 4,  burn: 3, warnings: 7, hype: 4, funding: "580M",  note: "News Corp acquisition created bureaucratic paralysis. Missed mobile entirely. Sold for $35M after $580M purchase." },
+  { rank: 25, name: "Zune",          ads: 4.55, delusion: 4, pmf: 6,  burn: 4, warnings: 5, hype: 3, funding: "300M",  note: "Microsoft's honest iPod competitor. Real product, real market — just completely owned by Apple's ecosystem." },
+  { rank: 26, name: "Friendster",    ads: 4.40, delusion: 5, pmf: 4,  burn: 3, warnings: 6, hype: 4, funding: "48.5M", note: "Turned down Google's $30M offer in 2003. Technology scale failures led to mass exodus to MySpace then Facebook." },
+  { rank: 27, name: "Homejoy",       ads: 4.00, delusion: 4, pmf: 4,  burn: 4, warnings: 4, hype: 4, funding: "38M",   note: "Legitimate on-demand cleaning marketplace killed by worker misclassification lawsuits — legal, not product, failure." },
+  { rank: 28, name: "Aereo",         ads: 3.55, delusion: 3, pmf: 3,  burn: 4, warnings: 4, hype: 5, funding: "97M",   note: "Antenna-rental TV streaming destroyed by Supreme Court. Barry Diller honestly said 'if we lose, we're finished.'" },
+  { rank: 29, name: "Rdio",          ads: 2.95, delusion: 2, pmf: 3,  burn: 3, warnings: 4, hype: 4, funding: "126M",  note: "Good product, honest team, real streaming market. Simply couldn't match Spotify's licensing deal power." },
+  { rank: 30, name: "Vine",          ads: 2.15, delusion: 2, pmf: 2,  burn: 2, warnings: 3, hype: 2, funding: "30M",   note: "Twitter killed a working product with 200M users for internal strategy reasons. TikTok proved the format was exactly right." },
+];
+
+const TIERS = [
+  {
+    letter: "S",
+    name: "Hall of Shame",
+    min: 7.5,
+    color: "#E91E63",
+    class: "tier-s",
+    desc: "Failures so preventable they belong in a museum"
+  },
+  {
+    letter: "A",
+    name: "Spectacular Own Goals",
+    min: 6.0,
+    color: "#FF6D00",
+    class: "tier-a",
+    desc: "Had real advantages, squandered them spectacularly"
+  },
+  {
+    letter: "B",
+    name: "Forgivably Stupid",
+    min: 5.0,
+    color: "#FFD600",
+    class: "tier-b",
+    desc: "Dumb decisions, but you can see how they got there"
+  },
+  {
+    letter: "C",
+    name: "Mostly Unlucky",
+    min: 3.5,
+    color: "#7C4DFF",
+    class: "tier-c",
+    desc: "Market or legal forces they couldn't fully control"
+  },
+  {
+    letter: "D",
+    name: "Wrong Place Wrong Time",
+    min: 0,
+    color: "#546E7A",
+    class: "tier-d",
+    desc: "Would have been fine in a different universe"
+  },
+];
+
+const sorted = [...DATA].sort((a, b) => b.ads - a.ads);
+const container = document.getElementById("tier-container");
+
+TIERS.forEach(tier => {
+  const nextMin = TIERS.find(t => t.min > tier.min);
+  const items = sorted.filter(d => {
+    if (nextMin) return d.ads >= tier.min && d.ads < nextMin.min;
+    return d.ads >= tier.min;
+  });
+
+  // Re-assign using the "highest matching tier" rule
+  const tierItems = sorted.filter(d => {
+    const assigned = TIERS.find(t => d.ads >= t.min);
+    return assigned && assigned.letter === tier.letter;
+  });
+
+  if (tierItems.length === 0) return;
+
+  const row = document.createElement("div");
+  row.className = `tier-row ${tier.class}`;
+
+  const labelWrap = document.createElement("div");
+  labelWrap.className = "tier-label-wrap";
+  labelWrap.style.background = tier.color;
+  labelWrap.innerHTML = `<div class="tier-letter">${tier.letter}</div><div class="tier-name">${tier.name}</div>`;
+
+  const itemsDiv = document.createElement("div");
+  itemsDiv.className = "tier-items";
+
+  tierItems.forEach(d => {
+    const el = document.createElement("div");
+    el.className = "tier-item";
+
+    const scoreColor = d.ads >= 7.5 ? "#E91E63" :
+                       d.ads >= 6.0 ? "#FF6D00" :
+                       d.ads >= 5.0 ? "#FFD600" :
+                       d.ads >= 3.5 ? "#7C4DFF" : "#546E7A";
+
+    el.innerHTML = `
+      ${d.name}
+      <div class="score-badge" style="color:${scoreColor}">${d.ads.toFixed(2)}</div>
+      <div class="tooltip-box">
+        <div class="tooltip-name">#${d.rank} ${d.name}</div>
+        <div class="tooltip-note">${d.note}</div>
+        <div class="tooltip-scores">
+          <span style="color:#FFD600">Delusion: ${d.delusion}/10</span>
+          <span style="color:#74B9FF">PMF Gap: ${d.pmf}/10</span>
+          <span style="color:#A29BFE">Burn: ${d.burn}/10</span>
+          <span style="color:#fd79a8">Warnings: ${d.warnings}/10</span>
+          <span style="color:#55efc4">Hype: ${d.hype}/10</span>
+          <span style="color:#aaa">Funding: $${d.funding}</span>
+        </div>
+      </div>
+    `;
+    itemsDiv.appendChild(el);
+  });
+
+  row.appendChild(labelWrap);
+  row.appendChild(itemsDiv);
+  container.appendChild(row);
+});
+
+// Entrance animation
+document.querySelectorAll(".tier-item").forEach((el, i) => {
+  el.style.opacity = "0";
+  el.style.transform = "translateY(12px)";
+  setTimeout(() => {
+    el.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+    el.style.opacity = "1";
+    el.style.transform = "translateY(0)";
+  }, 40 + i * 25);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 630px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .card {
+    width: 1200px; height: 630px;
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a0a22 50%, #0f0f2e 100%);
+    color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 56px 80px;
+    position: relative; overflow: hidden;
+  }
+
+  /* Decorative background pattern */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(233,30,99,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(124,77,255,0.10) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .accent-line {
+    position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+    background: linear-gradient(90deg, #E91E63, #FF6D00, #FFD600, #7C4DFF);
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #E91E63;
+    margin-bottom: 14px;
+  }
+
+  .title {
+    font-size: 46px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+    max-width: 780px;
+  }
+  .title span { color: #E91E63; }
+
+  .hook {
+    font-size: 18px;
+    color: #999;
+    margin-bottom: 44px;
+    max-width: 660px;
+    line-height: 1.45;
+  }
+
+  .top3 { display: flex; gap: 20px; }
+  .top-item {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 18px 26px;
+    min-width: 200px;
+    position: relative;
+    z-index: 1;
+  }
+  .top-item .medal { font-size: 26px; font-weight: 900; margin-bottom: 5px; }
+  .top-item .medal.gold   { color: #E91E63; }
+  .top-item .medal.silver { color: #FF6D00; }
+  .top-item .medal.bronze { color: #FFD600; }
+  .top-item .item-name { font-size: 17px; font-weight: 700; }
+  .top-item .item-score { font-size: 12px; color: #777; margin-top: 3px; }
+  .top-item .item-note { font-size: 11px; color: #555; margin-top: 5px; line-height: 1.3; }
+
+  .watermark {
+    position: absolute; bottom: 28px; right: 40px;
+    font-size: 15px; color: rgba(255,255,255,0.2); font-weight: 800; letter-spacing: 3px;
+  }
+
+  .stat-bar {
+    position: absolute; bottom: 28px; left: 80px;
+    display: flex; gap: 28px;
+    font-size: 12px; color: #555;
+  }
+  .stat-bar span { color: #aaa; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="accent-line"></div>
+
+  <div class="eyebrow">RankMint — Startup Graveyard Index</div>
+
+  <div class="title">The <span>Stupidest</span> Startup<br>Deaths. Ranked.</div>
+
+  <div class="hook">Not by money lost — by how preventable the failure was. Juicero beats Theranos. WeWork is #17.</div>
+
+  <div class="top3">
+    <div class="top-item">
+      <div class="medal gold">#1</div>
+      <div class="item-name">Juicero</div>
+      <div class="item-score">ADS 8.25 / 10</div>
+      <div class="item-note">$699 Wi-Fi press for bags<br>you could squeeze by hand</div>
+    </div>
+    <div class="top-item">
+      <div class="medal silver">#2</div>
+      <div class="item-name">Lily Robotics</div>
+      <div class="item-score">ADS 8.10 / 10</div>
+      <div class="item-note">$15M in pre-orders,<br>never shipped a drone</div>
+    </div>
+    <div class="top-item">
+      <div class="medal bronze">#3</div>
+      <div class="item-name">Color Labs</div>
+      <div class="item-score">ADS 8.00 / 10</div>
+      <div class="item-note">$41M pre-launch,<br>sold for $7M 18 months later</div>
+    </div>
+  </div>
+
+  <div class="stat-bar">
+    <div>30 startups ranked &nbsp;|&nbsp; <span>5 tiers</span> &nbsp;|&nbsp; ADS formula: Delusion + PMF Gap + Burn + Warnings + Hype &nbsp;|&nbsp; March 2026</div>
+  </div>
+
+  <div class="watermark">RANKMINT</div>
+</div>
+</body>
+</html>

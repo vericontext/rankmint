@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Startup Graveyard Index — Avoidable Death Score | RankMint</title>
+<meta property="og:title" content="Startup Graveyard Index — Avoidable Death Score">
+<meta property="og:description" content="Ranking 30 famous startup failures by how stupid, preventable, and inexcusable their deaths were.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Startup Graveyard Index — Avoidable Death Score">
+<meta name="twitter:description" content="Ranking 30 famous startup failures by how stupid, preventable, and inexcusable their deaths were.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d0d1a; color: #e0e0e0; }
+  #chart { width: 100%; height: 92vh; min-height: 700px; }
+  .header { padding: 28px 36px 10px; }
+  .header h1 { font-size: 1.5rem; color: #fff; letter-spacing: -0.02em; }
+  .header p { font-size: 0.85rem; color: #666; margin-top: 6px; }
+  .header .subtitle { color: #E91E63; font-weight: 600; font-size: 0.9rem; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>The Startup Graveyard Index</h1>
+  <div class="subtitle">Avoidable Death Score (ADS) — 30 Famous Startup Failures Ranked by Stupidity, Not Just Losses</div>
+  <p>Hover for breakdown. Scroll to zoom. Source: RankMint analysis, March 2026.</p>
+</div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { rank: 1,  name: "Juicero",       ads: 8.25, delusion: 9, pmf: 10, burn: 9, warnings: 3, hype: 8, funding: 120,  note: "$699 Wi-Fi juice press for bags you could squeeze by hand" },
+  { rank: 2,  name: "Lily Robotics", ads: 8.10, delusion: 9, pmf: 9,  burn: 8, warnings: 5, hype: 8, funding: 34,   note: "Took $15M in pre-order deposits, used competitor footage in ads, never shipped" },
+  { rank: 3,  name: "Color Labs",    ads: 8.00, delusion: 8, pmf: 9,  burn: 10, warnings: 3, hype: 9, funding: 41,  note: "$41M from Sequoia pre-launch; sold to Apple for $7M 18 months later" },
+  { rank: 4,  name: "Theranos",      ads: 7.95, delusion: 10, pmf: 5, burn: 6, warnings: 10, hype: 10, funding: 945, note: "Blood test fraud, 15-year deception, $9B valuation on zero verifiable revenue" },
+  { rank: 5,  name: "Segway",        ads: 7.95, delusion: 9, pmf: 9,  burn: 5, warnings: 8, hype: 8, funding: 80,   note: '"Bigger than the internet" — sold 140K units in 19 years vs 100K/year projection' },
+  { rank: 6,  name: "Clinkle",       ads: 7.75, delusion: 8, pmf: 8,  burn: 9, warnings: 5, hype: 8, funding: 30,   note: "Raised $30M in a room, spent on luxuries, produced nothing in 2 years" },
+  { rank: 7,  name: "Quibi",         ads: 7.55, delusion: 7, pmf: 9,  burn: 10, warnings: 2, hype: 9, funding: 1750, note: "$1.75B for mobile-only premium content nobody asked for — shut in 6 months" },
+  { rank: 8,  name: "Fire Phone",    ads: 7.30, delusion: 8, pmf: 10, burn: 7, warnings: 2, hype: 7, funding: 170,  note: "Jeff Bezos's gimmick phone — <35K units sold, $170M write-down" },
+  { rank: 9,  name: "Google+",       ads: 7.25, delusion: 6, pmf: 9,  burn: 6, warnings: 10, hype: 5, funding: 500, note: "Forced social on search users for 8 years. Nobody wanted this." },
+  { rank: 10, name: "Zume Pizza",    ads: 7.30, delusion: 7, pmf: 7,  burn: 8, warnings: 7, hype: 8, funding: 375,  note: "$375M SoftBank-backed robot pizza; pivoted to 'packaging innovation'" },
+  { rank: 11, name: "Better Place",  ads: 7.15, delusion: 8, pmf: 6,  burn: 7, warnings: 7, hype: 8, funding: 850,  note: "Forecast 100K battery-swap EVs in Israel by 2010; sold fewer than 1,000" },
+  { rank: 12, name: "Essential",     ads: 6.55, delusion: 7, pmf: 7,  burn: 7, warnings: 4, hype: 7, funding: 330,  note: "$330M for a notchless Android phone by Andy Rubin — ~150K units sold" },
+  { rank: 13, name: "Webvan",        ads: 6.20, delusion: 6, pmf: 5,  burn: 8, warnings: 5, hype: 8, funding: 800,  note: "$1B Bechtel contract before proving Bay Area grocery market" },
+  { rank: 14, name: "Secret",        ads: 6.10, delusion: 6, pmf: 7,  burn: 7, warnings: 3, hype: 7, funding: 35,   note: "Founders pocketed $3M each and returned remainder; shut after 18 months" },
+  { rank: 15, name: "MoviePass",     ads: 6.10, delusion: 7, pmf: 3,  burn: 8, warnings: 7, hype: 6, funding: 68.7, note: "Lost $21.7M/month at $9.95 unlimited; CEO called it 'not a charity'" },
+  { rank: 16, name: "Jawbone",       ads: 6.00, delusion: 7, pmf: 3,  burn: 7, warnings: 7, hype: 7, funding: 930,  note: "17 funding rounds while losing market to Fitbit and Apple Watch" },
+  { rank: 17, name: "WeWork",        ads: 5.70, delusion: 8, pmf: 4,  burn: 5, warnings: 6, hype: 4, funding: 12800, note: "$47B valuation for a real estate company — had $1.8B real revenue" },
+  { rank: 18, name: "Pets.com",      ads: 5.55, delusion: 5, pmf: 6,  burn: 7, warnings: 3, hype: 7, funding: 82,   note: "IPO to shutdown in 268 days; Chewy later proved the market existed" },
+  { rank: 19, name: "Brandless",     ads: 5.45, delusion: 5, pmf: 5,  burn: 7, warnings: 4, hype: 7, funding: 240,  note: "$240M SoftBank bet on 'unbranded' D2C that had no brand differentiation" },
+  { rank: 20, name: "Beepi",         ads: 5.35, delusion: 6, pmf: 4,  burn: 6, warnings: 5, hype: 6, funding: 150,  note: "Online used cars; execs paid lavishly while company burned" },
+  { rank: 21, name: "Yik Yak",       ads: 5.15, delusion: 5, pmf: 4,  burn: 6, warnings: 5, hype: 7, funding: 73.5, note: "$400M valuation; killed by moderation failures, not market failure" },
+  { rank: 22, name: "Doppler Labs",  ads: 5.15, delusion: 5, pmf: 6,  burn: 6, warnings: 3, hype: 5, funding: 50,   note: "Smart earbuds; AirPods launched 6 months before their bankruptcy" },
+  { rank: 23, name: "Solyndra",      ads: 4.90, delusion: 5, pmf: 4,  burn: 5, warnings: 6, hype: 5, funding: 850,  note: "$850M (mostly US gov loans) for solar panels Chinese manufacturers undercut" },
+  { rank: 24, name: "MySpace",       ads: 4.85, delusion: 6, pmf: 4,  burn: 3, warnings: 7, hype: 4, funding: 580,  note: "Acquired by News Corp for $580M; sold for $35M after missing mobile" },
+  { rank: 25, name: "Zune",          ads: 4.55, delusion: 4, pmf: 6,  burn: 4, warnings: 5, hype: 3, funding: 300,  note: "Microsoft's honest but doomed iPod competitor — 2% market share peak" },
+  { rank: 26, name: "Friendster",    ads: 4.40, delusion: 5, pmf: 4,  burn: 3, warnings: 6, hype: 4, funding: 48.5, note: "Turned down Google's $30M offer in 2003; Facebook outran them anyway" },
+  { rank: 27, name: "Homejoy",       ads: 4.00, delusion: 4, pmf: 4,  burn: 4, warnings: 4, hype: 4, funding: 38,   note: "On-demand cleaning killed by contractor misclassification lawsuits" },
+  { rank: 28, name: "Aereo",         ads: 3.55, delusion: 3, pmf: 3,  burn: 4, warnings: 4, hype: 5, funding: 97,   note: "Antenna-rental TV streaming; Supreme Court ended a legitimate legal bet" },
+  { rank: 29, name: "Rdio",          ads: 2.95, delusion: 2, pmf: 3,  burn: 3, warnings: 4, hype: 4, funding: 126,  note: "Good product, honest team; simply couldn't match Spotify's licensing power" },
+  { rank: 30, name: "Vine",          ads: 2.15, delusion: 2, pmf: 2,  burn: 2, warnings: 3, hype: 2, funding: 30,   note: "Twitter killed a working product with 200M users. TikTok proved it was right." },
+];
+
+// Sort descending by ADS
+const sorted = [...DATA].sort((a, b) => b.ads - a.ads);
+const names = sorted.map(d => d.name).reverse();
+const scores = sorted.map(d => d.ads).reverse();
+
+// Tier color mapping
+function tierColor(ads) {
+  if (ads >= 7.5) return "#E91E63";      // S — Hall of Shame (hot pink)
+  if (ads >= 6.0) return "#FF6D00";      // A — Spectacular Own Goals (orange)
+  if (ads >= 5.0) return "#FFD600";      // B — Forgivably Stupid (amber)
+  if (ads >= 3.5) return "#7C4DFF";      // C — Mostly Unlucky (purple)
+  return "#546E7A";                       // D — Wrong Place Wrong Time (slate)
+}
+
+const colors = sorted.map(d => tierColor(d.ads)).reverse();
+
+const chart = echarts.init(document.getElementById("chart"));
+chart.setOption({
+  backgroundColor: "#0d0d1a",
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    backgroundColor: "#1e1e3a",
+    borderColor: "#333",
+    textStyle: { color: "#e0e0e0", fontSize: 12 },
+    formatter: params => {
+      const idx = params[0].dataIndex;
+      const d = sorted[sorted.length - 1 - idx];
+      const tier = d.ads >= 7.5 ? "S — Hall of Shame" :
+                   d.ads >= 6.0 ? "A — Spectacular Own Goals" :
+                   d.ads >= 5.0 ? "B — Forgivably Stupid" :
+                   d.ads >= 3.5 ? "C — Mostly Unlucky" : "D — Wrong Place Wrong Time";
+      return `<b style="font-size:13px">${d.name}</b> <span style="color:#aaa">#${d.rank}</span><br/>
+              <span style="color:#E91E63">ADS: ${d.ads.toFixed(2)}</span><br/>
+              Tier: ${tier}<br/>
+              <span style="color:#aaa;font-size:11px">${d.note}</span><br/>
+              <br/>
+              <span style="color:#FFD600">Delusion: ${d.delusion}/10</span> &nbsp;
+              <span style="color:#74B9FF">PMF Gap: ${d.pmf}/10</span><br/>
+              <span style="color:#A29BFE">Burn: ${d.burn}/10</span> &nbsp;
+              <span style="color:#fd79a8">Warnings: ${d.warnings}/10</span> &nbsp;
+              <span style="color:#55efc4">Hype: ${d.hype}/10</span><br/>
+              Funding: $${d.funding >= 1000 ? (d.funding/1000).toFixed(1)+'B' : d.funding+'M'}`;
+    }
+  },
+  legend: {
+    data: ["S: Hall of Shame", "A: Spectacular Own Goals", "B: Forgivably Stupid", "C: Mostly Unlucky", "D: Wrong Place Wrong Time"],
+    top: 8,
+    right: 36,
+    textStyle: { color: "#aaa", fontSize: 11 },
+    itemWidth: 14,
+    itemHeight: 10,
+  },
+  grid: { left: "18%", right: "9%", top: 44, bottom: 36 },
+  xAxis: {
+    type: "value",
+    name: "Avoidable Death Score (ADS)",
+    nameLocation: "center",
+    nameGap: 28,
+    nameTextStyle: { color: "#888", fontSize: 11 },
+    max: 10,
+    axisLine: { lineStyle: { color: "#333" } },
+    axisLabel: { color: "#666" },
+    splitLine: { lineStyle: { color: "#1e1e3a" } },
+  },
+  yAxis: {
+    type: "category",
+    data: names,
+    axisLabel: { fontSize: 11, color: "#ccc" },
+    axisLine: { lineStyle: { color: "#333" } },
+  },
+  dataZoom: [
+    { type: "inside", yAxisIndex: 0, filterMode: "none" },
+    { type: "slider", yAxisIndex: 0, width: 16, right: 4,
+      borderColor: "#333", fillerColor: "rgba(233,30,99,0.2)", handleStyle: { color: "#E91E63" } }
+  ],
+  series: [{
+    type: "bar",
+    data: scores.map((v, i) => ({
+      value: v,
+      itemStyle: {
+        color: colors[i],
+        borderRadius: [0, 3, 3, 0],
+        opacity: 0.88,
+      }
+    })),
+    barWidth: "58%",
+    label: {
+      show: true,
+      position: "right",
+      formatter: p => p.value.toFixed(2),
+      fontSize: 10,
+      color: "#aaa",
+    },
+    animationDuration: 1600,
+    animationEasing: "cubicOut",
+  }],
+  graphic: [
+    { type: "text", right: 8, bottom: 8,
+      style: { text: "RankMint", fontSize: 11, fill: "#444", fontStyle: "italic" } },
+    // Tier labels on right axis
+    { type: "text", right: 60, top: 52,
+      style: { text: "S", fontSize: 14, fontWeight: "bold", fill: "#E91E63" } },
+  ],
+});
+
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

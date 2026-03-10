@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Startup Graveyard — Funding vs Stupidity Quadrant | RankMint</title>
+<meta property="og:title" content="Startup Graveyard — Funding vs Stupidity Quadrant">
+<meta property="og:description" content="Did burning more money make you stupider? The answer is messier than you think.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Startup Graveyard — Funding vs Stupidity Quadrant">
+<meta name="twitter:description" content="Did burning more money make you stupider? The answer is messier than you think.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; }
+  #chart { width: 100%; height: 92vh; min-height: 620px; }
+  .header { padding: 24px 36px 10px; border-bottom: 1px solid #eee; }
+  .header h1 { font-size: 1.4rem; color: #1a1a2e; font-weight: 700; }
+  .header p { font-size: 0.83rem; color: #888; margin-top: 5px; }
+  .header em { color: #E91E63; font-style: normal; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Startup Graveyard — Capital vs Stupidity Matrix</h1>
+  <p>X-axis: Total Funding Raised (log scale, $M) &nbsp;|&nbsp; Y-axis: Avoidable Death Score &nbsp;|&nbsp; Bubble size: Delusion Score &nbsp;|&nbsp; <em>Hover for details.</em> Scroll to zoom. Source: RankMint, March 2026.</p>
+</div>
+<div id="chart"></div>
+<script>
+// funding_log = log10(funding_million)
+const DATA = [
+  { name: "Juicero",       ads: 8.25, funding: 120,   delusion: 9,  note: "$699 juice press for squeezable bags" },
+  { name: "Lily Robotics", ads: 8.10, funding: 34,    delusion: 9,  note: "Pre-ordered drone, never shipped" },
+  { name: "Color Labs",    ads: 8.00, funding: 41,    delusion: 8,  note: "$41M pre-launch, sold to Apple for $7M" },
+  { name: "Theranos",      ads: 7.95, funding: 945,   delusion: 10, note: "15 years of blood test fraud" },
+  { name: "Segway",        ads: 7.95, funding: 80,    delusion: 9,  note: "Bigger than the internet, sold 140K in 19 yrs" },
+  { name: "Clinkle",       ads: 7.75, funding: 30,    delusion: 8,  note: "$30M, produced nothing in 2 years" },
+  { name: "Quibi",         ads: 7.55, funding: 1750,  delusion: 7,  note: "$1.75B, shut in 6 months" },
+  { name: "Fire Phone",    ads: 7.30, funding: 170,   delusion: 8,  note: "<35K units, $170M write-down" },
+  { name: "Zume Pizza",    ads: 7.30, funding: 375,   delusion: 7,  note: "$375M robot pizza with bad pizza" },
+  { name: "Google+",       ads: 7.25, funding: 500,   delusion: 6,  note: "Forced social on 8 years of nobody" },
+  { name: "Better Place",  ads: 7.15, funding: 850,   delusion: 8,  note: "Sold <1K EVs vs 100K/yr forecast" },
+  { name: "Essential",     ads: 6.55, funding: 330,   delusion: 7,  note: "~150K differentiated-nothing phones" },
+  { name: "Webvan",        ads: 6.20, funding: 800,   delusion: 6,  note: "$1B contract before proving market" },
+  { name: "Secret",        ads: 6.10, funding: 35,    delusion: 6,  note: "Founders pocketed $3M each on exit" },
+  { name: "MoviePass",     ads: 6.10, funding: 68.7,  delusion: 7,  note: "$10 unlimited, lost $21.7M/month" },
+  { name: "Jawbone",       ads: 6.00, funding: 930,   delusion: 7,  note: "17 funding rounds, lost to Apple Watch" },
+  { name: "WeWork",        ads: 5.70, funding: 12800, delusion: 8,  note: "$47B valuation, $1.8B real revenue" },
+  { name: "Pets.com",      ads: 5.55, funding: 82,    delusion: 5,  note: "IPO to shutdown 268 days" },
+  { name: "Brandless",     ads: 5.45, funding: 240,   delusion: 5,  note: "$240M for a brand with no brand" },
+  { name: "Beepi",         ads: 5.35, funding: 150,   delusion: 6,  note: "Used cars, lavish exec spend" },
+  { name: "Yik Yak",       ads: 5.15, funding: 73.5,  delusion: 5,  note: "$400M peak, moderation killed it" },
+  { name: "Doppler Labs",  ads: 5.15, funding: 50,    delusion: 5,  note: "AirPods launched 6 months earlier" },
+  { name: "Solyndra",      ads: 4.90, funding: 850,   delusion: 5,  note: "Chinese panels killed a real mission" },
+  { name: "MySpace",       ads: 4.85, funding: 580,   delusion: 6,  note: "Missed mobile, acquired for $580M sold for $35M" },
+  { name: "Zune",          ads: 4.55, funding: 300,   delusion: 4,  note: "Real product, owned by iPod's ecosystem" },
+  { name: "Friendster",    ads: 4.40, funding: 48.5,  delusion: 5,  note: "Declined Google $30M, outrun by Facebook" },
+  { name: "Homejoy",       ads: 4.00, funding: 38,    delusion: 4,  note: "Legal failure, not product failure" },
+  { name: "Aereo",         ads: 3.55, funding: 97,    delusion: 3,  note: "Supreme Court ended a legitimate bet" },
+  { name: "Rdio",          ads: 2.95, funding: 126,   delusion: 2,  note: "Good product, outgunned by Spotify" },
+  { name: "Vine",          ads: 2.15, funding: 30,    delusion: 2,  note: "Twitter killed 200M user product" },
+];
+
+// Use log10 scale for funding
+DATA.forEach(d => { d.fundingLog = Math.log10(d.funding); });
+
+const xVals = DATA.map(d => d.fundingLog);
+const yVals = DATA.map(d => d.ads);
+const xMid = (Math.min(...xVals) + Math.max(...xVals)) / 2;  // ~3.0 = log10(1000) range
+const yMid = (Math.min(...yVals) + Math.max(...yVals)) / 2;  // ~5.2
+const xMin = Math.min(...xVals) - 0.2;
+const xMax = Math.max(...xVals) + 0.2;
+const yMin = Math.min(...yVals) - 0.3;
+const yMax = Math.max(...yVals) + 0.3;
+
+// Fixed quadrant midpoints for better visual separation
+const QX = 2.95; // log10(~890M) — splits cheap/expensive
+const QY = 5.5;  // splits unlucky/stupid
+
+function getQuadrant(d) {
+  if (d.fundingLog >= QX && d.ads >= QY) return "topRight";
+  if (d.fundingLog < QX && d.ads >= QY)  return "topLeft";
+  if (d.fundingLog >= QX && d.ads < QY)  return "bottomRight";
+  return "bottomLeft";
+}
+
+const COLORS = {
+  topRight:    "#E91E63",  // Expensive Idiots — hot pink
+  topLeft:     "#FF6D00",  // Cheap Disasters — orange
+  bottomRight: "#7C4DFF",  // Ambitious Losers — purple
+  bottomLeft:  "#546E7A",  // Unlucky Underdogs — slate
+};
+
+const QUADRANT_BG = {
+  topRight:    "rgba(233,30,99,0.05)",
+  topLeft:     "rgba(255,109,0,0.05)",
+  bottomRight: "rgba(124,77,255,0.05)",
+  bottomLeft:  "rgba(84,110,122,0.05)",
+};
+
+const seriesData = DATA.map(d => ({
+  value: [d.fundingLog, d.ads],
+  name: d.name,
+  symbolSize: 10 + d.delusion * 3.2,
+  itemStyle: {
+    color: COLORS[getQuadrant(d)],
+    opacity: 0.82,
+    borderColor: "rgba(255,255,255,0.3)",
+    borderWidth: 1,
+  },
+  _raw: d,
+}));
+
+const chart = echarts.init(document.getElementById("chart"));
+
+// X-axis tick formatter: convert log back to $M/$B label
+function fundingLabel(logVal) {
+  const val = Math.pow(10, logVal);
+  if (val >= 1000) return `$${(val/1000).toFixed(0)}B`;
+  return `$${val.toFixed(0)}M`;
+}
+
+chart.setOption({
+  backgroundColor: "#fafafa",
+  tooltip: {
+    trigger: "item",
+    backgroundColor: "#1e1e3a",
+    borderColor: "#333",
+    textStyle: { color: "#e0e0e0", fontSize: 12 },
+    formatter: p => {
+      const d = p.data._raw;
+      const q = getQuadrant(d);
+      const qLabel = q === "topRight"    ? "The Expensive Idiots" :
+                     q === "topLeft"     ? "The Cheap Disasters" :
+                     q === "bottomRight" ? "The Ambitious Losers" : "The Unlucky Underdogs";
+      const fundStr = d.funding >= 1000 ? `$${(d.funding/1000).toFixed(2)}B` : `$${d.funding}M`;
+      return `<b style="font-size:13px">${d.name}</b><br/>
+              <span style="color:#E91E63">ADS: ${d.ads.toFixed(2)}</span> &nbsp; Delusion: ${d.delusion}/10<br/>
+              Funding: ${fundStr}<br/>
+              Quadrant: <em>${qLabel}</em><br/>
+              <span style="color:#aaa;font-size:11px">${d.note}</span>`;
+    }
+  },
+  grid: { left: "12%", right: "8%", top: 60, bottom: 70 },
+  xAxis: {
+    type: "value",
+    name: "Total Funding Raised (log scale)",
+    nameLocation: "center",
+    nameGap: 42,
+    nameTextStyle: { color: "#888", fontSize: 11 },
+    min: xMin,
+    max: xMax,
+    splitLine: { show: false },
+    axisLine: { lineStyle: { color: "#ccc" } },
+    axisLabel: {
+      color: "#888",
+      formatter: v => fundingLabel(v),
+      fontSize: 10,
+    },
+  },
+  yAxis: {
+    type: "value",
+    name: "Avoidable Death Score (ADS)",
+    nameLocation: "center",
+    nameGap: 52,
+    nameTextStyle: { color: "#888", fontSize: 11 },
+    min: yMin,
+    max: yMax,
+    splitLine: { show: false },
+    axisLine: { lineStyle: { color: "#ccc" } },
+    axisLabel: { color: "#888", fontSize: 10 },
+  },
+  dataZoom: [
+    { type: "inside", xAxisIndex: 0 },
+    { type: "inside", yAxisIndex: 0 },
+  ],
+  series: [{
+    type: "scatter",
+    data: seriesData,
+    label: {
+      show: true,
+      formatter: p => p.data.name,
+      position: "right",
+      fontSize: 9.5,
+      color: "#444",
+      offset: [4, 0],
+    },
+    emphasis: {
+      label: { fontSize: 12, fontWeight: "bold", color: "#1a1a2e" },
+      itemStyle: { opacity: 1, borderWidth: 2, borderColor: "#fff" },
+    },
+    animationDuration: 1800,
+    animationEasing: "cubicOut",
+    markArea: {
+      silent: true,
+      data: [
+        // top-left (cheap disasters)
+        [{ coord: [xMin, QY], itemStyle: { color: QUADRANT_BG.topLeft } },
+         { coord: [QX, yMax] }],
+        // top-right (expensive idiots)
+        [{ coord: [QX, QY], itemStyle: { color: QUADRANT_BG.topRight } },
+         { coord: [xMax, yMax] }],
+        // bottom-left (unlucky underdogs)
+        [{ coord: [xMin, yMin], itemStyle: { color: QUADRANT_BG.bottomLeft } },
+         { coord: [QX, QY] }],
+        // bottom-right (ambitious losers)
+        [{ coord: [QX, yMin], itemStyle: { color: QUADRANT_BG.bottomRight } },
+         { coord: [xMax, QY] }],
+      ],
+    },
+    markLine: {
+      silent: true,
+      lineStyle: { color: "#ccc", type: "dashed", width: 1.5 },
+      data: [
+        { xAxis: QX },
+        { yAxis: QY },
+      ],
+      label: { show: false },
+    },
+  }],
+  graphic: [
+    // Quadrant labels
+    {
+      type: "text", left: "13%", top: 68,
+      style: { text: "THE CHEAP DISASTERS", fontSize: 11, fill: "#FF6D00", fontWeight: "700", fontStyle: "italic" }
+    },
+    {
+      type: "text", right: "9%", top: 68,
+      style: { text: "THE EXPENSIVE IDIOTS", fontSize: 11, fill: "#E91E63", fontWeight: "700", fontStyle: "italic", textAlign: "right" }
+    },
+    {
+      type: "text", left: "13%", bottom: 72,
+      style: { text: "THE UNLUCKY UNDERDOGS", fontSize: 11, fill: "#546E7A", fontWeight: "700", fontStyle: "italic" }
+    },
+    {
+      type: "text", right: "9%", bottom: 72,
+      style: { text: "THE AMBITIOUS LOSERS", fontSize: 11, fill: "#7C4DFF", fontWeight: "700", fontStyle: "italic", textAlign: "right" }
+    },
+    // Bubble size legend
+    {
+      type: "text", right: 20, bottom: 10,
+      style: { text: "Bubble size = Founder Delusion Score  |  RankMint", fontSize: 10, fill: "#bbb", fontStyle: "italic" }
+    },
+  ],
+});
+
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>
