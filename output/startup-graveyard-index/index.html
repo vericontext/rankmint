@@ -42,10 +42,25 @@
   }
 
   /* Hero */
+  @keyframes heroGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes floatGlow {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+    50% { transform: translate(20px, -20px) scale(1.1); opacity: 1; }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
   .hero {
     text-align: center;
     padding: 64px 24px 48px;
-    background: linear-gradient(160deg, #0d0d1a 0%, #1a0a22 60%, #0f0f2e 100%);
+    background: linear-gradient(160deg, #0d0d1a 0%, #1a0a22 30%, #0f0f2e 50%, #1a0a22 70%, #0d0d1a 100%);
+    background-size: 300% 300%;
+    animation: heroGradient 12s ease infinite;
     position: relative;
     overflow: hidden;
   }
@@ -53,15 +68,17 @@
     content: '';
     position: absolute; top: -60px; right: -60px;
     width: 440px; height: 440px;
-    background: radial-gradient(circle, rgba(233,30,99,0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(233,30,99,0.15) 0%, transparent 70%);
     pointer-events: none;
+    animation: floatGlow 6s ease-in-out infinite;
   }
   .hero::after {
     content: '';
     position: absolute; bottom: -60px; left: -60px;
     width: 360px; height: 360px;
-    background: radial-gradient(circle, rgba(124,77,255,0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(124,77,255,0.12) 0%, transparent 70%);
     pointer-events: none;
+    animation: floatGlow 8s ease-in-out infinite reverse;
   }
   .hero .eyebrow {
     display: inline-block;
@@ -70,7 +87,9 @@
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--accent);
-    background: rgba(233,30,99,0.12);
+    background: linear-gradient(90deg, rgba(233,30,99,0.12), rgba(255,109,0,0.12), rgba(233,30,99,0.12));
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
     border: 1px solid rgba(233,30,99,0.25);
     border-radius: 20px;
     padding: 4px 14px;
@@ -95,7 +114,7 @@
     margin: 0 auto 32px;
   }
   .hero .counter-wrap { margin-bottom: 8px; }
-  .hero .counter { font-size: 4rem; font-weight: 900; color: var(--accent3); line-height: 1; }
+  .hero .counter { font-size: 5.5rem; font-weight: 900; color: var(--accent3); line-height: 1; text-shadow: 0 0 30px rgba(255,214,0,0.4), 0 0 60px rgba(255,214,0,0.2); }
   .hero .counter-label { font-size: 0.85rem; color: #777; margin-top: 6px; }
 
   /* Surprise Callout */
@@ -155,9 +174,18 @@
     border-radius: 12px;
     padding: 24px;
     border: 1px solid var(--border);
-    transition: border-color 0.2s;
+    border-left: 4px solid var(--border);
+    transition: all 0.3s ease;
   }
-  .tax-card:hover { border-color: rgba(233,30,99,0.3); }
+  .tax-card:hover { transform: scale(1.02); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+  .tax-card.tier-s { border-left-color: #E91E63; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(233,30,99,0.06) 100%); }
+  .tax-card.tier-s:hover { box-shadow: 0 8px 32px rgba(233,30,99,0.2); }
+  .tax-card.tier-a { border-left-color: #FF6D00; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255,109,0,0.06) 100%); }
+  .tax-card.tier-a:hover { box-shadow: 0 8px 32px rgba(255,109,0,0.2); }
+  .tax-card.tier-b { border-left-color: #FFD600; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255,214,0,0.05) 100%); }
+  .tax-card.tier-b:hover { box-shadow: 0 8px 32px rgba(255,214,0,0.15); }
+  .tax-card.tier-cd { border-left-color: #7C4DFF; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(124,77,255,0.05) 100%); }
+  .tax-card.tier-cd:hover { box-shadow: 0 8px 32px rgba(124,77,255,0.2); }
   .tax-card .tier-badge {
     display: inline-block;
     font-size: 0.65rem;
@@ -314,9 +342,17 @@
   /* Footer */
   .footer { text-align: center; padding: 24px; color: #333; font-size: 0.72rem; font-style: italic; border-top: 1px solid var(--border); }
 
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .share-btn, .chart-link { transition: all 0.3s ease; }
+  .share-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+  .chart-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
   @media (max-width: 640px) {
     .hero h1 { font-size: 1.9rem; }
-    .hero .counter { font-size: 2.8rem; }
+    .hero .counter { font-size: 3.5rem; }
     .tax-grid { grid-template-columns: 1fr; }
     .surprise { padding: 20px 20px; }
   }
@@ -374,8 +410,8 @@
   <h2>The Taxonomy — <span>Five Tiers of Failure</span></h2>
   <div class="tax-grid" id="tax-grid">
 
-    <div class="tax-card">
-      <div class="tier-badge" style="background:rgba(233,30,99,0.15);color:#E91E63;">S — Hall of Shame</div>
+    <div class="tax-card tier-s">
+      <div class="tier-badge" style="background:rgba(233,30,99,0.15);color:#E91E63;">&#x1F480; S — Hall of Shame</div>
       <h3>ADS 7.5 and above</h3>
       <p class="desc">Failures so preventable that any honest weekend of user research would have caught them. The problem was imaginary, the fraud was obvious, or the founder was untethered from physical reality.</p>
       <table>
@@ -390,8 +426,8 @@
       </table>
     </div>
 
-    <div class="tax-card">
-      <div class="tier-badge" style="background:rgba(255,109,0,0.15);color:#FF6D00;">A — Spectacular Own Goals</div>
+    <div class="tax-card tier-a">
+      <div class="tier-badge" style="background:rgba(255,109,0,0.15);color:#FF6D00;">&#x1F525; A — Spectacular Own Goals</div>
       <h3>ADS 6.0–7.49</h3>
       <p class="desc">Had real advantages — working tech, real markets, or serious founders — and still died in ways that required sustained willful blindness to the obvious.</p>
       <table>
@@ -405,8 +441,8 @@
       </table>
     </div>
 
-    <div class="tax-card">
-      <div class="tier-badge" style="background:rgba(255,214,0,0.12);color:#FFD600;">B — Forgivably Stupid</div>
+    <div class="tax-card tier-b">
+      <div class="tier-badge" style="background:rgba(255,214,0,0.12);color:#FFD600;">&#x1F937; B — Forgivably Stupid</div>
       <h3>ADS 5.0–5.99</h3>
       <p class="desc">You can trace a plausible path from reasonable idea to catastrophic outcome. Real products, real markets — failure required a chain of bad decisions, not a single obvious miss.</p>
       <table>
@@ -420,8 +456,8 @@
       </table>
     </div>
 
-    <div class="tax-card">
-      <div class="tier-badge" style="background:rgba(124,77,255,0.12);color:#7C4DFF;">C / D — Mostly Unlucky & Wrong Time</div>
+    <div class="tax-card tier-cd">
+      <div class="tier-badge" style="background:rgba(124,77,255,0.12);color:#7C4DFF;">&#x1F3B2; C / D — Mostly Unlucky & Wrong Time</div>
       <h3>ADS below 5.0</h3>
       <p class="desc">Market forces, legal rulings, or corporate indifference did most of the damage. The lowest two tiers include a Supreme Court ruling, Chinese manufacturing cost curves, and one corporate murder.</p>
       <table>
@@ -708,6 +744,14 @@ document.getElementById("share-copy").addEventListener("click", () => {
     setTimeout(() => btn.textContent = "Copy Link", 2000);
   });
 });
+
+// ===== Scroll Reveal Animations =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.chart-section, .taxonomy, .find-section, .full-table, .methodology, .tax-card, .surprise-wrap').forEach(el => { el.classList.add('reveal'); observer.observe(el); });
+// Also observe main sections by container children
+document.querySelectorAll('section.container').forEach(el => { el.classList.add('reveal'); observer.observe(el); });
 </script>
 </body>
 </html>

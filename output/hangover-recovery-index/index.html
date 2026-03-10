@@ -28,20 +28,59 @@
   .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
   /* Hero */
+  @keyframes heroGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes floatGlow {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+    33% { transform: translate(30px, -20px) scale(1.1); opacity: 0.5; }
+    66% { transform: translate(-20px, 15px) scale(0.9); opacity: 0.25; }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
   .hero {
     text-align: center; padding: 64px 20px 52px;
-    background: linear-gradient(140deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+    background: linear-gradient(140deg, #1a1a2e 0%, #16213e 30%, #0f3460 50%, #1a1a3e 70%, #1a1a2e 100%);
+    background-size: 300% 300%;
+    animation: heroGradient 12s ease infinite;
     color: #fff; position: relative; overflow: hidden;
   }
   .hero::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
-    background: linear-gradient(90deg, #FFD700, #FF6B6B, #a855f7);
+    background: linear-gradient(90deg, #FFD700, #FF6B6B, #a855f7, #FFD700);
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
   }
-  .hero .eyebrow { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: #aaa; margin-bottom: 12px; }
+  .hero::after {
+    content: ""; position: absolute; top: 20%; left: 10%;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 70%);
+    animation: floatGlow 8s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .hero .glow-orb {
+    position: absolute; top: 40%; right: 15%;
+    width: 250px; height: 250px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(168,85,247,0.12) 0%, transparent 70%);
+    animation: floatGlow 10s ease-in-out infinite reverse;
+    pointer-events: none;
+  }
+  .hero .eyebrow {
+    font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px;
+    background: linear-gradient(90deg, #aaa 40%, #FFD700 50%, #aaa 60%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 4s linear infinite;
+  }
   .hero h1 { font-size: 2.3rem; font-weight: 800; line-height: 1.2; margin-bottom: 16px; max-width: 680px; margin-left: auto; margin-right: auto; }
   .hero .hook { font-size: 1.05rem; color: #bbb; max-width: 580px; margin: 0 auto 36px; line-height: 1.55; }
   .counter-block { display: inline-block; }
-  .hero .counter { font-size: 4rem; font-weight: 900; color: var(--gold); line-height: 1; }
+  .hero .counter { font-size: 5.5rem; font-weight: 900; color: var(--gold); line-height: 1; text-shadow: 0 0 30px rgba(255,215,0,0.5), 0 0 60px rgba(255,215,0,0.2); }
   .hero .counter-label { font-size: 0.85rem; color: #888; margin-top: 6px; }
   .hero .chart-links { margin-top: 28px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .hero .chart-links a {
@@ -80,11 +119,21 @@
   .tax-card {
     background: var(--card-bg); border-radius: 14px; padding: 24px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.06); border-top: 4px solid transparent;
+    border-left: 4px solid transparent;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
-  .tax-card.professionals { border-top-color: #4CAF50; }
-  .tax-card.abstainers { border-top-color: #FF9800; }
-  .tax-card.wounded { border-top-color: #FF6B6B; }
-  .tax-card.innocent { border-top-color: #9E9E9E; }
+  .tax-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  }
+  .tax-card.professionals { border-top-color: #4CAF50; border-left-color: #4CAF50; background: linear-gradient(135deg, rgba(76,175,80,0.04) 0%, var(--card-bg) 100%); }
+  .tax-card.professionals:hover { box-shadow: 0 8px 30px rgba(76,175,80,0.15); }
+  .tax-card.abstainers { border-top-color: #FF9800; border-left-color: #FF9800; background: linear-gradient(135deg, rgba(255,152,0,0.04) 0%, var(--card-bg) 100%); }
+  .tax-card.abstainers:hover { box-shadow: 0 8px 30px rgba(255,152,0,0.15); }
+  .tax-card.wounded { border-top-color: #FF6B6B; border-left-color: #FF6B6B; background: linear-gradient(135deg, rgba(255,107,107,0.04) 0%, var(--card-bg) 100%); }
+  .tax-card.wounded:hover { box-shadow: 0 8px 30px rgba(255,107,107,0.15); }
+  .tax-card.innocent { border-top-color: #9E9E9E; border-left-color: #9E9E9E; background: linear-gradient(135deg, rgba(158,158,158,0.04) 0%, var(--card-bg) 100%); }
+  .tax-card.innocent:hover { box-shadow: 0 8px 30px rgba(158,158,158,0.15); }
   .tax-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
   .tax-card h3.professionals { color: #4CAF50; }
   .tax-card h3.abstainers { color: #FF9800; }
@@ -198,9 +247,17 @@
   /* Footer */
   .footer { text-align: center; padding: 24px; color: var(--muted); font-size: 0.75rem; font-style: italic; border-top: 1px solid var(--border); }
 
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .share-btn, .chart-nav a, .chart-link { transition: all 0.3s ease; }
+  .share-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+  .chart-nav a:hover, .chart-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
   @media (max-width: 640px) {
     .hero h1 { font-size: 1.6rem; }
-    .hero .counter { font-size: 2.8rem; }
+    .hero .counter { font-size: 3.2rem; }
     .tax-grid { grid-template-columns: 1fr; }
     .surprise { margin-left: 0; margin-right: 0; border-radius: 12px; }
   }
@@ -214,6 +271,7 @@
 
 <!-- Hero -->
 <section class="hero">
+  <div class="glow-orb"></div>
   <div class="container">
     <div class="eyebrow">RankMint Original Index &nbsp;|&nbsp; March 2026</div>
     <h1>Global Hangover Recovery Index</h1>
@@ -255,7 +313,7 @@
   <div class="tax-grid" id="tax-grid">
 
     <div class="tax-card abstainers">
-      <h3 class="abstainers">The Prepared Abstainers</h3>
+      <h3 class="abstainers">🛡️ The Prepared Abstainers</h3>
       <p>Low drinking, high recovery. World-class systems for a problem they rarely have — ready for any emergency binge.</p>
       <table>
         <tr><th>Rank</th><th>Country</th><th>Score</th></tr>
@@ -268,7 +326,7 @@
     </div>
 
     <div class="tax-card professionals">
-      <h3 class="professionals">The Professionals</h3>
+      <h3 class="professionals">🏆 The Professionals</h3>
       <p>High drinking, high recovery. They drink hard and built the infrastructure to match — drink culture and recovery culture evolved together.</p>
       <table>
         <tr><th>Rank</th><th>Country</th><th>Score</th></tr>
@@ -282,7 +340,7 @@
     </div>
 
     <div class="tax-card wounded">
-      <h3 class="wounded">The Walking Wounded</h3>
+      <h3 class="wounded">🩹 The Walking Wounded</h3>
       <p>High drinking, low recovery. The most dangerous quadrant — high exposure, low readiness. Heavy consumption without the infrastructure to handle it.</p>
       <table>
         <tr><th>Rank</th><th>Country</th><th>Score</th></tr>
@@ -295,7 +353,7 @@
     </div>
 
     <div class="tax-card innocent">
-      <h3 class="innocent">The Innocent Sufferers</h3>
+      <h3 class="innocent">😵 The Innocent Sufferers</h3>
       <p>Low drinking, low recovery. Underprepared for a bad night they rarely have — a single catastrophic binge could be genuinely hazardous.</p>
       <table>
         <tr><th>Rank</th><th>Country</th><th>Score</th></tr>
@@ -650,6 +708,12 @@ document.getElementById("share-copy").addEventListener("click", () => {
 });
 
 window.addEventListener("resize", () => chart.resize());
+</script>
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.chart-section, .taxonomy, .find-yourself, .full-table, .methodology').forEach(el => { el.classList.add('reveal'); observer.observe(el); });
 </script>
 </body>
 </html>

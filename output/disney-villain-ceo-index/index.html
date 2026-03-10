@@ -27,27 +27,53 @@
   .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
   /* Hero */
+  @keyframes heroGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
   .hero {
     text-align: center; padding: 64px 20px 48px;
-    background: linear-gradient(160deg, #0d0d1a 0%, #1a0820 50%, #0d0d1a 100%);
+    background: linear-gradient(160deg, #0d0d1a 0%, #1a0820 25%, #200a30 50%, #1a0820 75%, #0d0d1a 100%);
+    background-size: 300% 300%;
+    animation: heroGradient 12s ease infinite;
     border-bottom: 1px solid #1e1e2e;
     position: relative; overflow: hidden;
   }
   .hero::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, #e91e63, #9c27b0, #3f51b5);
+    background: linear-gradient(90deg, #e91e63, #9c27b0, #3f51b5, #e91e63);
+    background-size: 200% 100%;
+    animation: shimmer 4s linear infinite;
+  }
+  .hero::after {
+    content: ''; position: absolute; top: 50%; left: 50%; width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(233,30,99,0.08) 0%, transparent 70%);
+    border-radius: 50%; transform: translate(-50%, -50%);
+    pointer-events: none; animation: heroGlow 6s ease-in-out infinite alternate;
+  }
+  @keyframes heroGlow {
+    0% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.8); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
   }
   .hero .badge {
     display: inline-block; background: rgba(233,30,99,0.15); border: 1px solid rgba(233,30,99,0.4);
     color: #e91e63; font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px;
     text-transform: uppercase; padding: 4px 14px; border-radius: 100px;
     margin-bottom: 16px;
+    background-image: linear-gradient(90deg, transparent, rgba(233,30,99,0.3), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
   }
-  .hero h1 { font-size: 2.4rem; margin-bottom: 12px; color: #fff; line-height: 1.15; }
+  .hero h1 { font-size: 2.4rem; margin-bottom: 12px; color: #fff; line-height: 1.15; position: relative; z-index: 1; }
   .hero h1 span { color: var(--accent); }
-  .hero .hook { font-size: 1.05rem; color: #999; max-width: 560px; margin: 0 auto 32px; }
-  .hero .counter { font-size: 4rem; font-weight: 900; color: #FFD700; font-variant-numeric: tabular-nums; }
-  .hero .counter-label { font-size: 0.88rem; color: #666; margin-top: 6px; }
+  .hero .hook { font-size: 1.05rem; color: #999; max-width: 560px; margin: 0 auto 32px; position: relative; z-index: 1; }
+  .hero .counter { font-size: 5.5rem; font-weight: 900; color: #FFD700; font-variant-numeric: tabular-nums; text-shadow: 0 0 30px rgba(255,215,0,0.5), 0 0 60px rgba(255,215,0,0.2); position: relative; z-index: 1; }
+  .hero .counter-label { font-size: 0.88rem; color: #666; margin-top: 6px; position: relative; z-index: 1; }
 
   /* Surprise Callout */
   .surprise {
@@ -81,8 +107,22 @@
   .taxonomy { margin: 44px auto; }
   .taxonomy h2 { font-size: 1.25rem; margin-bottom: 20px; color: #eee; }
   .tax-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-  .tax-card { background: var(--card-bg); border-radius: 12px; padding: 22px 20px; border: 1px solid var(--border); }
-  .tax-card h3 { font-size: 0.95rem; margin-bottom: 6px; color: var(--accent); }
+  .tax-card {
+    background: var(--card-bg); border-radius: 12px; padding: 22px 20px; border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    transition: all 0.3s ease;
+  }
+  .tax-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    border-left-color: var(--card-accent, var(--accent));
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 15px var(--card-glow, rgba(233,30,99,0.2));
+  }
+  .tax-card:nth-child(1) { --card-accent: #c0392b; --card-glow: rgba(192,57,43,0.25); border-left-color: #c0392b; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(192,57,43,0.06) 100%); }
+  .tax-card:nth-child(2) { --card-accent: #e67e22; --card-glow: rgba(230,126,34,0.25); border-left-color: #e67e22; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(230,126,34,0.06) 100%); }
+  .tax-card:nth-child(3) { --card-accent: #8e44ad; --card-glow: rgba(142,68,173,0.25); border-left-color: #8e44ad; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(142,68,173,0.06) 100%); }
+  .tax-card:nth-child(4) { --card-accent: #2980b9; --card-glow: rgba(41,128,185,0.25); border-left-color: #2980b9; background: linear-gradient(135deg, var(--card-bg) 0%, rgba(41,128,185,0.06) 100%); }
+  .tax-card h3 { font-size: 0.95rem; margin-bottom: 6px; color: var(--card-accent, var(--accent)); }
   .tax-card p { font-size: 0.8rem; color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
   .tax-card table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
   .tax-card th, .tax-card td { padding: 5px 6px; text-align: left; border-bottom: 1px solid var(--border); }
@@ -140,9 +180,17 @@
 
   .footer { text-align: center; padding: 24px; color: #444; font-size: 0.75rem; font-style: italic; border-top: 1px solid var(--border); }
 
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .share-btn, .chart-nav a { transition: all 0.3s ease; }
+  .share-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+  .chart-nav a:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
   @media (max-width: 600px) {
     .hero h1 { font-size: 1.6rem; }
-    .hero .counter { font-size: 2.8rem; }
+    .hero .counter { font-size: 3.2rem; }
     .tax-grid { grid-template-columns: 1fr; }
     .surprise { padding: 20px; }
   }
@@ -193,7 +241,7 @@
   <h2>The Taxonomy</h2>
   <div class="tax-grid" id="tax-grid">
     <div class="tax-card">
-      <h3>The C-Suite Predators</h3>
+      <h3>🦈 The C-Suite Predators</h3>
       <p>Well-rounded profiles, calibrated ruthlessness. You'd hire them if you didn't know what they were.</p>
       <table>
         <tr><th>Rank</th><th>Villain</th><th>Score</th></tr>
@@ -205,7 +253,7 @@
       </table>
     </div>
     <div class="tax-card">
-      <h3>The Charming Frauds</h3>
+      <h3>🎭 The Charming Frauds</h3>
       <p>High charisma. Strategic vacuum. Every fast-growing company has one of these on the leadership team.</p>
       <table>
         <tr><th>Rank</th><th>Villain</th><th>Score</th></tr>
@@ -215,7 +263,7 @@
       </table>
     </div>
     <div class="tax-card">
-      <h3>The Micromanagers from Hell</h3>
+      <h3>🔥 The Micromanagers from Hell</h3>
       <p>Total conviction. Catastrophic execution. They'd write the most detailed OKRs you've ever seen.</p>
       <table>
         <tr><th>Rank</th><th>Villain</th><th>Score</th></tr>
@@ -226,7 +274,7 @@
       </table>
     </div>
     <div class="tax-card">
-      <h3>The PowerPoint Villains</h3>
+      <h3>📊 The PowerPoint Villains</h3>
       <p>Endless grievance. No follow-through. They would survive exactly one board meeting.</p>
       <table>
         <tr><th>Rank</th><th>Villain</th><th>Score</th></tr>
@@ -475,6 +523,12 @@ document.getElementById("share-copy").addEventListener("click", () => {
     setTimeout(() => document.getElementById("share-copy").textContent = "Copy Link", 2000);
   });
 });
+</script>
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.chart-section, .taxonomy, .find-yourself, .full-table, .methodology').forEach(el => { el.classList.add('reveal'); observer.observe(el); });
 </script>
 </body>
 </html>

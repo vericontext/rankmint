@@ -26,9 +26,16 @@
   .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
   /* Hero */
+  @keyframes heroGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
   .hero {
     text-align: center; padding: 72px 20px 52px;
-    background: linear-gradient(160deg, #0d1117 0%, #141d2e 50%, #0d1117 100%);
+    background: linear-gradient(160deg, #0d1117 0%, #141d2e 25%, #1a1040 50%, #141d2e 75%, #0d1117 100%);
+    background-size: 300% 300%;
+    animation: heroGradient 12s ease infinite;
     border-bottom: 1px solid var(--border);
     position: relative; overflow: hidden;
   }
@@ -36,17 +43,35 @@
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
     background: linear-gradient(90deg, var(--gold), var(--orange), var(--accent), var(--green));
   }
+  .hero::after {
+    content: ''; position: absolute; top: 30%; left: 50%; width: 500px; height: 500px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(88,166,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    animation: heroGlow 6s ease-in-out infinite alternate;
+  }
+  @keyframes heroGlow {
+    0% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.9); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
   .hero .badge {
     display: inline-block;
-    background: rgba(88,166,255,0.12); border: 1px solid rgba(88,166,255,0.25);
+    background: linear-gradient(90deg, rgba(88,166,255,0.12) 0%, rgba(255,215,0,0.15) 50%, rgba(88,166,255,0.12) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 4s linear infinite;
+    border: 1px solid rgba(88,166,255,0.25);
     color: var(--accent); font-size: 0.72rem; font-weight: 700;
     letter-spacing: 2px; text-transform: uppercase;
     padding: 5px 14px; border-radius: 20px; margin-bottom: 20px;
   }
-  .hero h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 14px; letter-spacing: -0.5px; line-height: 1.15; }
-  .hero .hook { font-size: 1.1rem; color: var(--muted); max-width: 580px; margin: 0 auto 32px; }
-  .hero .counter { font-size: 4rem; font-weight: 900; color: var(--gold); letter-spacing: -1px; }
-  .hero .counter-label { font-size: 0.82rem; color: var(--muted); margin-top: 5px; }
+  .hero h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 14px; letter-spacing: -0.5px; line-height: 1.15; position: relative; z-index: 1; }
+  .hero .hook { font-size: 1.1rem; color: var(--muted); max-width: 580px; margin: 0 auto 32px; position: relative; z-index: 1; }
+  .hero .counter { font-size: 5.5rem; font-weight: 900; color: var(--gold); letter-spacing: -2px; text-shadow: 0 0 30px rgba(255,215,0,0.4), 0 0 60px rgba(255,215,0,0.15); position: relative; z-index: 1; }
+  .hero .counter-label { font-size: 0.82rem; color: var(--muted); margin-top: 5px; position: relative; z-index: 1; }
 
   /* Surprise Callout */
   .surprise {
@@ -88,11 +113,19 @@
   .tax-card {
     background: var(--surface); border-radius: 12px; padding: 22px 24px;
     border: 1px solid var(--border); border-top: 3px solid;
+    border-left: 4px solid transparent;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    cursor: default;
   }
-  .tax-card.green { border-top-color: var(--green); }
-  .tax-card.blue { border-top-color: var(--accent); }
-  .tax-card.orange { border-top-color: var(--orange); }
-  .tax-card.red { border-top-color: var(--red); }
+  .tax-card:hover { transform: scale(1.02); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+  .tax-card.green { border-top-color: var(--green); border-left-color: var(--green); background: linear-gradient(135deg, var(--surface) 0%, rgba(74,222,128,0.04) 100%); }
+  .tax-card.green:hover { box-shadow: 0 8px 32px rgba(74,222,128,0.15); }
+  .tax-card.blue { border-top-color: var(--accent); border-left-color: var(--accent); background: linear-gradient(135deg, var(--surface) 0%, rgba(88,166,255,0.04) 100%); }
+  .tax-card.blue:hover { box-shadow: 0 8px 32px rgba(88,166,255,0.15); }
+  .tax-card.orange { border-top-color: var(--orange); border-left-color: var(--orange); background: linear-gradient(135deg, var(--surface) 0%, rgba(251,146,60,0.04) 100%); }
+  .tax-card.orange:hover { box-shadow: 0 8px 32px rgba(251,146,60,0.15); }
+  .tax-card.red { border-top-color: var(--red); border-left-color: var(--red); background: linear-gradient(135deg, var(--surface) 0%, rgba(248,113,113,0.04) 100%); }
+  .tax-card.red:hover { box-shadow: 0 8px 32px rgba(248,113,113,0.15); }
   .tax-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
   .tax-card.green h3 { color: var(--green); }
   .tax-card.blue h3 { color: var(--accent); }
@@ -201,9 +234,17 @@
   /* Footer */
   .footer { text-align: center; padding: 24px 20px 36px; color: var(--muted); font-size: 0.73rem; }
 
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .share-btn, .chart-nav a, .chart-link { transition: all 0.3s ease; }
+  .share-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+  .chart-nav a:hover, .chart-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
   @media (max-width: 640px) {
     .hero h1 { font-size: 1.7rem; }
-    .hero .counter { font-size: 2.8rem; }
+    .hero .counter { font-size: 3.2rem; }
     .tax-grid { grid-template-columns: 1fr; }
     .surprise { padding: 22px 20px; margin-left: 12px; margin-right: 12px; }
   }
@@ -253,7 +294,7 @@
   <p>Four archetypes emerge from the data — defined by whether a country has the cultural permission for rest, the structural time for it, or neither.</p>
   <div class="tax-grid">
     <div class="tax-card green">
-      <h3>The Enlightened Nappers</h3>
+      <h3>&#x1F31F; The Enlightened Nappers</h3>
       <p>Both the tradition and the time. Countries that have genuinely solved the rest problem — culturally and structurally.</p>
       <table>
         <tr><th>Rank</th><th>Country</th><th>NOS</th></tr>
@@ -265,7 +306,7 @@
       </table>
     </div>
     <div class="tax-card blue">
-      <h3>The Accidental Resters</h3>
+      <h3>&#x1F4A4; The Accidental Resters</h3>
       <p>Short workweeks, no napping vocabulary. They have the structural time — they just never named what they do with it.</p>
       <table>
         <tr><th>Rank</th><th>Country</th><th>NOS</th></tr>
@@ -277,7 +318,7 @@
       </table>
     </div>
     <div class="tax-card orange">
-      <h3>The Exhausted Believers</h3>
+      <h3>&#x1F525; The Exhausted Believers</h3>
       <p>Strong nap traditions, crushing workloads. They love the idea of the nap. They simply never have time for one.</p>
       <table>
         <tr><th>Rank</th><th>Country</th><th>NOS</th></tr>
@@ -289,7 +330,7 @@
       </table>
     </div>
     <div class="tax-card red">
-      <h3>The Productivity Martyrs</h3>
+      <h3>&#x26A0;&#xFE0F; The Productivity Martyrs</h3>
       <p>Long hours, no cultural permission, minimal infrastructure. Sleep deprivation as identity. Rest as weakness.</p>
       <table>
         <tr><th>Rank</th><th>Country</th><th>NOS</th></tr>
@@ -577,6 +618,12 @@ document.getElementById("share-copy").addEventListener("click", () => {
     setTimeout(() => document.getElementById("share-copy").textContent = "Copy Link", 2000);
   });
 });
+
+// ===== Scroll Reveal =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.chart-section, .taxonomy, .find-yourself, .full-table, .methodology, .findings, .surprise').forEach(el => { el.classList.add('reveal'); observer.observe(el); });
 </script>
 </body>
 </html>
