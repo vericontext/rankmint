@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 630px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .card {
+    width: 1200px; height: 630px;
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 50%, #2d0a3e 100%);
+    color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 60px 80px;
+    position: relative; overflow: hidden;
+  }
+  /* decorative circles */
+  .card::before {
+    content: "";
+    position: absolute; top: -120px; right: -120px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,107,0.18) 0%, transparent 70%);
+  }
+  .card::after {
+    content: "";
+    position: absolute; bottom: -80px; left: 200px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(192,132,252,0.15) 0%, transparent 70%);
+  }
+  .accent-line {
+    position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+    background: linear-gradient(90deg, #FF6B6B, #c084fc, #60a5fa);
+  }
+  .eyebrow {
+    font-size: 13px; font-weight: 700; letter-spacing: 3px;
+    color: #c084fc; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .title { font-size: 46px; font-weight: 900; margin-bottom: 14px; line-height: 1.15; max-width: 720px; }
+  .title span { color: #FF6B6B; }
+  .hook { font-size: 18px; color: #bbb; margin-bottom: 44px; max-width: 680px; line-height: 1.5; font-style: italic; }
+  .top3 { display: flex; gap: 20px; }
+  .top-item {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 18px 24px; min-width: 190px;
+    backdrop-filter: blur(4px);
+  }
+  .top-item .medal { font-size: 26px; font-weight: 900; margin-bottom: 6px; line-height: 1; }
+  .medal.gold   { color: #FFD700; }
+  .medal.silver { color: #C0C0C0; }
+  .medal.bronze { color: #CD7F32; }
+  .top-item .item-name { font-size: 16px; font-weight: 700; line-height: 1.2; }
+  .top-item .item-score { font-size: 12px; color: #999; margin-top: 5px; }
+  .watermark {
+    position: absolute; bottom: 28px; right: 40px;
+    font-size: 14px; color: rgba(255,255,255,0.25); font-weight: 800; letter-spacing: 3px;
+  }
+  .badge {
+    position: absolute; top: 28px; right: 40px;
+    background: rgba(255,107,107,0.15); border: 1px solid rgba(255,107,107,0.4);
+    color: #FF6B6B; font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    padding: 5px 12px; border-radius: 20px; text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="accent-line"></div>
+  <div class="badge">30 K-Dramas Ranked</div>
+  <div class="eyebrow">RankMint — Binge Trap Index</div>
+  <div class="title">K-Drama <span>Binge Trap</span> Index</div>
+  <div class="hook">"The show your therapist would warn you about isn't the one with the body count — it's the one where they haven't kissed yet."</div>
+  <div class="top3">
+    <div class="top-item">
+      <div class="medal gold">#1</div>
+      <div class="item-name">Crash Landing on You</div>
+      <div class="item-score">BTS 7.60 — Romance beats thrillers</div>
+    </div>
+    <div class="top-item">
+      <div class="medal silver">#2</div>
+      <div class="item-name">Squid Game</div>
+      <div class="item-score">BTS 7.40 — Max spoiler pressure</div>
+    </div>
+    <div class="top-item">
+      <div class="medal bronze">#3</div>
+      <div class="item-name">Penthouse</div>
+      <div class="item-score">BTS 7.10 — 10/10 cliffhangers</div>
+    </div>
+  </div>
+  <div class="watermark">RANKMINT</div>
+</div>
+</body>
+</html>

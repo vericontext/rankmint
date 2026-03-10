@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-Drama Binge Trap Index | RankMint</title>
+<meta property="og:title" content="K-Drama Binge Trap Index">
+<meta property="og:description" content="The show your therapist would warn you about isn't the one with the body count — it's the one where they haven't kissed yet.">
+<meta property="og:image" content="card.png">
+<meta property="og:url" content="https://rankmint.io/kdrama-binge-trap-index/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="K-Drama Binge Trap Index">
+<meta name="twitter:description" content="The show your therapist would warn you about isn't the one with the body count — it's the one where they haven't kissed yet.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #0d0d1a;
+    --card-bg: #14142b;
+    --border: #1e1e36;
+    --text: #e0e0e0;
+    --muted: #777;
+    --accent: #c084fc;
+    --danger: #FF6B6B;
+    --gold: #FFD700;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.65;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+
+  /* Hero */
+  .hero {
+    text-align: center; padding: 64px 20px 60px;
+    background: linear-gradient(160deg, #0d0d1a 0%, #1a0a2e 60%, #2d0a3e 100%);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; top: -100px; right: -100px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,107,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ""; position: absolute; bottom: -60px; left: 80px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(192,132,252,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero .eyebrow {
+    display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 3px;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 16px;
+    background: rgba(192,132,252,0.12); padding: 5px 14px; border-radius: 20px;
+    border: 1px solid rgba(192,132,252,0.25);
+  }
+  .hero h1 { font-size: 2.8rem; font-weight: 900; line-height: 1.15; margin-bottom: 16px; }
+  .hero h1 span { color: var(--danger); }
+  .hero .hook { font-size: 1.05rem; color: #aaa; max-width: 580px; margin: 0 auto 32px; font-style: italic; }
+  .hero .counter { font-size: 4rem; font-weight: 900; color: var(--gold); line-height: 1; }
+  .hero .counter-label { font-size: 0.85rem; color: var(--muted); margin-top: 6px; }
+  .hero .chart-links { margin-top: 24px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .chart-link {
+    display: inline-block; padding: 8px 18px; border-radius: 20px;
+    font-size: 0.78rem; font-weight: 600; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.15); color: #ccc;
+    transition: all 0.2s; background: rgba(255,255,255,0.05);
+  }
+  .chart-link:hover { background: rgba(255,255,255,0.12); color: #fff; transform: translateY(-1px); }
+
+  /* Surprise callout */
+  .surprise {
+    background: linear-gradient(135deg, #FF6B6B22 0%, #c084fc22 100%);
+    border: 1px solid #FF6B6B44;
+    border-radius: 14px; padding: 32px 36px;
+    margin: -28px auto 44px; max-width: 780px; position: relative; z-index: 1;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .surprise h2 { font-size: 1.1rem; color: var(--danger); margin-bottom: 10px; font-weight: 700; }
+  .surprise p { font-size: 0.92rem; color: #ccc; line-height: 1.7; }
+
+  /* Section headings */
+  .section-head { font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 20px; padding-top: 8px; }
+
+  /* Chart area */
+  .chart-section { margin: 40px 0; }
+  #main-chart { width: 100%; height: 560px; background: var(--card-bg); border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+
+  /* Taxonomy grid */
+  .taxonomy { margin: 44px 0; }
+  .tax-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .tax-card {
+    background: var(--card-bg); border-radius: 12px; padding: 22px 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3); border: 1px solid var(--border);
+  }
+  .tax-card .tier-badge {
+    display: inline-block; padding: 2px 10px; border-radius: 6px;
+    font-size: 0.72rem; font-weight: 800; letter-spacing: 1px;
+    margin-bottom: 10px; text-transform: uppercase;
+  }
+  .tax-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+  .tax-card p { font-size: 0.78rem; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+  .tax-card table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  .tax-card th, .tax-card td { padding: 5px 6px; text-align: left; border-bottom: 1px solid var(--border); }
+  .tax-card th { color: var(--muted); font-weight: 600; }
+  .tax-card td:last-child { color: var(--gold); font-weight: 700; text-align: right; }
+
+  /* Find Yourself */
+  .find-yourself {
+    margin: 44px 0; text-align: center; padding: 44px 24px;
+    background: var(--card-bg); border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3); border: 1px solid var(--border);
+  }
+  .find-yourself h2 { font-size: 1.25rem; margin-bottom: 8px; }
+  .find-yourself .sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 20px; }
+  .find-yourself select {
+    padding: 11px 22px; font-size: 1rem; border: 2px solid var(--accent);
+    border-radius: 10px; background: #1e1e36; color: #fff; min-width: 270px;
+    cursor: pointer; appearance: none;
+  }
+  .result-card {
+    display: none; margin: 24px auto 0; max-width: 420px; padding: 28px;
+    background: linear-gradient(135deg, #1a0a2e 0%, #2d0a3e 100%);
+    border: 1px solid rgba(192,132,252,0.3);
+    color: #fff; border-radius: 14px; text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  .result-card .rank { font-size: 3.2rem; font-weight: 900; color: var(--gold); }
+  .result-card .r-name { font-size: 1.25rem; margin: 8px 0 4px; font-weight: 700; }
+  .result-card .r-score { font-size: 0.88rem; color: #aaa; }
+  .result-card .r-tier { font-size: 0.8rem; margin-top: 10px; padding: 4px 14px; border-radius: 12px; display: inline-block; font-weight: 700; }
+
+  /* Full Table */
+  .full-table { margin: 44px 0; }
+  .table-controls { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .table-search {
+    flex: 1; min-width: 200px; padding: 10px 16px;
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 0.88rem; background: var(--card-bg); color: var(--text);
+  }
+  .full-table table {
+    width: 100%; border-collapse: collapse; font-size: 0.82rem;
+    background: var(--card-bg); border-radius: 12px; overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  .full-table th {
+    background: #1a0a2e; color: #ccc; padding: 11px 12px;
+    text-align: left; cursor: pointer; user-select: none; font-weight: 600;
+    border-bottom: 1px solid var(--border);
+  }
+  .full-table th:hover { background: #2d0a3e; color: #fff; }
+  .full-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  .full-table tr:hover td { background: rgba(192,132,252,0.06); }
+  .full-table td:nth-child(3) { font-weight: 700; color: var(--gold); }
+  .rank-pill {
+    display: inline-block; width: 28px; height: 28px; border-radius: 50%;
+    text-align: center; line-height: 28px; font-weight: 700; font-size: 0.78rem;
+  }
+  .rank-s { background: #FF475722; color: #FF4757; border: 1px solid #FF475755; }
+  .rank-a { background: #FF9F4322; color: #FF9F43; border: 1px solid #FF9F4355; }
+  .rank-b { background: #5352ED22; color: #7b7bee; border: 1px solid #5352ED55; }
+  .rank-c { background: #2ED57322; color: #2ED573; border: 1px solid #2ED57355; }
+  .rank-d { background: #747D8C22; color: #a0a8b4; border: 1px solid #747D8C55; }
+
+  /* Methodology */
+  .methodology {
+    margin: 44px 0; padding: 28px 30px; background: var(--card-bg);
+    border-radius: 12px; font-size: 0.82rem; color: var(--muted);
+    border: 1px solid var(--border); line-height: 1.7;
+  }
+  .methodology h2 { font-size: 1.05rem; color: var(--text); margin-bottom: 14px; }
+  .methodology strong { color: #bbb; }
+  .meth-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px 20px; margin-top: 12px; }
+  .meth-item { border-left: 2px solid var(--accent); padding-left: 10px; }
+  .meth-item .meth-label { font-weight: 700; color: #aaa; font-size: 0.76rem; margin-bottom: 2px; }
+
+  /* Share Bar */
+  .share-bar { display: flex; justify-content: center; gap: 12px; padding: 36px 0 24px; flex-wrap: wrap; }
+  .share-btn {
+    display: inline-flex; align-items: center; gap: 6px; padding: 10px 22px;
+    border-radius: 24px; text-decoration: none; font-size: 0.82rem; font-weight: 700;
+    color: #fff; transition: all 0.2s; border: none; cursor: pointer;
+  }
+  .share-btn:hover { transform: translateY(-2px); filter: brightness(1.15); }
+  .share-twitter  { background: #1DA1F2; }
+  .share-linkedin { background: #0A66C2; }
+  .share-copy     { background: #333; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 20px; color: #444; font-size: 0.72rem; font-style: italic; border-top: 1px solid var(--border); }
+
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 1.8rem; }
+    .hero .counter { font-size: 2.8rem; }
+    .tax-grid { grid-template-columns: 1fr; }
+    .full-table { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">RankMint — Binge Analysis</div>
+    <h1>K-Drama <span>Binge Trap</span> Index</h1>
+    <p class="hook">"The show your therapist would warn you about isn't the one with the body count — it's the one where they haven't kissed yet."</p>
+    <div class="counter" id="hero-counter">0.0</div>
+    <div class="counter-label">#1: Crash Landing on You — BTS 7.60</div>
+    <div class="chart-links">
+      <a class="chart-link" href="chart.html">Full Ranking Chart</a>
+      <a class="chart-link" href="chart_tier.html">Tier List</a>
+      <a class="chart-link" href="chart_matrix.html">Quality vs. Danger Matrix</a>
+    </div>
+  </div>
+</section>
+
+<!-- Surprise Callout -->
+<section class="container">
+  <div class="surprise">
+    <h2>The Surprise: Romance Destroys Sleep Harder Than Murder</h2>
+    <p>IMDb's top two K-dramas — Reply 1988 and My Mister, both rated 9.0 — rank #29 and #30 on this index. The #1 binge trap is not Squid Game. It is Crash Landing on You, a romance with a 10/10 Romance Tension Engine. Unresolved longing across a military border is a more persistent compulsion loop than a survival death game. And Penthouse — called trashy by critics — is the only drama in the index to score a perfect 10 on both Cliffhanger Density and Plot Twist Velocity simultaneously.</p>
+  </div>
+</section>
+
+<!-- Chart -->
+<section class="chart-section container">
+  <div class="section-head">The Rankings — All 30 Dramas</div>
+  <div id="main-chart"></div>
+  <p style="font-size:0.76rem;color:#555;margin-top:8px;text-align:right">Hover bars for full metric breakdown. <a href="chart.html">Open full-screen chart</a></p>
+</section>
+
+<!-- Taxonomy -->
+<section class="taxonomy container">
+  <div class="section-head">The Taxonomy</div>
+  <div class="tax-grid" id="tax-grid">
+
+    <div class="tax-card">
+      <div class="tier-badge" style="background:#FF475722;color:#FF4757;border:1px solid #FF475555">S — Sleep Killers</div>
+      <h3>Do NOT Start After 10pm</h3>
+      <p>Maximum structural danger. Each uses a different addiction weapon — longing, social FOMO, or relentless cliffhangers.</p>
+      <table>
+        <tr><th>#</th><th>Drama</th><th>BTS</th></tr>
+        <tr><td>1</td><td>Crash Landing on You</td><td>7.60</td></tr>
+        <tr><td>2</td><td>Squid Game</td><td>7.40</td></tr>
+        <tr><td>3</td><td>Penthouse</td><td>7.10</td></tr>
+      </table>
+    </div>
+
+    <div class="tax-card">
+      <div class="tier-badge" style="background:#FF9F4322;color:#FF9F43;border:1px solid #FF9F4355">A — Danger Zone</div>
+      <h3>You Will Cancel Plans</h3>
+      <p>High-urgency dramas with major social spoiler events, intense romance engines, or near-maximum cliffhanger density.</p>
+      <table>
+        <tr><th>#</th><th>Drama</th><th>BTS</th></tr>
+        <tr><td>4</td><td>All of Us Are Dead</td><td>6.35</td></tr>
+        <tr><td>5</td><td>The Glory</td><td>6.35</td></tr>
+        <tr><td>6</td><td>It's Okay to Not Be Okay</td><td>6.35</td></tr>
+        <tr><td>7</td><td>Goblin</td><td>6.30</td></tr>
+        <tr><td>8</td><td>Business Proposal</td><td>6.25</td></tr>
+      </table>
+    </div>
+
+    <div class="tax-card">
+      <div class="tier-badge" style="background:#5352ED22;color:#7b7bee;border:1px solid #5352ED55">B — Weekend Hostages</div>
+      <h3>It'll Cost You a Saturday</h3>
+      <p>Strong genre-specific traps. D.P. at 5 hours is the easiest binge on the list. Signal has 9/10 plot twists. Moving hides generational reveals across 20 episodes.</p>
+      <table>
+        <tr><th>#</th><th>Drama</th><th>BTS</th></tr>
+        <tr><td>12</td><td>D.P.</td><td>5.85</td></tr>
+        <tr><td>13</td><td>My Love from the Star</td><td>5.85</td></tr>
+        <tr><td>16</td><td>Twenty-Five Twenty-One</td><td>5.75</td></tr>
+        <tr><td>17</td><td>Vincenzo</td><td>5.60</td></tr>
+        <tr><td>21</td><td>Signal</td><td>5.25</td></tr>
+      </table>
+    </div>
+
+    <div class="tax-card">
+      <div class="tier-badge" style="background:#747D8C22;color:#a0a8b4;border:1px solid #747D8C55">C/D — Safe-ish</div>
+      <h3>Prestige Slow Burns and Soft Evenings</h3>
+      <p>IMDb's most beloved dramas. You will feel enriched and sleep fine. Probably. Reply 1988 (31.7h, Cliffhanger 2/10) and My Mister (no romance, no cliffhangers) are designed to let you stop.</p>
+      <table>
+        <tr><th>#</th><th>Drama</th><th>BTS</th></tr>
+        <tr><td>25</td><td>Mr. Sunshine</td><td>4.70</td></tr>
+        <tr><td>28</td><td>Hospital Playlist</td><td>3.15</td></tr>
+        <tr><td>29</td><td>Reply 1988</td><td>2.80</td></tr>
+        <tr><td>30</td><td>My Mister</td><td>2.50</td></tr>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- Find Yourself -->
+<section class="find-yourself container" id="find-section">
+  <h2>Where Do You Rank?</h2>
+  <p class="sub">Select a drama you have watched — and find out how dangerous it was for your sleep schedule.</p>
+  <select id="find-select">
+    <option value="">-- Choose a drama --</option>
+  </select>
+  <div class="result-card" id="result-card">
+    <div class="rank" id="result-rank"></div>
+    <div class="r-name" id="result-name"></div>
+    <div class="r-score" id="result-score"></div>
+    <div class="r-tier" id="result-tier"></div>
+  </div>
+</section>
+
+<!-- Full Table -->
+<section class="full-table container">
+  <div class="section-head">Full Rankings</div>
+  <div class="table-controls">
+    <input type="text" class="table-search" id="table-search" placeholder="Search any drama...">
+  </div>
+  <table id="ranking-table">
+    <thead id="table-head"></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</section>
+
+<!-- Methodology -->
+<section class="methodology container">
+  <h2>Methodology</h2>
+  <p><strong>Formula:</strong> BTS = (CliffhangerDensity × 0.30) + (RomanceTensionEngine × 0.25) + (SpoilerPressure × 0.20) + (EpisodeFriction × 0.15) + (PlotTwistVelocity × 0.10). All sub-metrics scored 1-10 using detailed rubrics. EpisodeFriction is inverted: fewer total hours = higher score.</p>
+  <div class="meth-grid" style="margin-top:14px">
+    <div class="meth-item"><div class="meth-label">Sample Size</div>30 K-dramas, 2013-2023</div>
+    <div class="meth-item"><div class="meth-label">Collection Date</div>March 2026</div>
+    <div class="meth-item"><div class="meth-label">Rating Source</div>IMDb, AsianWiki</div>
+    <div class="meth-item"><div class="meth-label">Viewership Data</div>Netflix press releases, Nielsen Korea</div>
+  </div>
+  <p style="margin-top:14px">Penthouse includes all 3 seasons (45 episodes, 48.75h total). Scoring rubrics from plan.md applied consistently across all dramas. Netflix viewership references: Squid Game 2.3B hours viewed; Extraordinary Attorney Woo 662M hours; All of Us Are Dead 660M hours.</p>
+</section>
+
+<!-- Share Bar -->
+<div class="share-bar">
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on Twitter</a>
+  <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">Share on LinkedIn</a>
+  <button class="share-btn share-copy" id="share-copy">Copy Link</button>
+</div>
+
+<div class="footer">Generated by RankMint &nbsp;|&nbsp; K-Drama Binge Trap Index &nbsp;|&nbsp; March 2026</div>
+
+<script>
+// ===== DATA =====
+const DATA = [
+  { rank: 1,  name: "Crash Landing on You",       bts: 7.60, cd: 8,  rte: 10, sp: 9,  ef: 2,  ptv: 6,  imdb: 8.7, hours: 24.0,  genre: "Romance/Drama"          },
+  { rank: 2,  name: "Squid Game",                 bts: 7.40, cd: 9,  rte: 2,  sp: 10, ef: 8,  ptv: 10, imdb: 8.0, hours: 7.5,   genre: "Thriller/Survival"       },
+  { rank: 3,  name: "Penthouse",                  bts: 7.10, cd: 10, rte: 7,  sp: 6,  ef: 1,  ptv: 10, imdb: 8.0, hours: 48.75, genre: "Melodrama/Thriller"       },
+  { rank: 4,  name: "All of Us Are Dead",         bts: 6.35, cd: 8,  rte: 3,  sp: 8,  ef: 6,  ptv: 7,  imdb: 7.6, hours: 12.0,  genre: "Horror/Thriller"          },
+  { rank: 5,  name: "The Glory",                  bts: 6.35, cd: 8,  rte: 2,  sp: 9,  ef: 5,  ptv: 9,  imdb: 8.2, hours: 14.7,  genre: "Thriller/Drama"           },
+  { rank: 6,  name: "It's Okay to Not Be Okay",   bts: 6.35, cd: 6,  rte: 9,  sp: 7,  ef: 2,  ptv: 6,  imdb: 8.6, hours: 21.3,  genre: "Romance/Drama"            },
+  { rank: 7,  name: "Goblin",                     bts: 6.30, cd: 7,  rte: 8,  sp: 7,  ef: 2,  ptv: 5,  imdb: 8.5, hours: 22.7,  genre: "Fantasy/Romance"          },
+  { rank: 8,  name: "Business Proposal",          bts: 6.25, cd: 6,  rte: 7,  sp: 7,  ef: 6,  ptv: 4,  imdb: 8.1, hours: 12.0,  genre: "Romance/Comedy"           },
+  { rank: 9,  name: "Moon Lovers",                bts: 6.25, cd: 7,  rte: 9,  sp: 5,  ef: 2,  ptv: 6,  imdb: 8.6, hours: 21.7,  genre: "Historical/Romance"       },
+  { rank: 10, name: "Kingdom",                    bts: 6.20, cd: 9,  rte: 1,  sp: 7,  ef: 7,  ptv: 8,  imdb: 8.3, hours: 9.0,   genre: "Historical/Horror"        },
+  { rank: 11, name: "Alchemy of Souls",           bts: 6.15, cd: 7,  rte: 8,  sp: 6,  ef: 1,  ptv: 7,  imdb: 8.7, hours: 40.0,  genre: "Fantasy/Romance"          },
+  { rank: 12, name: "D.P.",                       bts: 5.85, cd: 7,  rte: 1,  sp: 7,  ef: 10, ptv: 6,  imdb: 8.2, hours: 5.0,   genre: "Drama/Military"           },
+  { rank: 13, name: "My Love from the Star",      bts: 5.85, cd: 6,  rte: 9,  sp: 5,  ef: 2,  ptv: 5,  imdb: 8.3, hours: 21.0,  genre: "Fantasy/Romance"          },
+  { rank: 14, name: "Sweet Home",                 bts: 5.85, cd: 8,  rte: 2,  sp: 6,  ef: 7,  ptv: 7,  imdb: 7.5, hours: 8.7,   genre: "Horror/Fantasy"           },
+  { rank: 15, name: "Moving",                     bts: 5.80, cd: 7,  rte: 4,  sp: 7,  ef: 4,  ptv: 7,  imdb: 8.4, hours: 15.7,  genre: "Action/Superhero"         },
+  { rank: 16, name: "Twenty-Five Twenty-One",     bts: 5.75, cd: 5,  rte: 8,  sp: 7,  ef: 3,  ptv: 4,  imdb: 8.6, hours: 18.7,  genre: "Romance/Drama"            },
+  { rank: 17, name: "Vincenzo",                   bts: 5.60, cd: 7,  rte: 4,  sp: 7,  ef: 2,  ptv: 8,  imdb: 8.4, hours: 26.7,  genre: "Crime/Comedy"             },
+  { rank: 18, name: "Itaewon Class",              bts: 5.45, cd: 6,  rte: 6,  sp: 6,  ef: 3,  ptv: 5,  imdb: 8.1, hours: 18.7,  genre: "Drama/Romance"            },
+  { rank: 19, name: "Extraordinary Attorney Woo", bts: 5.45, cd: 5,  rte: 6,  sp: 8,  ef: 3,  ptv: 4,  imdb: 8.5, hours: 18.7,  genre: "Legal/Drama"              },
+  { rank: 20, name: "True Beauty",                bts: 5.45, cd: 5,  rte: 7,  sp: 6,  ef: 4,  ptv: 4,  imdb: 7.9, hours: 17.3,  genre: "Romance/Comedy"           },
+  { rank: 21, name: "Signal",                     bts: 5.25, cd: 8,  rte: 2,  sp: 5,  ef: 3,  ptv: 9,  imdb: 8.5, hours: 18.7,  genre: "Crime/Thriller"           },
+  { rank: 22, name: "Descendants of the Sun",     bts: 5.20, cd: 5,  rte: 6,  sp: 6,  ef: 4,  ptv: 4,  imdb: 8.2, hours: 16.0,  genre: "Romance/Action"           },
+  { rank: 23, name: "Sky Castle",                 bts: 5.10, cd: 7,  rte: 2,  sp: 7,  ef: 2,  ptv: 8,  imdb: 8.5, hours: 25.0,  genre: "Drama/Mystery"            },
+  { rank: 24, name: "Start-Up",                   bts: 4.95, cd: 5,  rte: 7,  sp: 5,  ef: 2,  ptv: 4,  imdb: 7.9, hours: 21.3,  genre: "Romance/Drama"            },
+  { rank: 25, name: "Mr. Sunshine",               bts: 4.70, cd: 5,  rte: 7,  sp: 4,  ef: 1,  ptv: 5,  imdb: 8.7, hours: 32.0,  genre: "Historical/Romance"       },
+  { rank: 26, name: "Hometown Cha-Cha-Cha",       bts: 3.65, cd: 3,  rte: 5,  sp: 5,  ef: 2,  ptv: 2,  imdb: 8.3, hours: 21.3,  genre: "Romance/Slice-of-Life"    },
+  { rank: 27, name: "Weightlifting Fairy",        bts: 3.55, cd: 3,  rte: 5,  sp: 3,  ef: 4,  ptv: 2,  imdb: 8.2, hours: 16.0,  genre: "Romance/Comedy"           },
+  { rank: 28, name: "Hospital Playlist",          bts: 3.15, cd: 2,  rte: 4,  sp: 6,  ef: 1,  ptv: 2,  imdb: 8.7, hours: 34.0,  genre: "Medical/Slice-of-Life"    },
+  { rank: 29, name: "Reply 1988",                 bts: 2.80, cd: 2,  rte: 5,  sp: 3,  ef: 1,  ptv: 2,  imdb: 9.0, hours: 31.7,  genre: "Slice-of-Life/Drama"      },
+  { rank: 30, name: "My Mister",                  bts: 2.50, cd: 3,  rte: 1,  sp: 3,  ef: 3,  ptv: 3,  imdb: 9.0, hours: 18.7,  genre: "Drama"                    },
+];
+
+function getTier(bts) {
+  if (bts >= 7.0) return { label: "S — Sleep Killer", color: "#FF4757" };
+  if (bts >= 6.0) return { label: "A — Danger Zone", color: "#FF9F43" };
+  if (bts >= 5.0) return { label: "B — Weekend Hostage", color: "#7b7bee" };
+  if (bts >= 4.0) return { label: "C — Comfortable Addiction", color: "#2ED573" };
+  return { label: "D — Soft Evening", color: "#a0a8b4" };
+}
+
+function getRankClass(rank) {
+  if (rank <= 3)  return "rank-s";
+  if (rank <= 11) return "rank-a";
+  if (rank <= 23) return "rank-b";
+  if (rank <= 25) return "rank-c";
+  return "rank-d";
+}
+
+// ===== Counter Animation =====
+const counterEl = document.getElementById("hero-counter");
+let count = 0;
+const target = 7.60;
+const step = target / 80;
+function animateCounter() {
+  count += step;
+  if (count >= target) { counterEl.textContent = target.toFixed(2); return; }
+  counterEl.textContent = count.toFixed(2);
+  requestAnimationFrame(animateCounter);
+}
+animateCounter();
+
+// ===== Bar Chart =====
+const GENRE_COLORS = {
+  "Romance/Drama":            "#FF6B6B",
+  "Romance/Comedy":           "#FF8E53",
+  "Romance/Action":           "#FF7B9C",
+  "Romance/Slice-of-Life":    "#FFA07A",
+  "Thriller/Survival":        "#9B59B6",
+  "Thriller/Drama":           "#8E44AD",
+  "Melodrama/Thriller":       "#6B2FA0",
+  "Horror/Thriller":          "#7D3C98",
+  "Horror/Fantasy":           "#5B2C6F",
+  "Historical/Romance":       "#E67E22",
+  "Historical/Horror":        "#CA6F1E",
+  "Fantasy/Romance":          "#F39C12",
+  "Drama/Romance":            "#E74C3C",
+  "Drama/Military":           "#C0392B",
+  "Drama/Mystery":            "#A93226",
+  "Drama":                    "#922B21",
+  "Crime/Thriller":           "#2980B9",
+  "Crime/Comedy":             "#1A5276",
+  "Legal/Drama":              "#117A65",
+  "Action/Superhero":         "#1E8449",
+  "Medical/Slice-of-Life":    "#148F77",
+  "Slice-of-Life/Drama":      "#1ABC9C",
+};
+
+const sorted = [...DATA].sort((a, b) => a.bts - b.bts);
+const names  = sorted.map(d => d.name);
+const scores = sorted.map(d => d.bts);
+const colors = sorted.map(d => GENRE_COLORS[d.genre] || "#888");
+
+const chart = echarts.init(document.getElementById("main-chart"), null, { renderer: "canvas" });
+chart.setOption({
+  backgroundColor: "#14142b",
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    backgroundColor: "#1e1e36",
+    borderColor: "#333",
+    textStyle: { color: "#e0e0e0", fontSize: 11 },
+    formatter: params => {
+      const i = params[0].dataIndex;
+      const d = sorted[i];
+      return `<b>${d.name}</b><br/>
+        <span style="color:#aaa">Genre: ${d.genre}</span><br/>
+        <span style="color:#FFD700">BTS: <b>${d.bts.toFixed(2)}</b></span><br/>
+        <span style="color:#aaa;font-size:10px">CD ${d.cd} | RTE ${d.rte} | SP ${d.sp} | EF ${d.ef} | PTV ${d.ptv}</span><br/>
+        <span style="color:#666;font-size:10px">IMDb ${d.imdb} | ${d.hours}h total</span>`;
+    }
+  },
+  grid: { left: "26%", right: "12%", top: 16, bottom: 36 },
+  xAxis: {
+    type: "value", name: "Binge Trap Score", nameLocation: "center", nameGap: 26,
+    nameTextStyle: { color: "#777", fontSize: 10 },
+    min: 0, max: 8.5,
+    splitLine: { lineStyle: { color: "#1e1e36" } },
+    axisLine: { lineStyle: { color: "#333" } },
+    axisLabel: { color: "#666", fontSize: 9.5 },
+  },
+  yAxis: {
+    type: "category", data: names,
+    axisLabel: {
+      color: "#ccc", fontSize: 10,
+      formatter: n => n.length > 20 ? n.slice(0, 19) + "…" : n,
+    },
+    axisLine: { lineStyle: { color: "#222" } },
+    splitLine: { show: false },
+  },
+  dataZoom: [{ type: "inside", yAxisIndex: 0, filterMode: "none" }],
+  series: [{
+    type: "bar",
+    data: scores.map((v, i) => ({
+      value: v,
+      itemStyle: { color: colors[i], borderRadius: [0, 3, 3, 0] }
+    })),
+    barWidth: "60%",
+    label: { show: true, position: "right", formatter: p => p.value.toFixed(2), color: "#aaa", fontSize: 9.5 },
+    animationDuration: 1600,
+    animationEasing: "cubicOut",
+    animationDelay: i => i * 35,
+  }],
+  graphic: [{ type: "text", right: 8, bottom: 6, style: { text: "RankMint", fontSize: 10, fill: "#333", fontStyle: "italic" } }],
+});
+window.addEventListener("resize", () => chart.resize());
+
+// ===== Find Yourself =====
+const findSelect = document.getElementById("find-select");
+DATA.forEach(d => {
+  const opt = document.createElement("option");
+  opt.value = d.name; opt.textContent = d.name;
+  findSelect.appendChild(opt);
+});
+findSelect.addEventListener("change", () => {
+  const d = DATA.find(x => x.name === findSelect.value);
+  if (!d) { document.getElementById("result-card").style.display = "none"; return; }
+  const tier = getTier(d.bts);
+  document.getElementById("result-card").style.display = "block";
+  document.getElementById("result-rank").textContent = `#${d.rank}`;
+  document.getElementById("result-name").textContent = d.name;
+  document.getElementById("result-score").textContent = `Binge Trap Score: ${d.bts.toFixed(2)} | IMDb: ${d.imdb}`;
+  const tierEl = document.getElementById("result-tier");
+  tierEl.textContent = tier.label;
+  tierEl.style.background = tier.color + "33";
+  tierEl.style.color = tier.color;
+  tierEl.style.border = `1px solid ${tier.color}55`;
+});
+
+// ===== Full Table =====
+const thead = document.getElementById("table-head");
+const tbody = document.getElementById("table-body");
+const cols = ["rank", "name", "bts", "cd", "rte", "sp", "ef", "ptv", "imdb", "hours", "genre"];
+const hdrs = ["#", "Drama", "BTS", "Cliffhanger", "Romance", "Spoiler", "Ep.Friction", "Twist Vel.", "IMDb", "Hours", "Genre"];
+
+const headerRow = document.createElement("tr");
+hdrs.forEach((h, i) => {
+  const th = document.createElement("th");
+  th.textContent = h; th.title = `Sort by ${h}`;
+  th.addEventListener("click", () => sortTable(i));
+  headerRow.appendChild(th);
+});
+thead.appendChild(headerRow);
+
+let tableData = [...DATA];
+function renderTable(data) {
+  tbody.innerHTML = "";
+  data.forEach(d => {
+    const tr = document.createElement("tr");
+    cols.forEach((col, ci) => {
+      const td = document.createElement("td");
+      const v = d[col];
+      if (col === "rank") {
+        td.innerHTML = `<span class="rank-pill ${getRankClass(v)}">${v}</span>`;
+      } else if (typeof v === "number") {
+        td.textContent = v % 1 === 0 ? v : v.toFixed(col === "bts" ? 2 : 1);
+      } else {
+        td.textContent = v;
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+renderTable(tableData);
+
+let sortDir = {};
+function sortTable(ci) {
+  const col = cols[ci];
+  sortDir[col] = !sortDir[col];
+  tableData.sort((a, b) => {
+    const va = a[col], vb = b[col];
+    const cmp = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb));
+    return sortDir[col] ? cmp : -cmp;
+  });
+  renderTable(tableData);
+}
+
+document.getElementById("table-search").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  renderTable(DATA.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q))));
+});
+
+// ===== Share =====
+const shareUrl = window.location.href;
+const shareText = "IMDb's #1 K-drama (Reply 1988, 9.0) ranks LAST on the Binge Trap Index. Romance beats survival horror at the top. #KDrama #RankMint";
+document.getElementById("share-twitter").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+document.getElementById("share-linkedin").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+document.getElementById("share-copy").addEventListener("click", () => {
+  navigator.clipboard.writeText(shareUrl).then(() => {
+    document.getElementById("share-copy").textContent = "Copied!";
+    setTimeout(() => document.getElementById("share-copy").textContent = "Copy Link", 2000);
+  });
+});
+</script>
+</body>
+</html>

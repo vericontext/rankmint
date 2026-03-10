@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-Drama Binge Trap Tier List | RankMint</title>
+<meta property="og:title" content="K-Drama Binge Trap Tier List">
+<meta property="og:description" content="S-tier Sleep Killers to D-tier Soft Evenings — every K-drama ranked by how dangerous it is for your sleep schedule.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="K-Drama Binge Trap Tier List">
+<meta name="twitter:description" content="S-tier Sleep Killers to D-tier Soft Evenings — every K-drama ranked by how dangerous it is for your sleep schedule.">
+<meta name="twitter:image" content="card.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0d0d1a;
+    color: #e0e0e0;
+    min-height: 100vh;
+  }
+  .header {
+    padding: 28px 32px 12px;
+    border-bottom: 1px solid #222;
+  }
+  .header h1 { font-size: 1.6rem; color: #fff; letter-spacing: -0.5px; }
+  .header p { font-size: 0.82rem; color: #777; margin-top: 6px; }
+  .back-link { display: inline-block; margin-top: 6px; font-size: 0.78rem; color: #c084fc; text-decoration: none; }
+  .back-link:hover { text-decoration: underline; }
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    padding: 12px 32px;
+    font-size: 0.75rem; color: #666;
+    border-bottom: 1px solid #1a1a2e;
+  }
+  .legend span { padding: 3px 10px; border-radius: 4px; font-weight: 600; }
+  .tier-container { max-width: 1100px; margin: 20px auto; padding: 0 20px 60px; }
+
+  .tier-row {
+    display: flex;
+    margin-bottom: 6px;
+    min-height: 74px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    animation: fadeInUp 0.4s ease both;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .tier-label {
+    width: 90px; min-width: 90px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 2rem; font-weight: 900;
+    color: #fff;
+    text-shadow: 1px 2px 4px rgba(0,0,0,0.4);
+    line-height: 1;
+  }
+  .tier-label .tier-name {
+    font-size: 0.58rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.5px;
+    margin-top: 3px;
+    text-transform: uppercase;
+  }
+
+  .tier-items {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-left: none;
+    border-radius: 0 10px 10px 0;
+  }
+
+  .tier-item {
+    position: relative;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 0.86rem;
+    font-weight: 500;
+    cursor: default;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.06);
+    line-height: 1.3;
+  }
+  .tier-item:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,0.16);
+    border-color: rgba(255,255,255,0.2);
+    z-index: 5;
+  }
+  .tier-item .item-score {
+    display: block;
+    font-size: 0.68rem;
+    color: #999;
+    margin-top: 2px;
+  }
+
+  .tooltip-box {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e1e36;
+    border: 1px solid #333;
+    color: #e0e0e0;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    z-index: 100;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    pointer-events: none;
+  }
+  .tooltip-box .t-row { display: flex; justify-content: space-between; gap: 20px; margin-top: 4px; color: #aaa; }
+  .tooltip-box .t-label { font-weight: 600; color: #FFD700; margin-bottom: 4px; font-size: 0.82rem; }
+  .tier-item:hover .tooltip-box { display: block; }
+
+  .watermark {
+    text-align: right;
+    padding: 16px 32px;
+    color: #333;
+    font-size: 0.72rem;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>K-Drama Binge Trap Tier List</h1>
+  <p>Ranked by Binge Trap Score (BTS). Hover any drama for full metric breakdown.</p>
+  <a class="back-link" href="index.html">← Back to full report</a>
+</div>
+
+<div class="tier-container" id="tiers"></div>
+<div class="watermark">RankMint — K-Drama Binge Trap Index 2026</div>
+
+<script>
+const DATA = [
+  { rank: 1,  name: "Crash Landing on You",       bts: 7.60, cd: 8,  rte: 10, sp: 9,  ef: 2,  ptv: 6,  genre: "Romance/Drama",         imdb: 8.7 },
+  { rank: 2,  name: "Squid Game",                 bts: 7.40, cd: 9,  rte: 2,  sp: 10, ef: 8,  ptv: 10, genre: "Thriller/Survival",      imdb: 8.0 },
+  { rank: 3,  name: "Penthouse",                  bts: 7.10, cd: 10, rte: 7,  sp: 6,  ef: 1,  ptv: 10, genre: "Melodrama/Thriller",     imdb: 8.0 },
+  { rank: 4,  name: "All of Us Are Dead",         bts: 6.35, cd: 8,  rte: 3,  sp: 8,  ef: 6,  ptv: 7,  genre: "Horror/Thriller",        imdb: 7.6 },
+  { rank: 5,  name: "The Glory",                  bts: 6.35, cd: 8,  rte: 2,  sp: 9,  ef: 5,  ptv: 9,  genre: "Thriller/Drama",         imdb: 8.2 },
+  { rank: 6,  name: "It's Okay to Not Be Okay",   bts: 6.35, cd: 6,  rte: 9,  sp: 7,  ef: 2,  ptv: 6,  genre: "Romance/Drama",          imdb: 8.6 },
+  { rank: 7,  name: "Goblin",                     bts: 6.30, cd: 7,  rte: 8,  sp: 7,  ef: 2,  ptv: 5,  genre: "Fantasy/Romance",        imdb: 8.5 },
+  { rank: 8,  name: "Business Proposal",          bts: 6.25, cd: 6,  rte: 7,  sp: 7,  ef: 6,  ptv: 4,  genre: "Romance/Comedy",         imdb: 8.1 },
+  { rank: 9,  name: "Moon Lovers",                bts: 6.25, cd: 7,  rte: 9,  sp: 5,  ef: 2,  ptv: 6,  genre: "Historical/Romance",     imdb: 8.6 },
+  { rank: 10, name: "Kingdom",                    bts: 6.20, cd: 9,  rte: 1,  sp: 7,  ef: 7,  ptv: 8,  genre: "Historical/Horror",      imdb: 8.3 },
+  { rank: 11, name: "Alchemy of Souls",           bts: 6.15, cd: 7,  rte: 8,  sp: 6,  ef: 1,  ptv: 7,  genre: "Fantasy/Romance",        imdb: 8.7 },
+  { rank: 12, name: "D.P.",                       bts: 5.85, cd: 7,  rte: 1,  sp: 7,  ef: 10, ptv: 6,  genre: "Drama/Military",         imdb: 8.2 },
+  { rank: 13, name: "My Love from the Star",      bts: 5.85, cd: 6,  rte: 9,  sp: 5,  ef: 2,  ptv: 5,  genre: "Fantasy/Romance",        imdb: 8.3 },
+  { rank: 14, name: "Sweet Home",                 bts: 5.85, cd: 8,  rte: 2,  sp: 6,  ef: 7,  ptv: 7,  genre: "Horror/Fantasy",         imdb: 7.5 },
+  { rank: 15, name: "Moving",                     bts: 5.80, cd: 7,  rte: 4,  sp: 7,  ef: 4,  ptv: 7,  genre: "Action/Superhero",       imdb: 8.4 },
+  { rank: 16, name: "Twenty-Five Twenty-One",     bts: 5.75, cd: 5,  rte: 8,  sp: 7,  ef: 3,  ptv: 4,  genre: "Romance/Drama",          imdb: 8.6 },
+  { rank: 17, name: "Vincenzo",                   bts: 5.60, cd: 7,  rte: 4,  sp: 7,  ef: 2,  ptv: 8,  genre: "Crime/Comedy",           imdb: 8.4 },
+  { rank: 18, name: "Itaewon Class",              bts: 5.45, cd: 6,  rte: 6,  sp: 6,  ef: 3,  ptv: 5,  genre: "Drama/Romance",          imdb: 8.1 },
+  { rank: 19, name: "Extraordinary Attorney Woo", bts: 5.45, cd: 5,  rte: 6,  sp: 8,  ef: 3,  ptv: 4,  genre: "Legal/Drama",            imdb: 8.5 },
+  { rank: 20, name: "True Beauty",                bts: 5.45, cd: 5,  rte: 7,  sp: 6,  ef: 4,  ptv: 4,  genre: "Romance/Comedy",         imdb: 7.9 },
+  { rank: 21, name: "Signal",                     bts: 5.25, cd: 8,  rte: 2,  sp: 5,  ef: 3,  ptv: 9,  genre: "Crime/Thriller",         imdb: 8.5 },
+  { rank: 22, name: "Descendants of the Sun",     bts: 5.20, cd: 5,  rte: 6,  sp: 6,  ef: 4,  ptv: 4,  genre: "Romance/Action",         imdb: 8.2 },
+  { rank: 23, name: "Sky Castle",                 bts: 5.10, cd: 7,  rte: 2,  sp: 7,  ef: 2,  ptv: 8,  genre: "Drama/Mystery",          imdb: 8.5 },
+  { rank: 24, name: "Start-Up",                   bts: 4.95, cd: 5,  rte: 7,  sp: 5,  ef: 2,  ptv: 4,  genre: "Romance/Drama",          imdb: 7.9 },
+  { rank: 25, name: "Mr. Sunshine",               bts: 4.70, cd: 5,  rte: 7,  sp: 4,  ef: 1,  ptv: 5,  genre: "Historical/Romance",     imdb: 8.7 },
+  { rank: 26, name: "Hometown Cha-Cha-Cha",       bts: 3.65, cd: 3,  rte: 5,  sp: 5,  ef: 2,  ptv: 2,  genre: "Romance/Slice-of-Life",  imdb: 8.3 },
+  { rank: 27, name: "Weightlifting Fairy",        bts: 3.55, cd: 3,  rte: 5,  sp: 3,  ef: 4,  ptv: 2,  genre: "Romance/Comedy",         imdb: 8.2 },
+  { rank: 28, name: "Hospital Playlist",          bts: 3.15, cd: 2,  rte: 4,  sp: 6,  ef: 1,  ptv: 2,  genre: "Medical/Slice-of-Life",  imdb: 8.7 },
+  { rank: 29, name: "Reply 1988",                 bts: 2.80, cd: 2,  rte: 5,  sp: 3,  ef: 1,  ptv: 2,  genre: "Slice-of-Life/Drama",    imdb: 9.0 },
+  { rank: 30, name: "My Mister",                  bts: 2.50, cd: 3,  rte: 1,  sp: 3,  ef: 3,  ptv: 3,  genre: "Drama",                  imdb: 9.0 },
+];
+
+const TIERS = [
+  {
+    label: "S",
+    name: "Sleep Killers",
+    subtitle: "Do NOT Start After 10pm",
+    min: 7.0,
+    color: "#FF4757",
+    glow: "rgba(255,71,87,0.35)",
+  },
+  {
+    label: "A",
+    name: "Danger Zone",
+    subtitle: "You Will Cancel Plans",
+    min: 6.0,
+    color: "#FF9F43",
+    glow: "rgba(255,159,67,0.2)",
+  },
+  {
+    label: "B",
+    name: "Weekend Hostages",
+    subtitle: "It'll Cost You a Saturday",
+    min: 5.0,
+    color: "#5352ED",
+    glow: "rgba(83,82,237,0.2)",
+  },
+  {
+    label: "C",
+    name: "Comfortable Addiction",
+    subtitle: "You'll Binge, But Survive",
+    min: 4.0,
+    color: "#2ED573",
+    glow: "rgba(46,213,115,0.15)",
+  },
+  {
+    label: "D",
+    name: "Soft Evenings",
+    subtitle: "You Can Stop Anytime (You Lie)",
+    min: 0,
+    color: "#747D8C",
+    glow: "none",
+  },
+];
+
+const sorted = [...DATA].sort((a, b) => b.bts - a.bts);
+const container = document.getElementById("tiers");
+
+TIERS.forEach((tier, ti) => {
+  const nextMin = TIERS[ti - 1] ? TIERS[ti - 1].min : Infinity;
+  const items = sorted.filter(d => d.bts >= tier.min && d.bts < nextMin);
+
+  const row = document.createElement("div");
+  row.className = "tier-row";
+  row.style.animationDelay = `${ti * 80}ms`;
+
+  const labelDiv = document.createElement("div");
+  labelDiv.className = "tier-label";
+  labelDiv.style.background = `linear-gradient(160deg, ${tier.color} 0%, ${tier.color}aa 100%)`;
+  if (tier.glow !== "none") {
+    labelDiv.style.boxShadow = `inset -4px 0 20px ${tier.glow}`;
+  }
+  labelDiv.innerHTML = `${tier.label}<span class="tier-name">${tier.name}</span>`;
+
+  const itemsDiv = document.createElement("div");
+  itemsDiv.className = "tier-items";
+
+  items.forEach((d, i) => {
+    const el = document.createElement("div");
+    el.className = "tier-item";
+    el.style.animationDelay = `${ti * 80 + i * 30}ms`;
+    el.style.borderColor = tier.color + "33";
+    el.innerHTML = `
+      ${d.name}
+      <span class="item-score">${d.bts.toFixed(2)}</span>
+      <div class="tooltip-box">
+        <div class="t-label">${d.name}</div>
+        <div class="t-row"><span>Binge Trap Score</span><span style="color:#FFD700;font-weight:700">${d.bts.toFixed(2)}</span></div>
+        <div class="t-row"><span>Cliffhanger Density</span><span>${d.cd}/10</span></div>
+        <div class="t-row"><span>Romance Tension</span><span>${d.rte}/10</span></div>
+        <div class="t-row"><span>Spoiler Pressure</span><span>${d.sp}/10</span></div>
+        <div class="t-row"><span>Episode Friction (inv.)</span><span>${d.ef}/10</span></div>
+        <div class="t-row"><span>Plot Twist Velocity</span><span>${d.ptv}/10</span></div>
+        <div class="t-row"><span>IMDb Rating</span><span>${d.imdb}</span></div>
+        <div class="t-row" style="margin-top:4px;color:#666">${d.genre}</div>
+      </div>
+    `;
+    itemsDiv.appendChild(el);
+  });
+
+  if (items.length === 0) {
+    itemsDiv.innerHTML = `<span style="color:#444;font-size:0.8rem;font-style:italic">No dramas in this tier</span>`;
+  }
+
+  row.appendChild(labelDiv);
+  row.appendChild(itemsDiv);
+  container.appendChild(row);
+});
+</script>
+</body>
+</html>

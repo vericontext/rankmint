@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quality vs. Danger — K-Drama Binge Trap Matrix | RankMint</title>
+<meta property="og:title" content="Quality vs. Danger: K-Drama Scatter Matrix">
+<meta property="og:description" content="IMDb Rating vs. Binge Trap Score — the chart that proves prestige and addictiveness are almost completely orthogonal.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Quality vs. Danger: K-Drama Scatter Matrix">
+<meta name="twitter:description" content="IMDb Rating vs. Binge Trap Score — the chart that proves prestige and addictiveness are almost completely orthogonal.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d0d1a; color: #e0e0e0; }
+  #chart { width: 100%; height: 88vh; min-height: 600px; }
+  .header { padding: 22px 32px 6px; }
+  .header h1 { font-size: 1.35rem; color: #fff; }
+  .header p { font-size: 0.80rem; color: #777; margin-top: 5px; }
+  .back-link { display: inline-block; margin-top: 5px; font-size: 0.78rem; color: #c084fc; text-decoration: none; }
+  .back-link:hover { text-decoration: underline; }
+  .legend-row {
+    display: flex; gap: 20px; flex-wrap: wrap; padding: 8px 32px 0;
+    font-size: 0.76rem;
+  }
+  .leg-item { display: flex; align-items: center; gap: 6px; color: #aaa; }
+  .leg-dot { width: 12px; height: 12px; border-radius: 50%; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Quality vs. Danger — K-Drama Binge Trap Matrix</h1>
+  <p>X axis: IMDb Rating (quality) &nbsp;|&nbsp; Y axis: Binge Trap Score (sleep danger) &nbsp;|&nbsp; Bubble size: total watch hours. Hover for details.</p>
+  <a class="back-link" href="index.html">← Back to full report</a>
+</div>
+<div class="legend-row">
+  <div class="leg-item"><div class="leg-dot" style="background:#E74C3C"></div>The Perfect Traps (high quality, high danger)</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#FF9F43"></div>Guilty Destroyers (low quality, high danger)</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#5352ED"></div>Prestige Slow Burns (high quality, low danger)</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#747D8C"></div>The Safe Zone</div>
+</div>
+<div id="chart"></div>
+
+<script>
+const DATA = [
+  { name: "Crash Landing on You",       bts: 7.60, imdb: 8.7, hours: 24.0,  cd: 8,  rte: 10, sp: 9,  ef: 2,  ptv: 6  },
+  { name: "Squid Game",                 bts: 7.40, imdb: 8.0, hours: 7.5,   cd: 9,  rte: 2,  sp: 10, ef: 8,  ptv: 10 },
+  { name: "Penthouse",                  bts: 7.10, imdb: 8.0, hours: 48.75, cd: 10, rte: 7,  sp: 6,  ef: 1,  ptv: 10 },
+  { name: "All of Us Are Dead",         bts: 6.35, imdb: 7.6, hours: 12.0,  cd: 8,  rte: 3,  sp: 8,  ef: 6,  ptv: 7  },
+  { name: "The Glory",                  bts: 6.35, imdb: 8.2, hours: 14.7,  cd: 8,  rte: 2,  sp: 9,  ef: 5,  ptv: 9  },
+  { name: "It's Okay to Not Be Okay",   bts: 6.35, imdb: 8.6, hours: 21.3,  cd: 6,  rte: 9,  sp: 7,  ef: 2,  ptv: 6  },
+  { name: "Goblin",                     bts: 6.30, imdb: 8.5, hours: 22.7,  cd: 7,  rte: 8,  sp: 7,  ef: 2,  ptv: 5  },
+  { name: "Business Proposal",          bts: 6.25, imdb: 8.1, hours: 12.0,  cd: 6,  rte: 7,  sp: 7,  ef: 6,  ptv: 4  },
+  { name: "Moon Lovers",                bts: 6.25, imdb: 8.6, hours: 21.7,  cd: 7,  rte: 9,  sp: 5,  ef: 2,  ptv: 6  },
+  { name: "Kingdom",                    bts: 6.20, imdb: 8.3, hours: 9.0,   cd: 9,  rte: 1,  sp: 7,  ef: 7,  ptv: 8  },
+  { name: "Alchemy of Souls",           bts: 6.15, imdb: 8.7, hours: 40.0,  cd: 7,  rte: 8,  sp: 6,  ef: 1,  ptv: 7  },
+  { name: "D.P.",                       bts: 5.85, imdb: 8.2, hours: 5.0,   cd: 7,  rte: 1,  sp: 7,  ef: 10, ptv: 6  },
+  { name: "My Love from the Star",      bts: 5.85, imdb: 8.3, hours: 21.0,  cd: 6,  rte: 9,  sp: 5,  ef: 2,  ptv: 5  },
+  { name: "Sweet Home",                 bts: 5.85, imdb: 7.5, hours: 8.7,   cd: 8,  rte: 2,  sp: 6,  ef: 7,  ptv: 7  },
+  { name: "Moving",                     bts: 5.80, imdb: 8.4, hours: 15.7,  cd: 7,  rte: 4,  sp: 7,  ef: 4,  ptv: 7  },
+  { name: "Twenty-Five Twenty-One",     bts: 5.75, imdb: 8.6, hours: 18.7,  cd: 5,  rte: 8,  sp: 7,  ef: 3,  ptv: 4  },
+  { name: "Vincenzo",                   bts: 5.60, imdb: 8.4, hours: 26.7,  cd: 7,  rte: 4,  sp: 7,  ef: 2,  ptv: 8  },
+  { name: "Itaewon Class",              bts: 5.45, imdb: 8.1, hours: 18.7,  cd: 6,  rte: 6,  sp: 6,  ef: 3,  ptv: 5  },
+  { name: "Extraordinary Attorney Woo", bts: 5.45, imdb: 8.5, hours: 18.7,  cd: 5,  rte: 6,  sp: 8,  ef: 3,  ptv: 4  },
+  { name: "True Beauty",                bts: 5.45, imdb: 7.9, hours: 17.3,  cd: 5,  rte: 7,  sp: 6,  ef: 4,  ptv: 4  },
+  { name: "Signal",                     bts: 5.25, imdb: 8.5, hours: 18.7,  cd: 8,  rte: 2,  sp: 5,  ef: 3,  ptv: 9  },
+  { name: "Descendants of the Sun",     bts: 5.20, imdb: 8.2, hours: 16.0,  cd: 5,  rte: 6,  sp: 6,  ef: 4,  ptv: 4  },
+  { name: "Sky Castle",                 bts: 5.10, imdb: 8.5, hours: 25.0,  cd: 7,  rte: 2,  sp: 7,  ef: 2,  ptv: 8  },
+  { name: "Start-Up",                   bts: 4.95, imdb: 7.9, hours: 21.3,  cd: 5,  rte: 7,  sp: 5,  ef: 2,  ptv: 4  },
+  { name: "Mr. Sunshine",               bts: 4.70, imdb: 8.7, hours: 32.0,  cd: 5,  rte: 7,  sp: 4,  ef: 1,  ptv: 5  },
+  { name: "Hometown Cha-Cha-Cha",       bts: 3.65, imdb: 8.3, hours: 21.3,  cd: 3,  rte: 5,  sp: 5,  ef: 2,  ptv: 2  },
+  { name: "Weightlifting Fairy",        bts: 3.55, imdb: 8.2, hours: 16.0,  cd: 3,  rte: 5,  sp: 3,  ef: 4,  ptv: 2  },
+  { name: "Hospital Playlist",          bts: 3.15, imdb: 8.7, hours: 34.0,  cd: 2,  rte: 4,  sp: 6,  ef: 1,  ptv: 2  },
+  { name: "Reply 1988",                 bts: 2.80, imdb: 9.0, hours: 31.7,  cd: 2,  rte: 5,  sp: 3,  ef: 1,  ptv: 2  },
+  { name: "My Mister",                  bts: 2.50, imdb: 9.0, hours: 18.7,  cd: 3,  rte: 1,  sp: 3,  ef: 3,  ptv: 3  },
+];
+
+// Fixed quadrant thresholds: IMDb midpoint = 8.35 (midpoint of 7.5-9.0), BTS midpoint = 5.5
+const X_MID = 8.35;
+const Y_MID = 5.5;
+
+function getQuadrant(d) {
+  if (d.imdb >= X_MID && d.bts >= Y_MID) return "topRight";
+  if (d.imdb < X_MID && d.bts >= Y_MID)  return "topLeft";
+  if (d.imdb >= X_MID && d.bts < Y_MID)  return "bottomRight";
+  return "bottomLeft";
+}
+
+const QUAD_COLORS = {
+  topRight:    "#E74C3C",  // Perfect Traps — red
+  topLeft:     "#FF9F43",  // Guilty Destroyers — amber
+  bottomRight: "#5352ED",  // Prestige Slow Burns — indigo
+  bottomLeft:  "#747D8C",  // Safe Zone — grey
+};
+const QUAD_BG = {
+  topRight:    "rgba(231,76,60,0.07)",
+  topLeft:     "rgba(255,159,67,0.07)",
+  bottomRight: "rgba(83,82,237,0.07)",
+  bottomLeft:  "rgba(116,125,140,0.04)",
+};
+
+const maxHours = Math.max(...DATA.map(d => d.hours));
+const minHours = Math.min(...DATA.map(d => d.hours));
+
+const seriesData = DATA.map(d => {
+  const q = getQuadrant(d);
+  // Bubble size: 14-50 based on total hours
+  const size = 14 + ((d.hours - minHours) / (maxHours - minHours)) * 36;
+  return {
+    value: [d.imdb, d.bts],
+    name: d.name,
+    symbolSize: size,
+    itemStyle: {
+      color: QUAD_COLORS[q] + "cc",
+      borderColor: QUAD_COLORS[q],
+      borderWidth: 1.5,
+    },
+    _raw: d,
+    _quad: q,
+  };
+});
+
+const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
+
+chart.setOption({
+  backgroundColor: "#0d0d1a",
+  tooltip: {
+    formatter: p => {
+      const d = p.data._raw;
+      const qNames = {
+        topRight: "The Perfect Traps",
+        topLeft: "Guilty Destroyers",
+        bottomRight: "Prestige Slow Burns",
+        bottomLeft: "The Safe Zone",
+      };
+      return `
+        <b style="font-size:13px">${d.name}</b>
+        <div style="color:#FFD700;font-size:11px;margin:3px 0">${qNames[p.data._quad]}</div>
+        <hr style="border-color:#333;margin:5px 0">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 14px;font-size:11px;color:#ccc">
+          <span>Binge Trap Score</span><span style="color:#FF6B6B;font-weight:700">${d.bts.toFixed(2)}</span>
+          <span>IMDb Rating</span><span style="color:#74B9FF">${d.imdb}</span>
+          <span>Total Hours</span><span>${d.hours}h</span>
+          <span>Cliffhanger Density</span><span>${d.cd}/10</span>
+          <span>Romance Tension</span><span>${d.rte}/10</span>
+          <span>Spoiler Pressure</span><span>${d.sp}/10</span>
+          <span>Plot Twist Velocity</span><span>${d.ptv}/10</span>
+        </div>
+      `;
+    },
+    backgroundColor: "#1e1e36",
+    borderColor: "#333",
+    textStyle: { color: "#e0e0e0" },
+    extraCssText: "box-shadow: 0 6px 20px rgba(0,0,0,0.5); min-width: 220px;",
+  },
+  grid: { left: "9%", right: "6%", top: 50, bottom: 60 },
+  xAxis: {
+    type: "value",
+    name: "IMDb Rating (Quality Signal)",
+    nameLocation: "center",
+    nameGap: 36,
+    nameTextStyle: { color: "#888", fontSize: 11 },
+    min: 7.3, max: 9.2,
+    splitLine: { lineStyle: { color: "#1a1a2e" } },
+    axisLine: { lineStyle: { color: "#333" } },
+    axisLabel: { color: "#888", fontSize: 10 },
+  },
+  yAxis: {
+    type: "value",
+    name: "Binge Trap Score (Sleep Danger)",
+    nameLocation: "center",
+    nameGap: 50,
+    nameTextStyle: { color: "#888", fontSize: 11 },
+    min: 2.0, max: 8.2,
+    splitLine: { lineStyle: { color: "#1a1a2e" } },
+    axisLine: { lineStyle: { color: "#333" } },
+    axisLabel: { color: "#888", fontSize: 10 },
+  },
+  dataZoom: [
+    { type: "inside", xAxisIndex: 0 },
+    { type: "inside", yAxisIndex: 0 },
+  ],
+  series: [{
+    type: "scatter",
+    data: seriesData,
+    label: {
+      show: true,
+      formatter: p => {
+        const name = p.data.name;
+        // Shorten long names
+        const short = {
+          "Crash Landing on You": "CLOY",
+          "Extraordinary Attorney Woo": "Att. Woo",
+          "It's Okay to Not Be Okay": "It's Okay",
+          "All of Us Are Dead": "AoUAD",
+          "Twenty-Five Twenty-One": "25-21",
+          "My Love from the Star": "MLFS",
+          "Descendants of the Sun": "DotS",
+          "Weightlifting Fairy": "WL Fairy",
+          "Hometown Cha-Cha-Cha": "Hometown",
+          "Alchemy of Souls": "Alchemy",
+          "Business Proposal": "Biz Prop",
+          "Hospital Playlist": "Hospital",
+        };
+        return short[name] || name;
+      },
+      position: "right",
+      fontSize: 9.5,
+      color: "#bbb",
+      distance: 4,
+    },
+    emphasis: {
+      label: { fontSize: 11.5, fontWeight: "bold", color: "#fff" },
+      itemStyle: { shadowBlur: 16, shadowColor: "rgba(255,255,255,0.3)" },
+    },
+    animationDuration: 2000,
+    animationEasing: "cubicOut",
+    markArea: {
+      silent: true,
+      data: [
+        // Top-Left: Guilty Destroyers
+        [{ coord: [7.3, Y_MID], itemStyle: { color: QUAD_BG.topLeft } }, { coord: [X_MID, 8.2] }],
+        // Top-Right: Perfect Traps
+        [{ coord: [X_MID, Y_MID], itemStyle: { color: QUAD_BG.topRight } }, { coord: [9.2, 8.2] }],
+        // Bottom-Left: Safe Zone
+        [{ coord: [7.3, 2.0], itemStyle: { color: QUAD_BG.bottomLeft } }, { coord: [X_MID, Y_MID] }],
+        // Bottom-Right: Prestige Slow Burns
+        [{ coord: [X_MID, 2.0], itemStyle: { color: QUAD_BG.bottomRight } }, { coord: [9.2, Y_MID] }],
+      ],
+    },
+    markLine: {
+      silent: true,
+      symbol: "none",
+      lineStyle: { color: "#333", type: "dashed", width: 1 },
+      data: [
+        { xAxis: X_MID },
+        { yAxis: Y_MID },
+      ],
+      label: { show: false },
+    },
+  }],
+  graphic: [
+    // Quadrant labels
+    {
+      type: "text", left: "10%", top: 58,
+      style: { text: "Guilty Destroyers", fontSize: 11, fill: "#FF9F43", fontStyle: "italic", fontWeight: "bold" }
+    },
+    {
+      type: "text", right: "7%", top: 58,
+      style: { text: "The Perfect Traps", fontSize: 11, fill: "#E74C3C", fontStyle: "italic", fontWeight: "bold" }
+    },
+    {
+      type: "text", left: "10%", bottom: 68,
+      style: { text: "The Safe Zone", fontSize: 11, fill: "#747D8C", fontStyle: "italic", fontWeight: "bold" }
+    },
+    {
+      type: "text", right: "7%", bottom: 68,
+      style: { text: "Prestige Slow Burns", fontSize: 11, fill: "#5352ED", fontStyle: "italic", fontWeight: "bold" }
+    },
+    {
+      type: "text", right: 20, bottom: 10,
+      style: { text: "RankMint", fontSize: 11, fill: "#333", fontStyle: "italic" }
+    },
+    // Bubble size note
+    {
+      type: "text", right: 20, top: 52,
+      style: { text: "Bubble size = total watch hours", fontSize: 9, fill: "#555", fontStyle: "italic" }
+    },
+  ],
+});
+
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>
