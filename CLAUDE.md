@@ -73,3 +73,4 @@
 - Use 6 named palettes: `gold-steel`, `sunset`, `forest`, `ocean`, `berry`, `ember`
 - Include `<!-- __ANALYTICS_SNIPPET__ -->` placeholder in all HTML files
 - The storyteller agent picks 2-3 chart types for each topic from the template gallery
+- **Tier list filtering**: When assigning items to S/A/B/C/D tiers, sort the TIERS array by `min` descending, then use `.find(t => score >= t.min)` to assign each item to its highest matching tier. Do NOT use `TIERS.find(t => t.min > tier.min)` to calculate nextMin — this returns the wrong boundary when the array is not sorted ascending. See `templates/chart_tier.html` for the correct pattern.

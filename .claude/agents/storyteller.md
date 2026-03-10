@@ -93,7 +93,7 @@ Choose 2-3 chart types from the 6 available templates based on data characterist
 Every output MUST pass this checklist before completion:
 1. Navigation: index.html has home nav bar (← RankMint Home → ../)
 2. Navigation: ALL chart pages have back nav (← Back to Rankings → index.html, ← RankMint Home → ../)
-3. Tier list: No item appears in more than one tier
+3. Tier list: No item appears in more than one tier. KNOWN BUG: When filtering items per tier, `TIERS.find(t => t.min > tier.min)` returns wrong boundary if TIERS is ordered descending (S→D). Fix: sort tiers by min descending, then use `.find(t => score >= t.min)` to assign each item to its highest matching tier. Reference `templates/chart_tier.html` for the correct pattern.
 4. Descriptions: No text is CSS-truncated (check text-overflow, max-height, overflow:hidden)
 5. OG tags: All HTML files have og:title, og:description, og:image
 6. Charts: ECharts graphic watermark "RankMint" present

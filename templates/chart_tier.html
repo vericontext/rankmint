@@ -82,16 +82,14 @@ const CONFIG = {
 const sorted = [...DATA].sort((a, b) => b[CONFIG.scoreField] - a[CONFIG.scoreField]);
 const container = document.getElementById("tiers");
 
+// IMPORTANT: Sort tiers by min DESCENDING so .find() returns the highest matching tier
+const sortedTiers = [...CONFIG.tiers].sort((a, b) => b.min - a.min);
+
 CONFIG.tiers.forEach(tier => {
-  const items = sorted.filter(d => {
-    const s = d[CONFIG.scoreField];
-    const nextTier = CONFIG.tiers.find(t => t.min > tier.min && t.min <= s);
-    return s >= tier.min && (!nextTier || s < nextTier.min);
-  });
-  // Re-filter: item belongs to highest tier whose min it exceeds
+  // Assign each item to the HIGHEST tier whose min it meets or exceeds
   const tierItems = sorted.filter(d => {
     const s = d[CONFIG.scoreField];
-    const assigned = CONFIG.tiers.find(t => s >= t.min);
+    const assigned = sortedTiers.find(t => s >= t.min);
     return assigned && assigned.label === tier.label;
   });
 
