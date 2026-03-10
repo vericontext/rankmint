@@ -98,3 +98,5 @@ Every output MUST pass this checklist before completion:
 5. OG tags: All HTML files have og:title, og:description, og:image
 6. Charts: ECharts graphic watermark "RankMint" present
 7. Responsive: All pages render at 375px width without horizontal scroll
+8. Desktop centering: `.container` must be `max-width: 1200px; margin: 0 auto;`. ALL content sections MUST use `margin: Npx auto` — NEVER `margin: Npx 0`. Using `0` breaks center alignment on desktop.
+9. Verify in browser at 1440px width: content must be centered, not left-aligned

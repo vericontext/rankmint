@@ -45,6 +45,12 @@
 - Every report must surface at least one counter-intuitive finding
 - Use `templates/report_structure.md` as the report template
 
+### Layout Rules
+- `.container` must use `max-width: 1200px; margin: 0 auto; padding: 0 20px;`
+- **CRITICAL**: ALL content sections (`.chart-section`, `.taxonomy`, `.full-table`, `.find-yourself`, `.methodology`, `.findings`, etc.) MUST use `margin: Npx auto` — NEVER `margin: Npx 0`. Using `0` instead of `auto` breaks center alignment on desktop viewports.
+- Landing pages (`index.html`) must have a home nav bar: `← RankMint Home` linking to `../`
+- Chart pages (`chart*.html`) must have back nav: `← RankMint Home` (→ `../`) + `← Back to Rankings` (→ `index.html`)
+
 ### Chart Rules
 - All charts are **interactive HTML** using Apache ECharts via CDN
 - Chart HTML files are self-contained (single file, no external dependencies except CDN)
