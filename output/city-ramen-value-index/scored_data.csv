@@ -1,0 +1,31 @@
+Rank,City,Country,AffordabilityScore,DensityScore,QualityScore,VarietyScore,EmbeddednessScore,CRVI
+1,Fukuoka,Japan,8.82,9.75,10.00,7.78,10.00,9.21
+2,Tokyo,Japan,7.65,10.00,9.00,10.00,8.00,8.91
+3,Osaka,Japan,8.24,9.53,8.00,8.89,7.00,8.39
+4,Taipei,Taiwan,8.82,6.59,9.00,8.89,7.00,8.15
+5,Sapporo,Japan,8.24,8.09,7.00,6.67,9.00,7.76
+6,Seoul,South Korea,8.24,6.01,6.00,7.78,8.00,7.22
+7,Bangkok,Thailand,9.41,3.47,7.00,7.78,6.00,6.90
+8,Hong Kong,China,7.06,5.15,7.00,7.78,5.00,6.50
+9,Shanghai,China,8.24,4.74,6.00,6.67,5.00,6.29
+10,Singapore,Singapore,5.88,3.88,6.00,6.67,4.00,5.38
+11,Portland,United States,3.53,5.48,6.00,6.67,5.00,5.26
+12,Kuala Lumpur,Malaysia,9.41,3.47,4.00,4.44,3.00,5.18
+13,Los Angeles,United States,1.18,4.65,7.00,7.78,5.00,4.93
+14,Vancouver,Canada,2.94,4.21,6.00,6.67,4.00,4.71
+15,Manila,Philippines,10.00,2.95,3.00,3.33,2.00,4.66
+16,Jakarta,Indonesia,10.00,2.95,3.00,3.33,2.00,4.66
+17,New York,United States,0.00,3.80,7.00,7.78,5.00,4.47
+18,Melbourne,Australia,3.53,3.88,5.00,5.56,4.00,4.37
+19,Berlin,Germany,4.12,2.95,5.00,5.56,3.00,4.18
+20,Toronto,Canada,3.53,3.47,5.00,5.56,3.00,4.14
+21,Sydney,Australia,2.35,3.47,5.00,5.56,3.00,3.85
+22,San Francisco,United States,0.00,3.47,6.00,6.67,4.00,3.83
+23,Chicago,United States,2.35,2.95,5.00,5.56,3.00,3.74
+24,Paris,France,2.35,2.95,5.00,5.56,3.00,3.74
+25,Sao Paulo,Brazil,7.65,0.94,3.00,3.33,2.00,3.67
+26,Mexico City,Mexico,8.24,0.00,2.00,2.22,1.00,3.06
+27,London,United Kingdom,0.00,2.38,5.00,5.56,3.00,3.04
+28,Dubai,UAE,4.71,0.94,3.00,3.33,2.00,2.93
+29,Amsterdam,Netherlands,1.18,1.79,4.00,3.33,2.00,2.42
+30,Stockholm,Sweden,2.35,0.94,3.00,3.33,2.00,2.34

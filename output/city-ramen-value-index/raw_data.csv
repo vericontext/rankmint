@@ -1,0 +1,31 @@
+City,Country,RamenPriceUSD,MonthlyWageUSD,ShopsPer100k,QualityCeiling,StyleCount,CultureEmbed
+Tokyo,Japan,9,2581,71,9,9,8
+Osaka,Japan,8,2019,55,8,8,7
+Fukuoka,Japan,7,2065,62,10,7,10
+Sapporo,Japan,8,1936,25,7,6,9
+Seoul,South Korea,8,3189,8,6,7,8
+Bangkok,Thailand,6,789,2,7,7,6
+Taipei,Taiwan,7,1608,11,9,8,7
+Singapore,Singapore,12,4254,2.5,6,6,4
+Hong Kong,China,10,3298,5,7,7,5
+Shanghai,China,8,1657,4,6,6,5
+Manila,Philippines,5,481,1.5,3,3,2
+Jakarta,Indonesia,5,480,1.5,3,3,2
+Kuala Lumpur,Malaysia,6,1559,2,4,4,3
+New York,United States,22,5254,2.4,7,7,5
+Los Angeles,United States,20,4196,3.8,7,7,5
+San Francisco,United States,22,7288,2,6,6,4
+Portland,United States,16,4678,6,6,6,5
+Chicago,United States,18,4930,1.5,5,5,3
+London,United Kingdom,22,5016,1.1,5,5,3
+Paris,France,18,3907,1.5,5,5,3
+Berlin,Germany,15,3551,1.5,5,5,3
+Amsterdam,Netherlands,20,5176,0.8,4,3,2
+Stockholm,Sweden,18,3900,0.5,3,3,2
+Sydney,Australia,18,4179,2,5,5,3
+Melbourne,Australia,16,4327,2.5,5,5,4
+Toronto,Canada,16,3674,2,5,5,3
+Vancouver,Canada,17,3643,3,6,6,4
+Sao Paulo,Brazil,9,829,0.5,3,3,2
+Mexico City,Mexico,8,1068,0.3,2,2,1
+Dubai,UAE,14,3956,0.5,3,3,2

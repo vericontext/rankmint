@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 630px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .card {
+    width: 1200px; height: 630px;
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a0808 50%, #2d0a0a 100%);
+    color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 60px 80px;
+    position: relative;
+  }
+  .accent-line {
+    position: absolute; top: 0; left: 0; width: 100%; height: 7px;
+    background: linear-gradient(90deg, #E53935, #FF9800, #FFD700);
+  }
+  .eyebrow { font-size: 14px; color: #FF9800; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; }
+  .title { font-size: 46px; font-weight: 900; margin-bottom: 14px; line-height: 1.15; max-width: 820px; }
+  .hook { font-size: 20px; color: #bbb; margin-bottom: 44px; max-width: 700px; line-height: 1.4; }
+  .top3 { display: flex; gap: 20px; }
+  .top-item {
+    background: rgba(255,255,255,0.07); border-radius: 14px; padding: 20px 28px;
+    min-width: 190px; border: 1px solid rgba(255,255,255,0.1);
+    position: relative; overflow: hidden;
+  }
+  .top-item::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; }
+  .top-item:nth-child(1)::before { background: #FFD700; }
+  .top-item:nth-child(2)::before { background: #C0C0C0; }
+  .top-item:nth-child(3)::before { background: #CD7F32; }
+  .medal { font-size: 26px; font-weight: 900; margin-bottom: 6px; }
+  .medal.gold { color: #FFD700; }
+  .medal.silver { color: #C0C0C0; }
+  .medal.bronze { color: #CD7F32; }
+  .item-name { font-size: 19px; font-weight: 700; }
+  .item-country { font-size: 12px; color: #888; margin-top: 2px; }
+  .item-score { font-size: 15px; color: #FF9800; margin-top: 6px; font-weight: 600; }
+  .surprise-tag {
+    position: absolute; bottom: 54px; right: 80px;
+    background: rgba(229,57,53,0.15); border: 1px solid rgba(229,57,53,0.3);
+    border-radius: 10px; padding: 10px 18px;
+    font-size: 14px; color: #ff8a80; max-width: 280px; text-align: right; line-height: 1.4;
+  }
+  .watermark {
+    position: absolute; bottom: 24px; right: 40px;
+    font-size: 15px; color: rgba(255,255,255,0.2); font-weight: 800; letter-spacing: 3px;
+  }
+  .stat-row { position: absolute; bottom: 24px; left: 80px; display: flex; gap: 28px; }
+  .stat { font-size: 12px; color: #555; }
+  .stat strong { color: #888; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="accent-line"></div>
+  <div class="eyebrow">City Ramen Value Index 2026</div>
+  <div class="title">Fukuoka beats Tokyo.<br>Bangkok beats New York.</div>
+  <div class="hook">30 cities ranked by affordability, quality, density, variety, and cultural soul.</div>
+  <div class="top3">
+    <div class="top-item">
+      <div class="medal gold">#1</div>
+      <div class="item-name">Fukuoka</div>
+      <div class="item-country">Japan</div>
+      <div class="item-score">9.21 pts</div>
+    </div>
+    <div class="top-item">
+      <div class="medal silver">#2</div>
+      <div class="item-name">Tokyo</div>
+      <div class="item-country">Japan</div>
+      <div class="item-score">8.91 pts</div>
+    </div>
+    <div class="top-item">
+      <div class="medal bronze">#4</div>
+      <div class="item-name">Taipei</div>
+      <div class="item-country">Taiwan</div>
+      <div class="item-score">8.15 pts</div>
+    </div>
+  </div>
+  <div class="surprise-tag">London #27. Stockholm dead last. New York pays $22 per bowl and ranks #17.</div>
+  <div class="stat-row">
+    <div class="stat"><strong>30 cities</strong><br>ranked</div>
+    <div class="stat"><strong>5 metrics</strong><br>per city</div>
+    <div class="stat"><strong>2026</strong><br>edition</div>
+  </div>
+  <div class="watermark">RANKMINT</div>
+</div>
+</body>
+</html>

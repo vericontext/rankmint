@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>City Ramen Value Index 2026 | RankMint</title>
+<meta property="og:title" content="City Ramen Value Index 2026">
+<meta property="og:description" content="Fukuoka, not Tokyo, is the world's best ramen city. Bangkok beats New York. 30 cities ranked by the full value equation.">
+<meta property="og:image" content="card.png">
+<meta property="og:url" content="https://rankmint.io/city-ramen-value-index/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="City Ramen Value Index 2026">
+<meta name="twitter:description" content="Fukuoka, not Tokyo, is the world's best ramen city. Bangkok beats New York. 30 cities ranked.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #fafafa; --text: #1a1a2e; --muted: #888; --accent: #E53935;
+    --card-bg: #fff; --border: #eee;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+  .hero {
+    text-align: center; padding: 64px 20px 44px;
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a0808 60%, #2d0a0a 100%);
+    color: #fff;
+  }
+  .hero h1 { font-size: 2.3rem; margin-bottom: 14px; font-weight: 900; letter-spacing: -0.5px; }
+  .hero .hook { font-size: 1.1rem; color: #bbb; max-width: 580px; margin: 0 auto 28px; line-height: 1.5; }
+  .hero .counter { font-size: 3.8rem; font-weight: 900; color: #FF9800; }
+  .hero .counter-label { font-size: 0.95rem; color: #999; margin-top: 6px; }
+  .hero .chart-links { margin-top: 22px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .hero .chart-links a {
+    padding: 7px 16px; border: 1px solid rgba(255,255,255,0.2); border-radius: 20px;
+    color: #ccc; text-decoration: none; font-size: 0.8rem; transition: all 0.2s;
+  }
+  .hero .chart-links a:hover { border-color: #FF9800; color: #FF9800; }
+
+  .surprise {
+    background: linear-gradient(135deg, #FF9800 0%, #E53935 100%);
+    color: #fff; padding: 34px 40px; border-radius: 14px;
+    margin: -28px auto 44px; max-width: 720px;
+    position: relative; z-index: 1; box-shadow: 0 10px 40px rgba(229,57,53,0.3);
+  }
+  .surprise h2 { font-size: 1.15rem; margin-bottom: 10px; font-weight: 800; }
+  .surprise p { font-size: 0.95rem; line-height: 1.55; }
+
+  .chart-section { margin: 40px 0; }
+  .chart-section h2 { font-size: 1.3rem; margin-bottom: 6px; }
+  .chart-section .sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 14px; }
+  #main-chart { width: 100%; height: 780px; background: #0d0d1a; border-radius: 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.10); }
+
+  .chart-nav { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0 0; }
+  .chart-nav a {
+    padding: 8px 18px; background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px; text-decoration: none; color: var(--text); font-size: 0.82rem;
+    transition: all 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+  .chart-nav a:hover { border-color: var(--accent); color: var(--accent); }
+
+  .taxonomy { margin: 44px 0; }
+  .taxonomy h2 { font-size: 1.3rem; margin-bottom: 20px; }
+  .tax-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; }
+  .tax-card { background: var(--card-bg); border-radius: 14px; padding: 24px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); border-top: 3px solid var(--accent); }
+  .tax-card h3 { font-size: 1rem; margin-bottom: 6px; color: var(--accent); font-weight: 700; }
+  .tax-card p { font-size: 0.83rem; color: var(--muted); margin-bottom: 14px; line-height: 1.45; }
+  .tax-card table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .tax-card th, .tax-card td { padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+  .tax-card th { color: var(--muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; }
+
+  .find-yourself { margin: 44px 0; text-align: center; padding: 44px 24px; background: var(--card-bg); border-radius: 14px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+  .find-yourself h2 { font-size: 1.3rem; margin-bottom: 6px; }
+  .find-yourself .sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 18px; }
+  .find-yourself select { padding: 11px 22px; font-size: 1rem; border: 2px solid #ddd; border-radius: 10px; background: #fff; min-width: 260px; color: var(--text); outline: none; }
+  .find-yourself select:focus { border-color: var(--accent); }
+  .result-card { display: none; margin: 24px auto 0; max-width: 420px; padding: 28px; background: linear-gradient(135deg, #0d0d1a 0%, #1a0808 100%); color: #fff; border-radius: 14px; text-align: center; }
+  .result-card .rank { font-size: 3.2rem; font-weight: 900; color: #FF9800; }
+  .result-card .name { font-size: 1.3rem; margin: 8px 0 4px; font-weight: 700; }
+  .result-card .score { font-size: 0.9rem; color: #aaa; }
+  .result-card .tier { display: inline-block; margin-top: 10px; padding: 4px 14px; border-radius: 14px; font-size: 0.8rem; font-weight: 700; }
+
+  .full-table { margin: 44px 0; }
+  .full-table h2 { font-size: 1.3rem; margin-bottom: 12px; }
+  .table-search { width: 100%; padding: 11px 18px; border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; margin-bottom: 12px; outline: none; }
+  .table-search:focus { border-color: var(--accent); }
+  .full-table table { width: 100%; border-collapse: collapse; font-size: 0.84rem; background: var(--card-bg); border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .full-table th { background: #0d0d1a; color: #e0e0e0; padding: 10px 12px; text-align: left; cursor: pointer; user-select: none; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  .full-table th:hover { background: #1a1a2e; }
+  .full-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  .full-table tr:hover td { background: #fff8f0; }
+  .rank-badge { display: inline-block; width: 26px; height: 26px; border-radius: 50%; background: #f5f5f5; text-align: center; line-height: 26px; font-weight: 700; font-size: 0.78rem; }
+  .rank-1 { background: #FFD700; color: #1a1a2e; }
+  .rank-2 { background: #C0C0C0; color: #1a1a2e; }
+  .rank-3 { background: #CD7F32; color: #fff; }
+
+  .region-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+
+  .methodology { margin: 44px 0; padding: 28px; background: var(--card-bg); border-radius: 14px; font-size: 0.84rem; color: var(--muted); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .methodology h2 { font-size: 1.1rem; color: var(--text); margin-bottom: 14px; }
+  .methodology p { margin-bottom: 8px; }
+  .methodology table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .methodology th, .methodology td { padding: 7px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+  .methodology th { font-weight: 600; color: var(--text); background: #f8f8f8; }
+
+  .share-bar { display: flex; justify-content: center; gap: 12px; padding: 32px 0; flex-wrap: wrap; }
+  .share-btn { display: inline-flex; align-items: center; gap: 7px; padding: 11px 22px; border-radius: 10px; text-decoration: none; font-size: 0.88rem; font-weight: 700; color: #fff; transition: transform 0.2s, box-shadow 0.2s; border: none; cursor: pointer; }
+  .share-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+  .share-twitter { background: #1DA1F2; }
+  .share-linkedin { background: #0A66C2; }
+  .share-copy { background: #1a1a2e; }
+
+  .footer { text-align: center; padding: 22px; color: var(--muted); font-size: 0.78rem; font-style: italic; border-top: 1px solid var(--border); }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 1.6rem; }
+    .hero .counter { font-size: 2.8rem; }
+    .tax-grid { grid-template-columns: 1fr; }
+    .surprise { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="container">
+    <h1>City Ramen Value Index 2026</h1>
+    <p class="hook">Ranking 30 cities by what ramen is actually worth — affordability, density, quality, variety, and cultural soul. The answer will surprise you.</p>
+    <div class="counter" id="hero-counter">0.00</div>
+    <div class="counter-label">#1: Fukuoka — 9.21 points</div>
+    <div class="chart-links">
+      <a href="chart.html">Rankings Bar</a>
+      <a href="chart_matrix.html">Quality vs Affordability</a>
+      <a href="chart_tier.html">Tier List</a>
+      <a href="chart_radar.html">Head-to-Head Radar</a>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="surprise">
+    <h2>The #1 ramen city is Fukuoka — not Tokyo.</h2>
+    <p>Tokyo has more shops, more variety, and more Michelin recognition than anywhere on Earth. But when you factor in Fukuoka's perfect cultural depth score (10/10), lower bowl prices, and the undeniable fact that ramen is Fukuoka's civic identity — not just its restaurant category — the birthplace of tonkotsu earns the crown. And Taipei (#4) beats every non-Japanese city on the planet, including Bangkok, Seoul, Hong Kong, New York, and London.</p>
+  </div>
+</section>
+
+<section class="chart-section container">
+  <h2>The Rankings</h2>
+  <p class="sub">30 cities color-coded by region. Hover any bar for the full 5-metric breakdown. Scroll or pinch to zoom.</p>
+  <div id="main-chart"></div>
+  <div class="chart-nav">
+    <a href="chart_matrix.html">Affordability vs Quality Quadrant</a>
+    <a href="chart_tier.html">S/A/B/C/D Tier List</a>
+    <a href="chart_radar.html">Head-to-Head Radar</a>
+  </div>
+</section>
+
+<section class="taxonomy container">
+  <h2>The Taxonomy</h2>
+  <div class="tax-grid">
+    <div class="tax-card" style="border-top-color:#E53935">
+      <h3>The Birthright Cities</h3>
+      <p>Ramen here is civic identity, not a restaurant trend. Generational shops, dedicated districts, perfect cultural depth.</p>
+      <table>
+        <tr><th>Rank</th><th>City</th><th>CRVI</th></tr>
+        <tr><td>1</td><td>Fukuoka</td><td>9.21</td></tr>
+        <tr><td>2</td><td>Tokyo</td><td>8.91</td></tr>
+        <tr><td>3</td><td>Osaka</td><td>8.39</td></tr>
+        <tr><td>5</td><td>Sapporo</td><td>7.76</td></tr>
+      </table>
+    </div>
+    <div class="tax-card" style="border-top-color:#FF9800">
+      <h3>The Rising Challengers</h3>
+      <p>Cities punching well above their ramen reputation — Michelin-trained talent, surprising variety, local affordability.</p>
+      <table>
+        <tr><th>Rank</th><th>City</th><th>CRVI</th></tr>
+        <tr><td>4</td><td>Taipei</td><td>8.15</td></tr>
+        <tr><td>6</td><td>Seoul</td><td>7.22</td></tr>
+        <tr><td>7</td><td>Bangkok</td><td>6.90</td></tr>
+      </table>
+    </div>
+    <div class="tax-card" style="border-top-color:#43A047">
+      <h3>The Honest Middleweights</h3>
+      <p>Cities where ramen has found a real home — genuine scenes, real trade-offs, honest value propositions.</p>
+      <table>
+        <tr><th>Rank</th><th>City</th><th>CRVI</th></tr>
+        <tr><td>8</td><td>Hong Kong</td><td>6.50</td></tr>
+        <tr><td>10</td><td>Singapore</td><td>5.38</td></tr>
+        <tr><td>11</td><td>Portland</td><td>5.26</td></tr>
+      </table>
+    </div>
+    <div class="tax-card" style="border-top-color:#1E88E5">
+      <h3>The Tourist Tax Cities</h3>
+      <p>Premium prices, low density, trend-driven scenes. You'll pay a lot. The bowl may or may not be worth it.</p>
+      <table>
+        <tr><th>Rank</th><th>City</th><th>CRVI</th></tr>
+        <tr><td>17</td><td>New York</td><td>4.47</td></tr>
+        <tr><td>27</td><td>London</td><td>3.04</td></tr>
+        <tr><td>30</td><td>Stockholm</td><td>2.34</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="find-yourself container" id="find-section">
+  <h2>Where Do You Rank?</h2>
+  <p class="sub">Select your city to see how it scored across all five dimensions.</p>
+  <select id="find-select">
+    <option value="">-- Select your city --</option>
+  </select>
+  <div class="result-card" id="result-card">
+    <div class="rank" id="result-rank"></div>
+    <div class="name" id="result-name"></div>
+    <div class="score" id="result-score"></div>
+    <div class="tier" id="result-tier"></div>
+  </div>
+</section>
+
+<section class="full-table container">
+  <h2>Full Rankings</h2>
+  <input type="text" class="table-search" id="table-search" placeholder="Search cities...">
+  <table id="ranking-table">
+    <thead id="table-head"></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</section>
+
+<section class="methodology container">
+  <h2>Methodology</h2>
+  <p><strong>Formula:</strong> CRVI = (0.25 x Affordability) + (0.20 x Density) + (0.20 x Quality) + (0.20 x Variety) + (0.15 x Culture). All components normalized 0-10 via min-max scaling before weighting.</p>
+  <p><strong>Collection date:</strong> March 2026 &nbsp;|&nbsp; <strong>Cities ranked:</strong> 30</p>
+  <table>
+    <tr><th>Metric</th><th>Weight</th><th>Source</th></tr>
+    <tr><td>Affordability (Price-to-Wage)</td><td>25%</td><td>Numbeo net salary + bowl price research</td></tr>
+    <tr><td>Shop Density (per 100k pop)</td><td>20%</td><td>Known anchors cross-referenced with Google Maps / TripAdvisor</td></tr>
+    <tr><td>Quality Ceiling</td><td>20%</td><td>Michelin Guide, Tabelog top-100, Time Out editorial picks</td></tr>
+    <tr><td>Style Variety (9 styles)</td><td>20%</td><td>City-by-city menu and guide research</td></tr>
+    <tr><td>Cultural Embeddedness</td><td>15%</td><td>Qualitative rubric: ramen districts, festivals, local media coverage</td></tr>
+  </table>
+</section>
+
+<div class="share-bar">
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on Twitter</a>
+  <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">Share on LinkedIn</a>
+  <button class="share-btn share-copy" id="share-copy">Copy Link</button>
+</div>
+
+<div class="footer">City Ramen Value Index 2026 &mdash; Generated by RankMint</div>
+
+<script>
+const DATA = [
+  { rank:1,  name:"Fukuoka",      country:"Japan",         region:"Japan",    affordability:8.82, density:9.75,  quality:10.00, variety:7.78,  embeddedness:10.00, crvi:9.21 },
+  { rank:2,  name:"Tokyo",        country:"Japan",         region:"Japan",    affordability:7.65, density:10.00, quality:9.00,  variety:10.00, embeddedness:8.00,  crvi:8.91 },
+  { rank:3,  name:"Osaka",        country:"Japan",         region:"Japan",    affordability:8.24, density:9.53,  quality:8.00,  variety:8.89,  embeddedness:7.00,  crvi:8.39 },
+  { rank:4,  name:"Taipei",       country:"Taiwan",        region:"EAsia",    affordability:8.82, density:6.59,  quality:9.00,  variety:8.89,  embeddedness:7.00,  crvi:8.15 },
+  { rank:5,  name:"Sapporo",      country:"Japan",         region:"Japan",    affordability:8.24, density:8.09,  quality:7.00,  variety:6.67,  embeddedness:9.00,  crvi:7.76 },
+  { rank:6,  name:"Seoul",        country:"South Korea",   region:"EAsia",    affordability:8.24, density:6.01,  quality:6.00,  variety:7.78,  embeddedness:8.00,  crvi:7.22 },
+  { rank:7,  name:"Bangkok",      country:"Thailand",      region:"SEAsia",   affordability:9.41, density:3.47,  quality:7.00,  variety:7.78,  embeddedness:6.00,  crvi:6.90 },
+  { rank:8,  name:"Hong Kong",    country:"China",         region:"EAsia",    affordability:7.06, density:5.15,  quality:7.00,  variety:7.78,  embeddedness:5.00,  crvi:6.50 },
+  { rank:9,  name:"Shanghai",     country:"China",         region:"EAsia",    affordability:8.24, density:4.74,  quality:6.00,  variety:6.67,  embeddedness:5.00,  crvi:6.29 },
+  { rank:10, name:"Singapore",    country:"Singapore",     region:"SEAsia",   affordability:5.88, density:3.88,  quality:6.00,  variety:6.67,  embeddedness:4.00,  crvi:5.38 },
+  { rank:11, name:"Portland",     country:"United States", region:"Western",  affordability:3.53, density:5.48,  quality:6.00,  variety:6.67,  embeddedness:5.00,  crvi:5.26 },
+  { rank:12, name:"Kuala Lumpur", country:"Malaysia",      region:"SEAsia",   affordability:9.41, density:3.47,  quality:4.00,  variety:4.44,  embeddedness:3.00,  crvi:5.18 },
+  { rank:13, name:"Los Angeles",  country:"United States", region:"Western",  affordability:1.18, density:4.65,  quality:7.00,  variety:7.78,  embeddedness:5.00,  crvi:4.93 },
+  { rank:14, name:"Vancouver",    country:"Canada",        region:"Western",  affordability:2.94, density:4.21,  quality:6.00,  variety:6.67,  embeddedness:4.00,  crvi:4.71 },
+  { rank:15, name:"Manila",       country:"Philippines",   region:"SEAsia",   affordability:10.00,density:2.95,  quality:3.00,  variety:3.33,  embeddedness:2.00,  crvi:4.66 },
+  { rank:16, name:"Jakarta",      country:"Indonesia",     region:"SEAsia",   affordability:10.00,density:2.95,  quality:3.00,  variety:3.33,  embeddedness:2.00,  crvi:4.66 },
+  { rank:17, name:"New York",     country:"United States", region:"Western",  affordability:0.00, density:3.80,  quality:7.00,  variety:7.78,  embeddedness:5.00,  crvi:4.47 },
+  { rank:18, name:"Melbourne",    country:"Australia",     region:"Western",  affordability:3.53, density:3.88,  quality:5.00,  variety:5.56,  embeddedness:4.00,  crvi:4.37 },
+  { rank:19, name:"Berlin",       country:"Germany",       region:"Western",  affordability:4.12, density:2.95,  quality:5.00,  variety:5.56,  embeddedness:3.00,  crvi:4.18 },
+  { rank:20, name:"Toronto",      country:"Canada",        region:"Western",  affordability:3.53, density:3.47,  quality:5.00,  variety:5.56,  embeddedness:3.00,  crvi:4.14 },
+  { rank:21, name:"Sydney",       country:"Australia",     region:"Western",  affordability:2.35, density:3.47,  quality:5.00,  variety:5.56,  embeddedness:3.00,  crvi:3.85 },
+  { rank:22, name:"San Francisco",country:"United States", region:"Western",  affordability:0.00, density:3.47,  quality:6.00,  variety:6.67,  embeddedness:4.00,  crvi:3.83 },
+  { rank:23, name:"Chicago",      country:"United States", region:"Western",  affordability:2.35, density:2.95,  quality:5.00,  variety:5.56,  embeddedness:3.00,  crvi:3.74 },
+  { rank:24, name:"Paris",        country:"France",        region:"Western",  affordability:2.35, density:2.95,  quality:5.00,  variety:5.56,  embeddedness:3.00,  crvi:3.74 },
+  { rank:25, name:"Sao Paulo",    country:"Brazil",        region:"Other",    affordability:7.65, density:0.94,  quality:3.00,  variety:3.33,  embeddedness:2.00,  crvi:3.67 },
+  { rank:26, name:"Mexico City",  country:"Mexico",        region:"Other",    affordability:8.24, density:0.00,  quality:2.00,  variety:2.22,  embeddedness:1.00,  crvi:3.06 },
+  { rank:27, name:"London",       country:"United Kingdom",region:"Western",  affordability:0.00, density:2.38,  quality:5.00,  variety:5.56,  embeddedness:3.00,  crvi:3.04 },
+  { rank:28, name:"Dubai",        country:"UAE",           region:"Other",    affordability:4.71, density:0.94,  quality:3.00,  variety:3.33,  embeddedness:2.00,  crvi:2.93 },
+  { rank:29, name:"Amsterdam",    country:"Netherlands",   region:"Western",  affordability:1.18, density:1.79,  quality:4.00,  variety:3.33,  embeddedness:2.00,  crvi:2.42 },
+  { rank:30, name:"Stockholm",    country:"Sweden",        region:"Western",  affordability:2.35, density:0.94,  quality:3.00,  variety:3.33,  embeddedness:2.00,  crvi:2.34 },
+];
+
+const REGION_COLORS = {
+  "Japan":   "#E53935",
+  "EAsia":   "#FF9800",
+  "SEAsia":  "#43A047",
+  "Western": "#1E88E5",
+  "Other":   "#8E24AA",
+};
+
+function getTier(crvi) {
+  if (crvi >= 7.5) return { label: "S-Tier", bg: "#FF4757" };
+  if (crvi >= 6.0) return { label: "A-Tier", bg: "#FFA502" };
+  if (crvi >= 5.0) return { label: "B-Tier", bg: "#2ED573" };
+  if (crvi >= 4.0) return { label: "C-Tier", bg: "#1E90FF" };
+  return { label: "D-Tier", bg: "#747D8C" };
+}
+
+// Counter animation
+const counterEl = document.getElementById("hero-counter");
+let count = 0;
+const target = 9.21;
+const step = target / 80;
+function animateCounter() {
+  count += step;
+  if (count >= target) { counterEl.textContent = target.toFixed(2); return; }
+  counterEl.textContent = count.toFixed(2);
+  requestAnimationFrame(animateCounter);
+}
+animateCounter();
+
+// Bar chart
+const sorted = [...DATA].sort((a, b) => a.crvi - b.crvi);
+const names = sorted.map(d => d.name);
+const barData = sorted.map(d => ({
+  value: d.crvi,
+  itemStyle: { color: REGION_COLORS[d.region] || "#888" },
+  _raw: d,
+}));
+
+const chart = echarts.init(document.getElementById("main-chart"));
+chart.setOption({
+  backgroundColor: "#0d0d1a",
+  tooltip: {
+    trigger: "axis", axisPointer: { type: "shadow" },
+    backgroundColor: "#1a1a2e", borderColor: "#333",
+    textStyle: { color: "#e0e0e0", fontSize: 12 },
+    formatter: params => {
+      const d = sorted[params[0].dataIndex];
+      return [
+        `<b>${d.name}</b> <span style="color:#888">(${d.country})</span>`,
+        `<span style="color:#FF9800">CRVI: ${d.crvi.toFixed(2)}</span>`,
+        `<hr style="border-color:#333;margin:5px 0">`,
+        `Affordability: ${d.affordability.toFixed(1)}`,
+        `Shop Density: ${d.density.toFixed(1)}`,
+        `Quality Ceiling: ${d.quality.toFixed(1)}`,
+        `Style Variety: ${d.variety.toFixed(1)}`,
+        `Cultural Depth: ${d.embeddedness.toFixed(1)}`,
+      ].join("<br/>");
+    },
+  },
+  grid: { left: "18%", right: "10%", top: 20, bottom: 30 },
+  xAxis: {
+    type: "value", max: 10,
+    axisLabel: { color: "#888" },
+    splitLine: { lineStyle: { color: "#1f1f35" } },
+    axisLine: { lineStyle: { color: "#333" } },
+  },
+  yAxis: {
+    type: "category", data: names,
+    axisLabel: { color: "#ccc", fontSize: 11 },
+    axisLine: { lineStyle: { color: "#333" } },
+  },
+  dataZoom: [
+    { type: "inside", yAxisIndex: 0, filterMode: "none" },
+    { type: "slider", yAxisIndex: 0, width: 16, right: 2, backgroundColor: "#1a1a2e", fillerColor: "rgba(255,152,0,0.15)", borderColor: "#333" },
+  ],
+  series: [{
+    type: "bar", data: barData, barWidth: "62%",
+    label: { show: true, position: "right", formatter: p => p.value.toFixed(2), fontSize: 10, color: "#aaa" },
+    animationDuration: 1800, animationEasing: "elasticOut",
+  }],
+  graphic: [{ type: "text", right: 30, bottom: 10, style: { text: "RankMint", fontSize: 11, fill: "#444", fontStyle: "italic" } }],
+});
+
+// Find Yourself
+const findSelect = document.getElementById("find-select");
+DATA.sort((a, b) => a.name.localeCompare(b.name)).forEach(d => {
+  const opt = document.createElement("option");
+  opt.value = d.rank; opt.textContent = d.name;
+  findSelect.appendChild(opt);
+});
+DATA.sort((a, b) => a.rank - b.rank);
+
+findSelect.addEventListener("change", () => {
+  const rank = parseInt(findSelect.value);
+  const selected = DATA.find(d => d.rank === rank);
+  if (!selected) { document.getElementById("result-card").style.display = "none"; return; }
+  const tier = getTier(selected.crvi);
+  document.getElementById("result-card").style.display = "block";
+  document.getElementById("result-rank").textContent = `#${selected.rank}`;
+  document.getElementById("result-name").textContent = selected.name;
+  document.getElementById("result-score").textContent = `CRVI Score: ${selected.crvi.toFixed(2)} out of 10`;
+  const tierEl = document.getElementById("result-tier");
+  tierEl.textContent = tier.label;
+  tierEl.style.background = tier.bg;
+  tierEl.style.color = tier.bg === "#FFA502" || tier.bg === "#2ED573" ? "#111" : "#fff";
+});
+
+// Full Table
+const thead = document.getElementById("table-head");
+const tbody = document.getElementById("table-body");
+const COLS = ["rank","name","country","crvi","affordability","density","quality","variety","embeddedness"];
+const HEADERS = ["Rank","City","Country","CRVI","Afford.","Density","Quality","Variety","Culture"];
+const headerRow = document.createElement("tr");
+HEADERS.forEach((h, i) => {
+  const th = document.createElement("th");
+  th.textContent = h;
+  th.addEventListener("click", () => sortTable(i));
+  headerRow.appendChild(th);
+});
+thead.appendChild(headerRow);
+
+let tableData = [...DATA].sort((a, b) => a.rank - b.rank);
+function renderTable(data) {
+  tbody.innerHTML = "";
+  data.forEach(d => {
+    const tr = document.createElement("tr");
+    COLS.forEach((col, i) => {
+      const td = document.createElement("td");
+      if (col === "rank") {
+        const badge = document.createElement("span");
+        badge.className = `rank-badge rank-${d.rank <= 3 ? d.rank : ''}`;
+        badge.textContent = d.rank;
+        td.appendChild(badge);
+      } else if (col === "name") {
+        const dot = `<span class="region-dot" style="background:${REGION_COLORS[d.region] || '#888'}"></span>`;
+        td.innerHTML = dot + d.name;
+      } else {
+        const v = d[col];
+        td.textContent = typeof v === "number" ? v.toFixed(typeof v === "number" && v % 1 !== 0 ? 2 : 0) : v;
+        if (col === "crvi") td.style.fontWeight = "700";
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+renderTable(tableData);
+
+let sortDir = {};
+function sortTable(colIdx) {
+  const col = COLS[colIdx];
+  sortDir[col] = !sortDir[col];
+  tableData.sort((a, b) => {
+    const va = a[col], vb = b[col];
+    const cmp = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb));
+    return sortDir[col] ? cmp : -cmp;
+  });
+  renderTable(tableData);
+}
+document.getElementById("table-search").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  renderTable(tableData.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q))));
+});
+
+// Share
+const url = window.location.href;
+const shareText = "Fukuoka is the world's #1 ramen city — not Tokyo. Bangkok beats New York. See the full City Ramen Value Index 2026 #RankMint";
+document.getElementById("share-twitter").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`;
+document.getElementById("share-linkedin").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+document.getElementById("share-copy").addEventListener("click", () => {
+  navigator.clipboard.writeText(url).then(() => {
+    document.getElementById("share-copy").textContent = "Copied!";
+    setTimeout(() => document.getElementById("share-copy").textContent = "Copy Link", 2000);
+  });
+});
+
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

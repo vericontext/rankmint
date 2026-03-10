@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>City Ramen Value Index — Rankings | RankMint</title>
+<meta property="og:title" content="City Ramen Value Index">
+<meta property="og:description" content="Fukuoka, not Tokyo, is the world's best ramen city — and it's not even close.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="City Ramen Value Index">
+<meta name="twitter:description" content="Fukuoka, not Tokyo, is the world's best ramen city — and it's not even close.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d0d1a; color: #e0e0e0; }
+  .header { padding: 28px 32px 10px; border-bottom: 1px solid #222; }
+  .header h1 { font-size: 1.5rem; color: #fff; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 6px; }
+  .legend { display: flex; gap: 20px; padding: 12px 32px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: #aaa; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+  #chart { width: 100%; height: 86vh; min-height: 700px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>City Ramen Value Index — 30 Cities Ranked</h1>
+  <p>Blending affordability, shop density, quality ceiling, style variety, and cultural depth &mdash; 2026 edition</p>
+</div>
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#E53935"></div>Japan</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#FF9800"></div>East Asia</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#43A047"></div>Southeast Asia</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#1E88E5"></div>Western</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#8E24AA"></div>Other</div>
+</div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { rank:1,  name:"Fukuoka",      country:"Japan",         region:"Japan",        affordability:8.82, density:9.75, quality:10.00, variety:7.78, embeddedness:10.00, crvi:9.21 },
+  { rank:2,  name:"Tokyo",        country:"Japan",         region:"Japan",        affordability:7.65, density:10.00, quality:9.00, variety:10.00, embeddedness:8.00,  crvi:8.91 },
+  { rank:3,  name:"Osaka",        country:"Japan",         region:"Japan",        affordability:8.24, density:9.53, quality:8.00,  variety:8.89,  embeddedness:7.00,  crvi:8.39 },
+  { rank:4,  name:"Taipei",       country:"Taiwan",        region:"East Asia",    affordability:8.82, density:6.59, quality:9.00,  variety:8.89,  embeddedness:7.00,  crvi:8.15 },
+  { rank:5,  name:"Sapporo",      country:"Japan",         region:"Japan",        affordability:8.24, density:8.09, quality:7.00,  variety:6.67,  embeddedness:9.00,  crvi:7.76 },
+  { rank:6,  name:"Seoul",        country:"South Korea",   region:"East Asia",    affordability:8.24, density:6.01, quality:6.00,  variety:7.78,  embeddedness:8.00,  crvi:7.22 },
+  { rank:7,  name:"Bangkok",      country:"Thailand",      region:"SE Asia",      affordability:9.41, density:3.47, quality:7.00,  variety:7.78,  embeddedness:6.00,  crvi:6.90 },
+  { rank:8,  name:"Hong Kong",    country:"China",         region:"East Asia",    affordability:7.06, density:5.15, quality:7.00,  variety:7.78,  embeddedness:5.00,  crvi:6.50 },
+  { rank:9,  name:"Shanghai",     country:"China",         region:"East Asia",    affordability:8.24, density:4.74, quality:6.00,  variety:6.67,  embeddedness:5.00,  crvi:6.29 },
+  { rank:10, name:"Singapore",    country:"Singapore",     region:"SE Asia",      affordability:5.88, density:3.88, quality:6.00,  variety:6.67,  embeddedness:4.00,  crvi:5.38 },
+  { rank:11, name:"Portland",     country:"United States", region:"Western",      affordability:3.53, density:5.48, quality:6.00,  variety:6.67,  embeddedness:5.00,  crvi:5.26 },
+  { rank:12, name:"Kuala Lumpur", country:"Malaysia",      region:"SE Asia",      affordability:9.41, density:3.47, quality:4.00,  variety:4.44,  embeddedness:3.00,  crvi:5.18 },
+  { rank:13, name:"Los Angeles",  country:"United States", region:"Western",      affordability:1.18, density:4.65, quality:7.00,  variety:7.78,  embeddedness:5.00,  crvi:4.93 },
+  { rank:14, name:"Vancouver",    country:"Canada",        region:"Western",      affordability:2.94, density:4.21, quality:6.00,  variety:6.67,  embeddedness:4.00,  crvi:4.71 },
+  { rank:15, name:"Manila",       country:"Philippines",   region:"SE Asia",      affordability:10.00, density:2.95, quality:3.00, variety:3.33,  embeddedness:2.00,  crvi:4.66 },
+  { rank:16, name:"Jakarta",      country:"Indonesia",     region:"SE Asia",      affordability:10.00, density:2.95, quality:3.00, variety:3.33,  embeddedness:2.00,  crvi:4.66 },
+  { rank:17, name:"New York",     country:"United States", region:"Western",      affordability:0.00, density:3.80, quality:7.00,  variety:7.78,  embeddedness:5.00,  crvi:4.47 },
+  { rank:18, name:"Melbourne",    country:"Australia",     region:"Western",      affordability:3.53, density:3.88, quality:5.00,  variety:5.56,  embeddedness:4.00,  crvi:4.37 },
+  { rank:19, name:"Berlin",       country:"Germany",       region:"Western",      affordability:4.12, density:2.95, quality:5.00,  variety:5.56,  embeddedness:3.00,  crvi:4.18 },
+  { rank:20, name:"Toronto",      country:"Canada",        region:"Western",      affordability:3.53, density:3.47, quality:5.00,  variety:5.56,  embeddedness:3.00,  crvi:4.14 },
+  { rank:21, name:"Sydney",       country:"Australia",     region:"Western",      affordability:2.35, density:3.47, quality:5.00,  variety:5.56,  embeddedness:3.00,  crvi:3.85 },
+  { rank:22, name:"San Francisco",country:"United States", region:"Western",      affordability:0.00, density:3.47, quality:6.00,  variety:6.67,  embeddedness:4.00,  crvi:3.83 },
+  { rank:23, name:"Chicago",      country:"United States", region:"Western",      affordability:2.35, density:2.95, quality:5.00,  variety:5.56,  embeddedness:3.00,  crvi:3.74 },
+  { rank:24, name:"Paris",        country:"France",        region:"Western",      affordability:2.35, density:2.95, quality:5.00,  variety:5.56,  embeddedness:3.00,  crvi:3.74 },
+  { rank:25, name:"Sao Paulo",    country:"Brazil",        region:"Other",        affordability:7.65, density:0.94, quality:3.00,  variety:3.33,  embeddedness:2.00,  crvi:3.67 },
+  { rank:26, name:"Mexico City",  country:"Mexico",        region:"Other",        affordability:8.24, density:0.00, quality:2.00,  variety:2.22,  embeddedness:1.00,  crvi:3.06 },
+  { rank:27, name:"London",       country:"United Kingdom",region:"Western",      affordability:0.00, density:2.38, quality:5.00,  variety:5.56,  embeddedness:3.00,  crvi:3.04 },
+  { rank:28, name:"Dubai",        country:"UAE",           region:"Other",        affordability:4.71, density:0.94, quality:3.00,  variety:3.33,  embeddedness:2.00,  crvi:2.93 },
+  { rank:29, name:"Amsterdam",    country:"Netherlands",   region:"Western",      affordability:1.18, density:1.79, quality:4.00,  variety:3.33,  embeddedness:2.00,  crvi:2.42 },
+  { rank:30, name:"Stockholm",    country:"Sweden",        region:"Western",      affordability:2.35, density:0.94, quality:3.00,  variety:3.33,  embeddedness:2.00,  crvi:2.34 },
+];
+
+const REGION_COLORS = {
+  "Japan":    "#E53935",
+  "East Asia":"#FF9800",
+  "SE Asia":  "#43A047",
+  "Western":  "#1E88E5",
+  "Other":    "#8E24AA",
+};
+
+const sorted = [...DATA].sort((a, b) => a.crvi - b.crvi);
+const names = sorted.map(d => d.name);
+const barData = sorted.map(d => ({
+  value: d.crvi,
+  itemStyle: { color: REGION_COLORS[d.region] || "#888" },
+  _raw: d,
+}));
+
+const chart = echarts.init(document.getElementById("chart"));
+chart.setOption({
+  backgroundColor: "#0d0d1a",
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    backgroundColor: "#1a1a2e",
+    borderColor: "#333",
+    textStyle: { color: "#e0e0e0", fontSize: 13 },
+    formatter: params => {
+      const d = sorted[params[0].dataIndex];
+      return [
+        `<b>${d.name}</b> <span style="color:#888">(${d.country})</span>`,
+        `<span style="color:#FFD700">CRVI Score: ${d.crvi.toFixed(2)}</span>`,
+        `<hr style="border-color:#333;margin:6px 0">`,
+        `Affordability: ${d.affordability.toFixed(1)}`,
+        `Shop Density: ${d.density.toFixed(1)}`,
+        `Quality Ceiling: ${d.quality.toFixed(1)}`,
+        `Style Variety: ${d.variety.toFixed(1)}`,
+        `Cultural Depth: ${d.embeddedness.toFixed(1)}`,
+      ].join("<br/>");
+    },
+  },
+  grid: { left: "16%", right: "12%", top: 20, bottom: 30 },
+  xAxis: {
+    type: "value",
+    max: 10,
+    axisLabel: { color: "#888", fontSize: 11 },
+    splitLine: { lineStyle: { color: "#1f1f35" } },
+    axisLine: { lineStyle: { color: "#333" } },
+  },
+  yAxis: {
+    type: "category",
+    data: names,
+    axisLabel: { color: "#ccc", fontSize: 12 },
+    axisLine: { lineStyle: { color: "#333" } },
+  },
+  dataZoom: [
+    { type: "inside", yAxisIndex: 0, filterMode: "none", zoomOnMouseWheel: true },
+    { type: "slider", yAxisIndex: 0, width: 18, right: 4, backgroundColor: "#1a1a2e", fillerColor: "rgba(255,152,0,0.15)", borderColor: "#333" },
+  ],
+  series: [{
+    type: "bar",
+    data: barData,
+    barWidth: "62%",
+    label: {
+      show: true,
+      position: "right",
+      formatter: p => p.value.toFixed(2),
+      fontSize: 11,
+      color: "#ccc",
+    },
+    animationDuration: 1800,
+    animationEasing: "elasticOut",
+  }],
+  graphic: [
+    { type: "text", right: 60, bottom: 10, style: { text: "RankMint", fontSize: 12, fill: "#444", fontStyle: "italic" } },
+  ],
+});
+
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

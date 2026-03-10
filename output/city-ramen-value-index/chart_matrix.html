@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramen Value Index — Affordability vs Quality Quadrant | RankMint</title>
+<meta property="og:title" content="Ramen Value Index: Affordability vs Quality">
+<meta property="og:description" content="Which cities give you world-class ramen at local prices — and which drain your wallet for mediocrity?">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ramen Value Index: Affordability vs Quality">
+<meta name="twitter:description" content="Which cities give you world-class ramen at local prices — and which drain your wallet for mediocrity?">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; }
+  .header { padding: 24px 32px 4px; }
+  .header h1 { font-size: 1.4rem; color: #1a1a2e; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+  .note { padding: 4px 32px 8px; font-size: 0.8rem; color: #aaa; }
+  #chart { width: 100%; height: 88vh; min-height: 600px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Affordability vs Quality — The Ramen Value Quadrant</h1>
+  <p>X-axis: Price-to-Wage Score (higher = more affordable for locals) &nbsp;|&nbsp; Y-axis: Quality Ceiling Score &nbsp;|&nbsp; Bubble size: Shop Density</p>
+</div>
+<div class="note">Hover any bubble to see full metrics. Scroll to zoom.</div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { rank:1,  name:"Fukuoka",      region:"Japan",    x:8.82, y:10.00, density:9.75,  crvi:9.21 },
+  { rank:2,  name:"Tokyo",        region:"Japan",    x:7.65, y:9.00,  density:10.00, crvi:8.91 },
+  { rank:3,  name:"Osaka",        region:"Japan",    x:8.24, y:8.00,  density:9.53,  crvi:8.39 },
+  { rank:4,  name:"Taipei",       region:"EAsia",    x:8.82, y:9.00,  density:6.59,  crvi:8.15 },
+  { rank:5,  name:"Sapporo",      region:"Japan",    x:8.24, y:7.00,  density:8.09,  crvi:7.76 },
+  { rank:6,  name:"Seoul",        region:"EAsia",    x:8.24, y:6.00,  density:6.01,  crvi:7.22 },
+  { rank:7,  name:"Bangkok",      region:"SEAsia",   x:9.41, y:7.00,  density:3.47,  crvi:6.90 },
+  { rank:8,  name:"Hong Kong",    region:"EAsia",    x:7.06, y:7.00,  density:5.15,  crvi:6.50 },
+  { rank:9,  name:"Shanghai",     region:"EAsia",    x:8.24, y:6.00,  density:4.74,  crvi:6.29 },
+  { rank:10, name:"Singapore",    region:"SEAsia",   x:5.88, y:6.00,  density:3.88,  crvi:5.38 },
+  { rank:11, name:"Portland",     region:"Western",  x:3.53, y:6.00,  density:5.48,  crvi:5.26 },
+  { rank:12, name:"Kuala Lumpur", region:"SEAsia",   x:9.41, y:4.00,  density:3.47,  crvi:5.18 },
+  { rank:13, name:"Los Angeles",  region:"Western",  x:1.18, y:7.00,  density:4.65,  crvi:4.93 },
+  { rank:14, name:"Vancouver",    region:"Western",  x:2.94, y:6.00,  density:4.21,  crvi:4.71 },
+  { rank:15, name:"Manila",       region:"SEAsia",   x:10.00, y:3.00, density:2.95,  crvi:4.66 },
+  { rank:16, name:"Jakarta",      region:"SEAsia",   x:10.00, y:3.00, density:2.95,  crvi:4.66 },
+  { rank:17, name:"New York",     region:"Western",  x:0.00, y:7.00,  density:3.80,  crvi:4.47 },
+  { rank:18, name:"Melbourne",    region:"Western",  x:3.53, y:5.00,  density:3.88,  crvi:4.37 },
+  { rank:19, name:"Berlin",       region:"Western",  x:4.12, y:5.00,  density:2.95,  crvi:4.18 },
+  { rank:20, name:"Toronto",      region:"Western",  x:3.53, y:5.00,  density:3.47,  crvi:4.14 },
+  { rank:21, name:"Sydney",       region:"Western",  x:2.35, y:5.00,  density:3.47,  crvi:3.85 },
+  { rank:22, name:"San Francisco",region:"Western",  x:0.00, y:6.00,  density:3.47,  crvi:3.83 },
+  { rank:23, name:"Chicago",      region:"Western",  x:2.35, y:5.00,  density:2.95,  crvi:3.74 },
+  { rank:24, name:"Paris",        region:"Western",  x:2.35, y:5.00,  density:2.95,  crvi:3.74 },
+  { rank:25, name:"Sao Paulo",    region:"Other",    x:7.65, y:3.00,  density:0.94,  crvi:3.67 },
+  { rank:26, name:"Mexico City",  region:"Other",    x:8.24, y:2.00,  density:0.00,  crvi:3.06 },
+  { rank:27, name:"London",       region:"Western",  x:0.00, y:5.00,  density:2.38,  crvi:3.04 },
+  { rank:28, name:"Dubai",        region:"Other",    x:4.71, y:3.00,  density:0.94,  crvi:2.93 },
+  { rank:29, name:"Amsterdam",    region:"Western",  x:1.18, y:4.00,  density:1.79,  crvi:2.42 },
+  { rank:30, name:"Stockholm",    region:"Western",  x:2.35, y:3.00,  density:0.94,  crvi:2.34 },
+];
+
+const REGION_COLORS = {
+  "Japan":   "#E53935",
+  "EAsia":   "#FF9800",
+  "SEAsia":  "#43A047",
+  "Western": "#1E88E5",
+  "Other":   "#8E24AA",
+};
+
+// Fixed midpoints for meaningful quadrant division
+const xMid = 5.0;
+const yMid = 6.0;
+
+const seriesData = DATA.map(d => {
+  const quadrant = d.x >= xMid && d.y >= yMid ? "topRight"
+    : d.x < xMid && d.y >= yMid ? "topLeft"
+    : d.x >= xMid && d.y < yMid ? "bottomRight"
+    : "bottomLeft";
+  return {
+    value: [d.x, d.y],
+    name: d.name,
+    symbolSize: 10 + (d.density / 10) * 38,
+    itemStyle: { color: REGION_COLORS[d.region] || "#888", opacity: 0.82 },
+    emphasis: { itemStyle: { opacity: 1, borderColor: "#fff", borderWidth: 2 } },
+    _raw: d,
+  };
+});
+
+const chart = echarts.init(document.getElementById("chart"));
+chart.setOption({
+  backgroundColor: "#fafafa",
+  tooltip: {
+    formatter: p => {
+      const d = p.data._raw;
+      return [
+        `<b style="font-size:14px">#${d.rank} ${d.name}</b>`,
+        `<span style="color:#888">${d.region}</span>`,
+        `<hr style="border-color:#eee;margin:5px 0">`,
+        `Affordability Score: <b>${d.x.toFixed(1)}</b>`,
+        `Quality Score: <b>${d.y.toFixed(1)}</b>`,
+        `Shop Density: <b>${d.density.toFixed(1)}</b>`,
+        `CRVI Total: <b style="color:#E53935">${d.crvi.toFixed(2)}</b>`,
+      ].join("<br/>");
+    },
+  },
+  grid: { left: "10%", right: "8%", top: 60, bottom: 70 },
+  xAxis: {
+    type: "value",
+    name: "Affordability Score (Price-to-Wage)",
+    nameLocation: "center",
+    nameGap: 40,
+    nameTextStyle: { fontSize: 13, color: "#555" },
+    min: -0.5,
+    max: 11,
+    splitLine: { show: false },
+    axisLine: { lineStyle: { color: "#ccc" } },
+    axisLabel: { color: "#888" },
+  },
+  yAxis: {
+    type: "value",
+    name: "Quality Ceiling Score",
+    nameLocation: "center",
+    nameGap: 50,
+    nameTextStyle: { fontSize: 13, color: "#555" },
+    min: 0,
+    max: 11,
+    splitLine: { show: false },
+    axisLine: { lineStyle: { color: "#ccc" } },
+    axisLabel: { color: "#888" },
+  },
+  dataZoom: [
+    { type: "inside", xAxisIndex: 0 },
+    { type: "inside", yAxisIndex: 0 },
+  ],
+  series: [{
+    type: "scatter",
+    data: seriesData,
+    label: {
+      show: true,
+      formatter: p => p.data.name,
+      position: "right",
+      fontSize: 10,
+      color: "#444",
+      distance: 6,
+    },
+    emphasis: { label: { fontSize: 12, fontWeight: "bold", color: "#1a1a2e" } },
+    animationDuration: 2000,
+    animationEasing: "cubicOut",
+    markArea: {
+      silent: true,
+      data: [
+        [{ coord: [-0.5, yMid], itemStyle: { color: "rgba(244,67,54,0.05)" } }, { coord: [xMid, 11] }],
+        [{ coord: [xMid, yMid],  itemStyle: { color: "rgba(76,175,80,0.07)" } }, { coord: [11, 11] }],
+        [{ coord: [-0.5, 0],    itemStyle: { color: "rgba(158,158,158,0.05)" } }, { coord: [xMid, yMid] }],
+        [{ coord: [xMid, 0],    itemStyle: { color: "rgba(33,150,243,0.05)" } }, { coord: [11, yMid] }],
+      ],
+    },
+    markLine: {
+      silent: true,
+      lineStyle: { color: "#bbb", type: "dashed", width: 1.5 },
+      data: [{ xAxis: xMid }, { yAxis: yMid }],
+      label: { show: false },
+    },
+  }],
+  graphic: [
+    { type: "text", left: "12%", top: 62, style: { text: "The Prestige Bowls", fontSize: 13, fill: "#F44336", fontStyle: "italic", fontWeight: "bold" } },
+    { type: "text", right: "10%", top: 62, style: { text: "The Slurp Spots", fontSize: 13, fill: "#4CAF50", fontStyle: "italic", fontWeight: "bold" } },
+    { type: "text", left: "12%", bottom: 72, style: { text: "The Tourist Trap", fontSize: 13, fill: "#9E9E9E", fontStyle: "italic", fontWeight: "bold" } },
+    { type: "text", right: "10%", bottom: 72, style: { text: "The Cheap Gamble", fontSize: 13, fill: "#2196F3", fontStyle: "italic", fontWeight: "bold" } },
+    { type: "text", right: 20, bottom: 10, style: { text: "RankMint", fontSize: 12, fill: "#ccc", fontStyle: "italic" } },
+  ],
+});
+
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

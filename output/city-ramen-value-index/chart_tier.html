@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramen City Tier List — CRVI 2026 | RankMint</title>
+<meta property="og:title" content="Ramen City Tier List — CRVI 2026">
+<meta property="og:description" content="S-tier to D-tier: where does your city rank for ramen value?">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ramen City Tier List — CRVI 2026">
+<meta name="twitter:description" content="S-tier to D-tier: where does your city rank for ramen value?">
+<meta name="twitter:image" content="card.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #111827; color: #e0e0e0; min-height: 100vh; }
+  .header { padding: 28px 32px 12px; border-bottom: 1px solid #1f2937; }
+  .header h1 { font-size: 1.6rem; color: #fff; font-weight: 800; }
+  .header p { font-size: 0.85rem; color: #6b7280; margin-top: 6px; }
+  .tier-container { max-width: 1050px; margin: 24px auto; padding: 0 20px 40px; }
+  .tier-row { display: flex; margin-bottom: 6px; min-height: 72px; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .tier-label {
+    width: 88px; min-width: 88px; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; font-size: 2rem; font-weight: 900; color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4); letter-spacing: 2px;
+  }
+  .tier-label .tier-range { font-size: 0.6rem; font-weight: 400; opacity: 0.75; margin-top: 2px; letter-spacing: 0; }
+  .tier-items { flex: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 16px; background: rgba(255,255,255,0.04); border-left: 2px solid rgba(255,255,255,0.08); }
+  .tier-item {
+    background: rgba(255,255,255,0.09); border-radius: 8px; padding: 9px 16px;
+    font-size: 0.88rem; cursor: default; transition: all 0.22s; position: relative; border: 1px solid rgba(255,255,255,0.06);
+  }
+  .tier-item:hover { background: rgba(255,255,255,0.18); transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+  .tier-item .city-name { font-weight: 600; color: #f3f4f6; }
+  .tier-item .score { font-size: 0.72rem; color: #9ca3af; margin-top: 3px; }
+  .tier-item .flag { margin-right: 5px; font-size: 1rem; }
+  .tooltip-box {
+    display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    background: #1f2937; color: #e0e0e0; padding: 10px 14px; border-radius: 8px; font-size: 0.75rem;
+    white-space: nowrap; z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.5); border: 1px solid #374151;
+    min-width: 190px;
+  }
+  .tooltip-box::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #1f2937; }
+  .tier-item:hover .tooltip-box { display: block; }
+  .tooltip-row { display: flex; justify-content: space-between; gap: 16px; margin-top: 4px; }
+  .tooltip-row .label { color: #9ca3af; }
+  .tooltip-row .val { color: #f3f4f6; font-weight: 600; }
+  .watermark { text-align: right; padding: 8px 32px 20px; color: #374151; font-size: 0.75rem; font-style: italic; }
+  .legend { display: flex; gap: 18px; padding: 6px 20px 0; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: #6b7280; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>City Ramen Value Index — Tier List</h1>
+  <p>Ranked by CRVI score: affordability + density + quality + variety + cultural depth &nbsp;|&nbsp; 30 cities, 2026 edition</p>
+</div>
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#E53935"></div>Japan</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#FF9800"></div>East Asia</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#43A047"></div>SE Asia</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#1E88E5"></div>Western</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#8E24AA"></div>Other</div>
+</div>
+<div class="tier-container" id="tiers"></div>
+<div class="watermark">RankMint &mdash; City Ramen Value Index 2026</div>
+
+<script>
+const DATA = [
+  { rank:1,  name:"Fukuoka",      flag:"JP", region:"Japan",   crvi:9.21, affordability:8.82, density:9.75,  quality:10.00, variety:7.78, embeddedness:10.00 },
+  { rank:2,  name:"Tokyo",        flag:"JP", region:"Japan",   crvi:8.91, affordability:7.65, density:10.00, quality:9.00,  variety:10.00, embeddedness:8.00  },
+  { rank:3,  name:"Osaka",        flag:"JP", region:"Japan",   crvi:8.39, affordability:8.24, density:9.53,  quality:8.00,  variety:8.89,  embeddedness:7.00  },
+  { rank:4,  name:"Taipei",       flag:"TW", region:"EAsia",   crvi:8.15, affordability:8.82, density:6.59,  quality:9.00,  variety:8.89,  embeddedness:7.00  },
+  { rank:5,  name:"Sapporo",      flag:"JP", region:"Japan",   crvi:7.76, affordability:8.24, density:8.09,  quality:7.00,  variety:6.67,  embeddedness:9.00  },
+  { rank:6,  name:"Seoul",        flag:"KR", region:"EAsia",   crvi:7.22, affordability:8.24, density:6.01,  quality:6.00,  variety:7.78,  embeddedness:8.00  },
+  { rank:7,  name:"Bangkok",      flag:"TH", region:"SEAsia",  crvi:6.90, affordability:9.41, density:3.47,  quality:7.00,  variety:7.78,  embeddedness:6.00  },
+  { rank:8,  name:"Hong Kong",    flag:"HK", region:"EAsia",   crvi:6.50, affordability:7.06, density:5.15,  quality:7.00,  variety:7.78,  embeddedness:5.00  },
+  { rank:9,  name:"Shanghai",     flag:"CN", region:"EAsia",   crvi:6.29, affordability:8.24, density:4.74,  quality:6.00,  variety:6.67,  embeddedness:5.00  },
+  { rank:10, name:"Singapore",    flag:"SG", region:"SEAsia",  crvi:5.38, affordability:5.88, density:3.88,  quality:6.00,  variety:6.67,  embeddedness:4.00  },
+  { rank:11, name:"Portland",     flag:"US", region:"Western", crvi:5.26, affordability:3.53, density:5.48,  quality:6.00,  variety:6.67,  embeddedness:5.00  },
+  { rank:12, name:"Kuala Lumpur", flag:"MY", region:"SEAsia",  crvi:5.18, affordability:9.41, density:3.47,  quality:4.00,  variety:4.44,  embeddedness:3.00  },
+  { rank:13, name:"Los Angeles",  flag:"US", region:"Western", crvi:4.93, affordability:1.18, density:4.65,  quality:7.00,  variety:7.78,  embeddedness:5.00  },
+  { rank:14, name:"Vancouver",    flag:"CA", region:"Western", crvi:4.71, affordability:2.94, density:4.21,  quality:6.00,  variety:6.67,  embeddedness:4.00  },
+  { rank:15, name:"Manila",       flag:"PH", region:"SEAsia",  crvi:4.66, affordability:10.00,density:2.95,  quality:3.00,  variety:3.33,  embeddedness:2.00  },
+  { rank:16, name:"Jakarta",      flag:"ID", region:"SEAsia",  crvi:4.66, affordability:10.00,density:2.95,  quality:3.00,  variety:3.33,  embeddedness:2.00  },
+  { rank:17, name:"New York",     flag:"US", region:"Western", crvi:4.47, affordability:0.00, density:3.80,  quality:7.00,  variety:7.78,  embeddedness:5.00  },
+  { rank:18, name:"Melbourne",    flag:"AU", region:"Western", crvi:4.37, affordability:3.53, density:3.88,  quality:5.00,  variety:5.56,  embeddedness:4.00  },
+  { rank:19, name:"Berlin",       flag:"DE", region:"Western", crvi:4.18, affordability:4.12, density:2.95,  quality:5.00,  variety:5.56,  embeddedness:3.00  },
+  { rank:20, name:"Toronto",      flag:"CA", region:"Western", crvi:4.14, affordability:3.53, density:3.47,  quality:5.00,  variety:5.56,  embeddedness:3.00  },
+  { rank:21, name:"Sydney",       flag:"AU", region:"Western", crvi:3.85, affordability:2.35, density:3.47,  quality:5.00,  variety:5.56,  embeddedness:3.00  },
+  { rank:22, name:"San Francisco",flag:"US", region:"Western", crvi:3.83, affordability:0.00, density:3.47,  quality:6.00,  variety:6.67,  embeddedness:4.00  },
+  { rank:23, name:"Chicago",      flag:"US", region:"Western", crvi:3.74, affordability:2.35, density:2.95,  quality:5.00,  variety:5.56,  embeddedness:3.00  },
+  { rank:24, name:"Paris",        flag:"FR", region:"Western", crvi:3.74, affordability:2.35, density:2.95,  quality:5.00,  variety:5.56,  embeddedness:3.00  },
+  { rank:25, name:"Sao Paulo",    flag:"BR", region:"Other",   crvi:3.67, affordability:7.65, density:0.94,  quality:3.00,  variety:3.33,  embeddedness:2.00  },
+  { rank:26, name:"Mexico City",  flag:"MX", region:"Other",   crvi:3.06, affordability:8.24, density:0.00,  quality:2.00,  variety:2.22,  embeddedness:1.00  },
+  { rank:27, name:"London",       flag:"GB", region:"Western", crvi:3.04, affordability:0.00, density:2.38,  quality:5.00,  variety:5.56,  embeddedness:3.00  },
+  { rank:28, name:"Dubai",        flag:"AE", region:"Other",   crvi:2.93, affordability:4.71, density:0.94,  quality:3.00,  variety:3.33,  embeddedness:2.00  },
+  { rank:29, name:"Amsterdam",    flag:"NL", region:"Western", crvi:2.42, affordability:1.18, density:1.79,  quality:4.00,  variety:3.33,  embeddedness:2.00  },
+  { rank:30, name:"Stockholm",    flag:"SE", region:"Western", crvi:2.34, affordability:2.35, density:0.94,  quality:3.00,  variety:3.33,  embeddedness:2.00  },
+];
+
+const REGION_COLORS = {
+  "Japan":   "#E53935", "EAsia": "#FF9800",
+  "SEAsia":  "#43A047", "Western": "#1E88E5", "Other": "#8E24AA",
+};
+
+const TIERS = [
+  { label: "S", desc: "Pilgrimage-worthy",  min: 7.5,  color: "#FF4757", textColor: "#fff" },
+  { label: "A", desc: "Excellent value",    min: 6.0,  color: "#FFA502", textColor: "#111" },
+  { label: "B", desc: "Solid scene",        min: 5.0,  color: "#2ED573", textColor: "#111" },
+  { label: "C", desc: "Worth exploring",    min: 4.0,  color: "#1E90FF", textColor: "#fff" },
+  { label: "D", desc: "Manage expectations",min: 0,    color: "#747D8C", textColor: "#fff" },
+];
+
+const sorted = [...DATA].sort((a, b) => b.crvi - a.crvi);
+const container = document.getElementById("tiers");
+
+TIERS.forEach(tier => {
+  const tierMax = TIERS.find(t => t.min > tier.min)?.min ?? 999;
+  const items = sorted.filter(d => d.crvi >= tier.min && d.crvi < tierMax);
+  if (items.length === 0) return;
+
+  const row = document.createElement("div");
+  row.className = "tier-row";
+  row.innerHTML = `
+    <div class="tier-label" style="background:${tier.color};color:${tier.textColor}">
+      ${tier.label}
+      <span class="tier-range">${tier.desc}</span>
+    </div>`;
+
+  const itemsDiv = document.createElement("div");
+  itemsDiv.className = "tier-items";
+
+  items.forEach(d => {
+    const dotColor = REGION_COLORS[d.region] || "#888";
+    const el = document.createElement("div");
+    el.className = "tier-item";
+    el.innerHTML = `
+      <div class="city-name">
+        <span class="flag" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${dotColor};vertical-align:middle;margin-right:6px"></span>
+        ${d.name}
+      </div>
+      <div class="score">CRVI ${d.crvi.toFixed(2)} &nbsp;&bull;&nbsp; #${d.rank}</div>
+      <div class="tooltip-box">
+        <b>${d.name}</b><br>
+        <div class="tooltip-row"><span class="label">Affordability</span><span class="val">${d.affordability.toFixed(1)}</span></div>
+        <div class="tooltip-row"><span class="label">Shop Density</span><span class="val">${d.density.toFixed(1)}</span></div>
+        <div class="tooltip-row"><span class="label">Quality</span><span class="val">${d.quality.toFixed(1)}</span></div>
+        <div class="tooltip-row"><span class="label">Variety</span><span class="val">${d.variety.toFixed(1)}</span></div>
+        <div class="tooltip-row"><span class="label">Cultural Depth</span><span class="val">${d.embeddedness.toFixed(1)}</span></div>
+      </div>
+    `;
+    itemsDiv.appendChild(el);
+  });
+
+  row.appendChild(itemsDiv);
+  container.appendChild(row);
+});
+
+// Staggered entrance animation
+document.querySelectorAll(".tier-item").forEach((el, i) => {
+  el.style.opacity = "0";
+  el.style.transform = "translateY(12px)";
+  setTimeout(() => {
+    el.style.transition = "opacity 0.4s, transform 0.4s";
+    el.style.opacity = "1";
+    el.style.transform = "translateY(0)";
+  }, 60 + i * 35);
+});
+</script>
+</body>
+</html>
