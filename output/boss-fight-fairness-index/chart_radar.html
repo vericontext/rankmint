@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boss Metrics Radar — Head-to-Head Comparison | RankMint</title>
+<meta property="og:title" content="Boss Metrics Radar — Isshin vs Malenia vs Bed of Chaos">
+<meta property="og:description" content="Compare any two bosses across 6 fairness metrics. The design gap between Isshin and Bed of Chaos is stunning.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Boss Metrics Radar">
+<meta name="twitter:description" content="Compare any two bosses across 6 fairness metrics. The design gap is stunning.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f1a; color: #e0e0e0; }
+  #chart { width: 100%; height: 78vh; min-height: 560px; }
+  .header { padding: 22px 32px 8px; }
+  .header h1 { font-size: 1.3rem; color: #FFD700; font-weight: 800; }
+  .header p { font-size: 0.82rem; color: #888; margin-top: 4px; }
+  .controls { padding: 12px 32px 6px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .controls label { font-size: 0.82rem; color: #aaa; }
+  .controls select {
+    padding: 7px 14px; border: 1px solid #333; border-radius: 7px; font-size: 0.85rem;
+    background: #1a1a2e; color: #e0e0e0; cursor: pointer; min-width: 200px;
+  }
+  .controls select:focus { outline: none; border-color: #4682B4; }
+  .vs-label { font-size: 1rem; color: #555; font-weight: 700; }
+  .score-display { padding: 6px 32px; font-size: 0.82rem; color: #888; }
+  .score-display span { font-weight: 700; }
+  .score-1 { color: #5470c6; }
+  .score-2 { color: #ee6666; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Boss Metrics Radar — Head-to-Head Comparison</h1>
+  <p>Compare any two bosses across all 6 fairness dimensions. Default: Isshin vs Malenia vs Bed of Chaos.</p>
+</div>
+<div class="controls">
+  <label>Boss A:</label>
+  <select id="item1"></select>
+  <span class="vs-label">vs</span>
+  <label>Boss B:</label>
+  <select id="item2"></select>
+  <span class="vs-label">vs</span>
+  <label>Boss C:</label>
+  <select id="item3"></select>
+</div>
+<div class="score-display" id="score-display"></div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { name: "Baldur",             game: "God of War 2018",       score: 8.73, telegraph: 9, hitbox: 9, recovery: 9, learning: 8,  friction_inv: 8, camera: 9, difficulty: 2  },
+  { name: "Isshin",             game: "Sekiro",                score: 8.59, telegraph: 9, hitbox: 9, recovery: 8, learning: 10, friction_inv: 5, camera: 9, difficulty: 9  },
+  { name: "Genichiro",          game: "Sekiro",                score: 8.42, telegraph: 9, hitbox: 9, recovery: 8, learning: 9,  friction_inv: 5, camera: 9, difficulty: 6  },
+  { name: "Vergil",             game: "DMC5",                  score: 8.17, telegraph: 9, hitbox: 9, recovery: 7, learning: 8,  friction_inv: 6, camera: 9, difficulty: 7  },
+  { name: "Gael",              game: "Dark Souls 3",           score: 7.92, telegraph: 9, hitbox: 9, recovery: 7, learning: 8,  friction_inv: 4, camera: 8, difficulty: 7  },
+  { name: "Sigrun",            game: "God of War 2018",        score: 7.86, telegraph: 8, hitbox: 9, recovery: 7, learning: 9,  friction_inv: 5, camera: 7, difficulty: 8  },
+  { name: "Ganondorf",         game: "Ocarina of Time",        score: 7.80, telegraph: 8, hitbox: 8, recovery: 8, learning: 8,  friction_inv: 6, camera: 8, difficulty: 3  },
+  { name: "Margit",            game: "Elden Ring",             score: 7.69, telegraph: 8, hitbox: 8, recovery: 7, learning: 9,  friction_inv: 5, camera: 8, difficulty: 5  },
+  { name: "Armstrong",         game: "Metal Gear Rising",      score: 6.99, telegraph: 7, hitbox: 8, recovery: 6, learning: 7,  friction_inv: 6, camera: 8, difficulty: 6  },
+  { name: "Sans",              game: "Undertale",              score: 6.88, telegraph: 7, hitbox: 8, recovery: 4, learning: 7,  friction_inv: 8, camera: 9, difficulty: 9  },
+  { name: "Lady Butterfly",    game: "Sekiro",                 score: 6.84, telegraph: 7, hitbox: 8, recovery: 6, learning: 7,  friction_inv: 5, camera: 7, difficulty: 6  },
+  { name: "Malenia",           game: "Elden Ring",             score: 6.82, telegraph: 7, hitbox: 7, recovery: 6, learning: 7,  friction_inv: 7, camera: 7, difficulty: 10 },
+  { name: "Sephiroth",         game: "Final Fantasy VII",      score: 6.82, telegraph: 6, hitbox: 8, recovery: 7, learning: 6,  friction_inv: 7, camera: 8, difficulty: 4  },
+  { name: "Sister Friede",     game: "Dark Souls 3",           score: 6.69, telegraph: 7, hitbox: 8, recovery: 6, learning: 7,  friction_inv: 4, camera: 6, difficulty: 7  },
+  { name: "Ornstein & Smough", game: "Dark Souls 1",           score: 6.62, telegraph: 7, hitbox: 7, recovery: 6, learning: 7,  friction_inv: 5, camera: 7, difficulty: 8  },
+  { name: "Ludwig",            game: "Bloodborne",             score: 6.57, telegraph: 7, hitbox: 7, recovery: 6, learning: 7,  friction_inv: 5, camera: 6, difficulty: 7  },
+  { name: "Radahn",            game: "Elden Ring",             score: 6.55, telegraph: 7, hitbox: 7, recovery: 6, learning: 6,  friction_inv: 6, camera: 7, difficulty: 7  },
+  { name: "Nameless King",     game: "Dark Souls 3",           score: 6.42, telegraph: 7, hitbox: 7, recovery: 6, learning: 7,  friction_inv: 4, camera: 5, difficulty: 7  },
+  { name: "Psycho Mantis",     game: "Metal Gear Solid",       score: 6.19, telegraph: 5, hitbox: 8, recovery: 7, learning: 6,  friction_inv: 4, camera: 7, difficulty: 4  },
+  { name: "Thunderblight Ganon",game: "Breath of the Wild",    score: 6.09, telegraph: 5, hitbox: 7, recovery: 6, learning: 6,  friction_inv: 7, camera: 7, difficulty: 7  },
+  { name: "Bowser",            game: "Super Mario Bros NES",   score: 5.81, telegraph: 6, hitbox: 5, recovery: 7, learning: 6,  friction_inv: 4, camera: 7, difficulty: 4  },
+  { name: "Ender Dragon",      game: "Minecraft",              score: 5.58, telegraph: 5, hitbox: 6, recovery: 7, learning: 5,  friction_inv: 5, camera: 5, difficulty: 3  },
+  { name: "Orphan of Kos",     game: "Bloodborne",             score: 5.37, telegraph: 6, hitbox: 5, recovery: 4, learning: 6,  friction_inv: 6, camera: 5, difficulty: 9  },
+  { name: "Absolute Radiance", game: "Hollow Knight",          score: 5.26, telegraph: 5, hitbox: 6, recovery: 3, learning: 5,  friction_inv: 8, camera: 7, difficulty: 9  },
+  { name: "Dr. Wily",          game: "Mega Man 1",             score: 5.19, telegraph: 5, hitbox: 6, recovery: 5, learning: 6,  friction_inv: 2, camera: 7, difficulty: 6  },
+  { name: "Mike Tyson",        game: "Punch-Out!!",            score: 4.75, telegraph: 4, hitbox: 7, recovery: 3, learning: 5,  friction_inv: 3, camera: 8, difficulty: 8  },
+  { name: "Shao Kahn",         game: "Mortal Kombat",          score: 3.26, telegraph: 2, hitbox: 5, recovery: 2, learning: 2,  friction_inv: 6, camera: 6, difficulty: 6  },
+  { name: "Yellow Devil",      game: "Mega Man 1",             score: 3.20, telegraph: 2, hitbox: 6, recovery: 2, learning: 3,  friction_inv: 1, camera: 7, difficulty: 7  },
+  { name: "Capra Demon",       game: "Dark Souls 1",           score: 2.94, telegraph: 3, hitbox: 4, recovery: 2, learning: 3,  friction_inv: 3, camera: 1, difficulty: 5  },
+  { name: "Bed of Chaos",      game: "Dark Souls 1",           score: 1.50, telegraph: 1, hitbox: 1, recovery: 2, learning: 2,  friction_inv: 2, camera: 2, difficulty: 4  },
+];
+
+const METRICS = ["telegraph", "hitbox", "recovery", "learning", "friction_inv", "camera"];
+const METRIC_LABELS = [
+  "Telegraph Clarity",
+  "Hitbox Accuracy",
+  "Recovery Window",
+  "Learning Curve",
+  "Low Retry Friction",
+  "Camera / Arena"
+];
+
+const COLORS = ["#5470c6", "#ee6666", "#91cc75"];
+
+const sel1 = document.getElementById("item1");
+const sel2 = document.getElementById("item2");
+const sel3 = document.getElementById("item3");
+
+DATA.forEach((d, i) => {
+  [sel1, sel2, sel3].forEach(sel => {
+    const opt = document.createElement("option");
+    opt.value = i;
+    opt.textContent = `${d.name} (${d.game})`;
+    sel.appendChild(opt);
+  });
+});
+
+// Defaults: Isshin (#1 in array), Malenia (#11), Bed of Chaos (#29)
+sel1.value = 1;  // Isshin
+sel2.value = 11; // Malenia
+sel3.value = 29; // Bed of Chaos
+
+const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
+
+const maxVals = METRICS.map(m => 10);
+
+function updateScoreDisplay() {
+  const d1 = DATA[sel1.value];
+  const d2 = DATA[sel2.value];
+  const d3 = DATA[sel3.value];
+  document.getElementById("score-display").innerHTML =
+    `<span class="score-1">${d1.name}: ${d1.score.toFixed(2)}</span> &nbsp;|&nbsp; ` +
+    `<span class="score-2">${d2.name}: ${d2.score.toFixed(2)}</span> &nbsp;|&nbsp; ` +
+    `<span style="color:#91cc75">${d3.name}: ${d3.score.toFixed(2)}</span>`;
+}
+
+function render() {
+  const d1 = DATA[sel1.value];
+  const d2 = DATA[sel2.value];
+  const d3 = DATA[sel3.value];
+  updateScoreDisplay();
+
+  chart.setOption({
+    backgroundColor: "#0f0f1a",
+    legend: {
+      data: [d1.name, d2.name, d3.name],
+      top: 12, textStyle: { color: "#aaa", fontSize: 12 },
+      icon: "roundRect",
+    },
+    radar: {
+      indicator: METRICS.map((m, i) => ({ name: METRIC_LABELS[i], max: 10 })),
+      shape: "polygon",
+      center: ["50%", "50%"],
+      radius: "65%",
+      splitNumber: 5,
+      splitArea: {
+        areaStyle: {
+          color: ["rgba(30,30,60,0.6)", "rgba(20,20,45,0.6)", "rgba(30,30,60,0.6)", "rgba(20,20,45,0.6)", "rgba(30,30,60,0.6)"]
+        }
+      },
+      splitLine: { lineStyle: { color: "#2a2a4a" } },
+      axisLine: { lineStyle: { color: "#2a2a4a" } },
+      axisName: { color: "#bbb", fontSize: 12.5, fontWeight: 500 },
+    },
+    tooltip: {
+      backgroundColor: "#1a1a2e",
+      borderColor: "#333",
+      textStyle: { color: "#e0e0e0", fontSize: 12 },
+      formatter: p => {
+        const boss = [d1, d2, d3].find(x => x.name === p.name);
+        if (!boss) return p.name;
+        let tip = `<b style="color:#FFD700">${boss.name}</b> — ${boss.game}<br/>Fairness: ${boss.score.toFixed(2)}<hr style="border-color:#333;margin:5px 0"/>`;
+        METRICS.forEach((m, i) => { tip += `${METRIC_LABELS[i]}: ${boss[m]}/10<br/>`; });
+        return tip;
+      }
+    },
+    series: [{
+      type: "radar",
+      data: [
+        {
+          name: d1.name,
+          value: METRICS.map(m => d1[m]),
+          areaStyle: { opacity: 0.15 },
+          lineStyle: { color: COLORS[0], width: 2.5 },
+          itemStyle: { color: COLORS[0] },
+        },
+        {
+          name: d2.name,
+          value: METRICS.map(m => d2[m]),
+          areaStyle: { opacity: 0.15 },
+          lineStyle: { color: COLORS[1], width: 2.5 },
+          itemStyle: { color: COLORS[1] },
+        },
+        {
+          name: d3.name,
+          value: METRICS.map(m => d3[m]),
+          areaStyle: { opacity: 0.15 },
+          lineStyle: { color: COLORS[2], width: 2.5 },
+          itemStyle: { color: COLORS[2] },
+        },
+      ],
+      animationDuration: 1500,
+      animationEasing: "cubicOut",
+    }],
+    graphic: [{
+      type: "text", right: 20, bottom: 10,
+      style: { text: "RankMint", fontSize: 11, fill: "#333", fontStyle: "italic" },
+    }],
+  });
+}
+
+sel1.addEventListener("change", render);
+sel2.addEventListener("change", render);
+sel3.addEventListener("change", render);
+render();
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

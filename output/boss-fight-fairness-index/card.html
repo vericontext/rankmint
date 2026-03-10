@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 630px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .card {
+    width: 1200px; height: 630px;
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 45%, #16213e 100%);
+    color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 56px 80px;
+    position: relative; overflow: hidden;
+  }
+  /* Decorative background elements */
+  .bg-circle {
+    position: absolute; border-radius: 50%; opacity: 0.04;
+    background: radial-gradient(circle, #FFD700, transparent);
+  }
+  .bg-circle-1 { width: 600px; height: 600px; top: -200px; right: -100px; }
+  .bg-circle-2 { width: 300px; height: 300px; bottom: -100px; left: 200px; }
+
+  .accent-line {
+    position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+    background: linear-gradient(90deg, #FFD700 0%, #FF6B6B 40%, #4682B4 100%);
+  }
+  .tag { font-size: 12px; font-weight: 700; letter-spacing: 3px; color: #FFD700; text-transform: uppercase; margin-bottom: 14px; opacity: 0.9; }
+  .title { font-size: 46px; font-weight: 900; margin-bottom: 14px; line-height: 1.1; max-width: 760px; }
+  .hook { font-size: 19px; color: #bbb; margin-bottom: 38px; max-width: 680px; line-height: 1.5; }
+  .top3 { display: flex; gap: 20px; }
+  .top-item {
+    background: rgba(255,255,255,0.07); border-radius: 12px; padding: 18px 26px;
+    min-width: 190px; border: 1px solid rgba(255,255,255,0.08);
+  }
+  .top-item .medal { font-size: 13px; font-weight: 800; letter-spacing: 1px; margin-bottom: 5px; }
+  .top-item .medal.gold { color: #FFD700; }
+  .top-item .medal.silver { color: #C0C0C0; }
+  .top-item .medal.bronze { color: #CD7F32; }
+  .top-item .item-name { font-size: 17px; font-weight: 700; color: #fff; }
+  .top-item .item-game { font-size: 11px; color: #888; margin-top: 2px; }
+  .top-item .item-score { font-size: 13px; color: #aaa; margin-top: 6px; font-weight: 600; }
+  .bottom-label {
+    position: absolute; bottom: 28px; left: 80px;
+    font-size: 12px; color: #555; letter-spacing: 1px;
+  }
+  .watermark {
+    position: absolute; bottom: 28px; right: 40px;
+    font-size: 15px; color: rgba(255,255,255,0.2); font-weight: 800; letter-spacing: 3px;
+  }
+  .last-place {
+    position: absolute; right: 80px; top: 50%; transform: translateY(-50%);
+    text-align: center; opacity: 0.5;
+  }
+  .last-place .lp-label { font-size: 10px; color: #e05c5c; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+  .last-place .lp-name { font-size: 15px; color: #e05c5c; font-weight: 800; }
+  .last-place .lp-score { font-size: 28px; color: #e05c5c; font-weight: 900; margin-top: 2px; }
+  .last-place .lp-game { font-size: 11px; color: #888; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="accent-line"></div>
+  <div class="bg-circle bg-circle-1"></div>
+  <div class="bg-circle bg-circle-2"></div>
+
+  <div class="tag">RankMint — Boss Fight Fairness Index</div>
+  <div class="title">30 Bosses Ranked by Design Honesty</div>
+  <div class="hook">The internet agrees Malenia is harder than Bed of Chaos.<br>The internet is wrong about which one is more unfair.</div>
+
+  <div class="top3">
+    <div class="top-item">
+      <div class="medal gold">#1 FAIREST</div>
+      <div class="item-name">Baldur</div>
+      <div class="item-game">God of War 2018</div>
+      <div class="item-score">8.73 / 10</div>
+    </div>
+    <div class="top-item">
+      <div class="medal silver">#2 FAIREST</div>
+      <div class="item-name">Isshin</div>
+      <div class="item-game">Sekiro: Shadows Die Twice</div>
+      <div class="item-score">8.59 / 10</div>
+    </div>
+    <div class="top-item">
+      <div class="medal" style="color:#e05c5c">#12 FAIREST</div>
+      <div class="item-name">Malenia</div>
+      <div class="item-game">Elden Ring</div>
+      <div class="item-score">6.82 / 10</div>
+    </div>
+  </div>
+
+  <div class="last-place">
+    <div class="lp-label">DEAD LAST</div>
+    <div class="lp-name">Bed of Chaos</div>
+    <div class="lp-score">1.50</div>
+    <div class="lp-game">Dark Souls 1</div>
+  </div>
+
+  <div class="bottom-label">30 bosses · 6 metrics · 1987–2024</div>
+  <div class="watermark">RANKMINT</div>
+</div>
+</body>
+</html>

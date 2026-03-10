@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Difficulty vs Fairness — Boss Fight Quadrant | RankMint</title>
+<meta property="og:title" content="Difficulty vs Fairness: Boss Fight Quadrant">
+<meta property="og:description" content="The internet agrees Malenia is harder than Bed of Chaos. The internet is wrong about which one is more unfair.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Difficulty vs Fairness: Boss Fight Quadrant">
+<meta name="twitter:description" content="The internet agrees Malenia is harder than Bed of Chaos. The internet is wrong about which one is more unfair.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f1a; color: #e0e0e0; }
+  #chart { width: 100%; height: 88vh; min-height: 620px; }
+  .header { padding: 20px 32px 6px; }
+  .header h1 { font-size: 1.3rem; color: #FFD700; font-weight: 800; }
+  .header p { font-size: 0.82rem; color: #888; margin-top: 4px; }
+  .quadrant-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 10px 32px; max-width: 700px; }
+  .ql-item { font-size: 0.75rem; padding: 4px 10px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Difficulty vs. Fairness — The Boss Fight Quadrant</h1>
+  <p>X-axis: Community-perceived difficulty (1–10). Y-axis: Fairness Score from Boss Fight Fairness Index. Bubble size = Fairness Score.</p>
+</div>
+<div class="quadrant-legend">
+  <div class="ql-item" style="background:rgba(76,217,100,0.15);color:#7ecfa4">Upper-Right: The Hall of Mastery — Hard AND fair. Every death is your fault.</div>
+  <div class="ql-item" style="background:rgba(255,204,0,0.15);color:#FFD700">Upper-Left: The Honest Pushovers — Easy AND fair. Clean design, no friction.</div>
+  <div class="ql-item" style="background:rgba(255,59,48,0.15);color:#e05c5c">Lower-Right: The Bullshit Wall — Hard AND unfair. Rage-quit territory.</div>
+  <div class="ql-item" style="background:rgba(150,150,150,0.15);color:#aaa">Lower-Left: The Forgotten Sins — Easy AND cheap. Bad design nobody notices.</div>
+</div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { name: "Baldur",              game: "God of War 2018",    score: 8.73, difficulty: 2,  rank: 1  },
+  { name: "Isshin",              game: "Sekiro",             score: 8.59, difficulty: 9,  rank: 2  },
+  { name: "Genichiro",           game: "Sekiro",             score: 8.42, difficulty: 6,  rank: 3  },
+  { name: "Vergil",              game: "DMC5",               score: 8.17, difficulty: 7,  rank: 4  },
+  { name: "Gael",               game: "Dark Souls 3",       score: 7.92, difficulty: 7,  rank: 5  },
+  { name: "Sigrun",              game: "God of War 2018",    score: 7.86, difficulty: 8,  rank: 6  },
+  { name: "Ganondorf",           game: "Ocarina of Time",    score: 7.80, difficulty: 3,  rank: 7  },
+  { name: "Margit",              game: "Elden Ring",         score: 7.69, difficulty: 5,  rank: 8  },
+  { name: "Armstrong",           game: "Metal Gear Rising",  score: 6.99, difficulty: 6,  rank: 9  },
+  { name: "Sans",                game: "Undertale",          score: 6.88, difficulty: 9,  rank: 10 },
+  { name: "Lady Butterfly",      game: "Sekiro",             score: 6.84, difficulty: 6,  rank: 11 },
+  { name: "Malenia",             game: "Elden Ring",         score: 6.82, difficulty: 10, rank: 12 },
+  { name: "Sephiroth",           game: "Final Fantasy VII",  score: 6.82, difficulty: 4,  rank: 13 },
+  { name: "Sister Friede",       game: "Dark Souls 3",       score: 6.69, difficulty: 7,  rank: 14 },
+  { name: "Ornstein & Smough",   game: "Dark Souls 1",       score: 6.62, difficulty: 8,  rank: 15 },
+  { name: "Ludwig",              game: "Bloodborne",         score: 6.57, difficulty: 7,  rank: 16 },
+  { name: "Radahn",              game: "Elden Ring",         score: 6.55, difficulty: 7,  rank: 17 },
+  { name: "Nameless King",       game: "Dark Souls 3",       score: 6.42, difficulty: 7,  rank: 18 },
+  { name: "Psycho Mantis",       game: "Metal Gear Solid",   score: 6.19, difficulty: 4,  rank: 19 },
+  { name: "Thunderblight Ganon", game: "BotW",               score: 6.09, difficulty: 7,  rank: 20 },
+  { name: "Bowser",              game: "Super Mario Bros",   score: 5.81, difficulty: 4,  rank: 21 },
+  { name: "Ender Dragon",        game: "Minecraft",          score: 5.58, difficulty: 3,  rank: 22 },
+  { name: "Orphan of Kos",       game: "Bloodborne",         score: 5.37, difficulty: 9,  rank: 23 },
+  { name: "Absolute Radiance",   game: "Hollow Knight",      score: 5.26, difficulty: 9,  rank: 24 },
+  { name: "Dr. Wily",            game: "Mega Man 1",         score: 5.19, difficulty: 6,  rank: 25 },
+  { name: "Mike Tyson",          game: "Punch-Out!!",        score: 4.75, difficulty: 8,  rank: 26 },
+  { name: "Shao Kahn",           game: "Mortal Kombat",      score: 3.26, difficulty: 6,  rank: 27 },
+  { name: "Yellow Devil",        game: "Mega Man 1",         score: 3.20, difficulty: 7,  rank: 28 },
+  { name: "Capra Demon",         game: "Dark Souls 1",       score: 2.94, difficulty: 5,  rank: 29 },
+  { name: "Bed of Chaos",        game: "Dark Souls 1",       score: 1.50, difficulty: 4,  rank: 30 },
+];
+
+// Fixed midpoints for meaningful quadrant split
+const X_MID = 6.0;   // medium difficulty threshold
+const Y_MID = 6.0;   // medium fairness threshold
+
+function getQuadrantColor(d) {
+  const hard = d.difficulty >= X_MID;
+  const fair = d.score >= Y_MID;
+  if (hard && fair)   return "#7ecfa4";   // Hall of Mastery — green
+  if (!hard && fair)  return "#FFD700";   // Honest Pushovers — gold
+  if (hard && !fair)  return "#e05c5c";   // Bullshit Wall — red
+  return "#a0a0c0";                       // Forgotten Sins — muted
+}
+
+function getQuadrantBg(isHard, isFair) {
+  if (isHard && isFair)   return "rgba(76,217,100,0.04)";
+  if (!isHard && isFair)  return "rgba(255,204,0,0.04)";
+  if (isHard && !isFair)  return "rgba(255,59,48,0.06)";
+  return "rgba(150,150,150,0.03)";
+}
+
+const seriesData = DATA.map(d => ({
+  value: [d.difficulty, d.score],
+  name: d.name,
+  symbolSize: 10 + (d.score / 10) * 28,
+  itemStyle: { color: getQuadrantColor(d), opacity: 0.88 },
+  _raw: d,
+}));
+
+const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
+
+chart.setOption({
+  backgroundColor: "#0f0f1a",
+  tooltip: {
+    backgroundColor: "#1e1e3a",
+    borderColor: "#333",
+    textStyle: { color: "#e0e0e0", fontSize: 12 },
+    formatter: p => {
+      const d = p.data._raw;
+      const hard = d.difficulty >= X_MID;
+      const fair = d.score >= Y_MID;
+      let quad = hard && fair ? "The Hall of Mastery" :
+                 !hard && fair ? "The Honest Pushovers" :
+                 hard && !fair ? "The Bullshit Wall" : "The Forgotten Sins";
+      return `<b style="color:#FFD700">#${d.rank} ${d.name}</b><br/>
+              <span style="color:#aaa">${d.game}</span><br/>
+              <b>Fairness Score: ${d.score.toFixed(2)}</b><br/>
+              Community Difficulty: ${d.difficulty}/10<br/>
+              <span style="color:#aaa;font-style:italic">${quad}</span>`;
+    }
+  },
+  grid: { left: "10%", right: "6%", top: 40, bottom: 60 },
+  xAxis: {
+    type: "value",
+    name: "Community-Perceived Difficulty",
+    nameLocation: "center",
+    nameGap: 38,
+    min: 1, max: 11,
+    axisLine: { lineStyle: { color: "#333" } },
+    splitLine: { lineStyle: { color: "#1e1e3a" } },
+    axisLabel: { color: "#888", fontSize: 11 },
+    nameTextStyle: { color: "#888", fontSize: 12 },
+  },
+  yAxis: {
+    type: "value",
+    name: "Fairness Score",
+    nameLocation: "center",
+    nameGap: 48,
+    min: 0, max: 10,
+    axisLine: { lineStyle: { color: "#333" } },
+    splitLine: { lineStyle: { color: "#1e1e3a" } },
+    axisLabel: { color: "#888", fontSize: 11 },
+    nameTextStyle: { color: "#888", fontSize: 12 },
+  },
+  dataZoom: [
+    { type: "inside", xAxisIndex: 0 },
+    { type: "inside", yAxisIndex: 0 },
+  ],
+  series: [
+    {
+      type: "scatter",
+      data: seriesData,
+      label: {
+        show: true,
+        formatter: p => p.data.name,
+        position: "right",
+        fontSize: 9.5,
+        color: "#ccc",
+        distance: 4,
+      },
+      emphasis: {
+        label: { fontSize: 12, fontWeight: "bold", color: "#FFD700" },
+        itemStyle: { opacity: 1, shadowBlur: 12, shadowColor: "rgba(255,215,0,0.4)" }
+      },
+      animationDuration: 1800,
+      animationEasing: "cubicOut",
+      markArea: {
+        silent: true,
+        data: [
+          // Upper-Left: Honest Pushovers (easy + fair)
+          [{ coord: [1, Y_MID], itemStyle: { color: "rgba(255,204,0,0.05)" } }, { coord: [X_MID, 10] }],
+          // Upper-Right: Hall of Mastery (hard + fair)
+          [{ coord: [X_MID, Y_MID], itemStyle: { color: "rgba(76,217,100,0.05)" } }, { coord: [11, 10] }],
+          // Lower-Left: Forgotten Sins (easy + unfair)
+          [{ coord: [1, 0], itemStyle: { color: "rgba(150,150,150,0.04)" } }, { coord: [X_MID, Y_MID] }],
+          // Lower-Right: Bullshit Wall (hard + unfair)
+          [{ coord: [X_MID, 0], itemStyle: { color: "rgba(255,59,48,0.07)" } }, { coord: [11, Y_MID] }],
+        ]
+      },
+      markLine: {
+        silent: true,
+        lineStyle: { color: "#333", type: "dashed", width: 1.5 },
+        data: [
+          { xAxis: X_MID, label: { show: false } },
+          { yAxis: Y_MID, label: { show: false } },
+        ],
+      },
+    }
+  ],
+  graphic: [
+    // Quadrant labels
+    { type: "text", left: "11%", top: 46, style: { text: "The Honest Pushovers", fontSize: 12, fill: "rgba(255,204,0,0.5)", fontStyle: "italic", fontWeight: "bold" } },
+    { type: "text", right: "7%",  top: 46, style: { text: "The Hall of Mastery",  fontSize: 12, fill: "rgba(76,217,100,0.5)", fontStyle: "italic", fontWeight: "bold" } },
+    { type: "text", left: "11%", bottom: 64, style: { text: "The Forgotten Sins",  fontSize: 12, fill: "rgba(180,180,180,0.4)", fontStyle: "italic", fontWeight: "bold" } },
+    { type: "text", right: "7%",  bottom: 64, style: { text: "The Bullshit Wall",   fontSize: 12, fill: "rgba(255,59,48,0.5)", fontStyle: "italic", fontWeight: "bold" } },
+    { type: "text", right: 20, bottom: 10, style: { text: "RankMint", fontSize: 11, fill: "#333", fontStyle: "italic" } },
+  ],
+});
+
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boss Fight Fairness Index — Full Rankings | RankMint</title>
+<meta property="og:title" content="Boss Fight Fairness Index">
+<meta property="og:description" content="The internet agrees Malenia is harder than Bed of Chaos. The internet is wrong about which one is more unfair.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Boss Fight Fairness Index">
+<meta name="twitter:description" content="The internet agrees Malenia is harder than Bed of Chaos. The internet is wrong about which one is more unfair.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f1a; color: #e0e0e0; }
+  #chart { width: 100%; height: 92vh; min-height: 700px; }
+  .header { padding: 20px 32px 6px; background: #0f0f1a; border-bottom: 1px solid #1e1e3a; }
+  .header h1 { font-size: 1.3rem; color: #FFD700; font-weight: 800; letter-spacing: 0.5px; }
+  .header p { font-size: 0.82rem; color: #888; margin-top: 4px; }
+  .legend { padding: 8px 32px 12px; display: flex; flex-wrap: wrap; gap: 16px; background: #0f0f1a; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: #aaa; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Boss Fight Fairness Index — All 30 Bosses</h1>
+  <p>Ranked by design honesty, not community-perceived difficulty. Hover for full breakdown. Scroll/pinch to zoom.</p>
+</div>
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#FFD700"></div>S Tier: Design Perfection (7.5+)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#82c3f0"></div>A Tier: Mostly Honest (6.5–7.49)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7ecfa4"></div>B Tier: Acceptable (5.0–6.49)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f0a07e"></div>C Tier: Questionable (3.5–4.99)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#e05c5c"></div>D Tier: Pure BS (&lt;3.5)</div>
+</div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { rank: 1,  name: "Baldur",             game: "God of War 2018",         telegraph: 9, hitbox: 9, recovery: 9, learning: 8,  friction: 2, camera: 9, score: 8.73, difficulty: 2  },
+  { rank: 2,  name: "Isshin",             game: "Sekiro",                  telegraph: 9, hitbox: 9, recovery: 8, learning: 10, friction: 5, camera: 9, score: 8.59, difficulty: 9  },
+  { rank: 3,  name: "Genichiro",          game: "Sekiro",                  telegraph: 9, hitbox: 9, recovery: 8, learning: 9,  friction: 5, camera: 9, score: 8.42, difficulty: 6  },
+  { rank: 4,  name: "Vergil",             game: "DMC5",                    telegraph: 9, hitbox: 9, recovery: 7, learning: 8,  friction: 4, camera: 9, score: 8.17, difficulty: 7  },
+  { rank: 5,  name: "Gael",              game: "Dark Souls 3",             telegraph: 9, hitbox: 9, recovery: 7, learning: 8,  friction: 6, camera: 8, score: 7.92, difficulty: 7  },
+  { rank: 6,  name: "Sigrun",            game: "God of War 2018",          telegraph: 8, hitbox: 9, recovery: 7, learning: 9,  friction: 5, camera: 7, score: 7.86, difficulty: 8  },
+  { rank: 7,  name: "Ganondorf",         game: "Ocarina of Time",          telegraph: 8, hitbox: 8, recovery: 8, learning: 8,  friction: 4, camera: 8, score: 7.80, difficulty: 3  },
+  { rank: 8,  name: "Margit",            game: "Elden Ring",               telegraph: 8, hitbox: 8, recovery: 7, learning: 9,  friction: 5, camera: 8, score: 7.69, difficulty: 5  },
+  { rank: 9,  name: "Senator Armstrong", game: "Metal Gear Rising",        telegraph: 7, hitbox: 8, recovery: 6, learning: 7,  friction: 4, camera: 8, score: 6.99, difficulty: 6  },
+  { rank: 10, name: "Sans",              game: "Undertale",                telegraph: 7, hitbox: 8, recovery: 4, learning: 7,  friction: 2, camera: 9, score: 6.88, difficulty: 9  },
+  { rank: 11, name: "Lady Butterfly",    game: "Sekiro",                   telegraph: 7, hitbox: 8, recovery: 6, learning: 7,  friction: 5, camera: 7, score: 6.84, difficulty: 6  },
+  { rank: 12, name: "Malenia",           game: "Elden Ring",               telegraph: 7, hitbox: 7, recovery: 6, learning: 7,  friction: 3, camera: 7, score: 6.82, difficulty: 10 },
+  { rank: 13, name: "Sephiroth",         game: "Final Fantasy VII",        telegraph: 6, hitbox: 8, recovery: 7, learning: 6,  friction: 3, camera: 8, score: 6.82, difficulty: 4  },
+  { rank: 14, name: "Sister Friede",     game: "Dark Souls 3",             telegraph: 7, hitbox: 8, recovery: 6, learning: 7,  friction: 6, camera: 6, score: 6.69, difficulty: 7  },
+  { rank: 15, name: "Ornstein & Smough", game: "Dark Souls 1",             telegraph: 7, hitbox: 7, recovery: 6, learning: 7,  friction: 5, camera: 7, score: 6.62, difficulty: 8  },
+  { rank: 16, name: "Ludwig",            game: "Bloodborne",               telegraph: 7, hitbox: 7, recovery: 6, learning: 7,  friction: 5, camera: 6, score: 6.57, difficulty: 7  },
+  { rank: 17, name: "Radahn",            game: "Elden Ring",               telegraph: 7, hitbox: 7, recovery: 6, learning: 6,  friction: 4, camera: 7, score: 6.55, difficulty: 7  },
+  { rank: 18, name: "Nameless King",     game: "Dark Souls 3",             telegraph: 7, hitbox: 7, recovery: 6, learning: 7,  friction: 6, camera: 5, score: 6.42, difficulty: 7  },
+  { rank: 19, name: "Psycho Mantis",     game: "Metal Gear Solid",         telegraph: 5, hitbox: 8, recovery: 7, learning: 6,  friction: 6, camera: 7, score: 6.19, difficulty: 4  },
+  { rank: 20, name: "Thunderblight Ganon",game: "Breath of the Wild",      telegraph: 5, hitbox: 7, recovery: 6, learning: 6,  friction: 3, camera: 7, score: 6.09, difficulty: 7  },
+  { rank: 21, name: "Bowser",            game: "Super Mario Bros NES",     telegraph: 6, hitbox: 5, recovery: 7, learning: 6,  friction: 6, camera: 7, score: 5.81, difficulty: 4  },
+  { rank: 22, name: "Ender Dragon",      game: "Minecraft",                telegraph: 5, hitbox: 6, recovery: 7, learning: 5,  friction: 5, camera: 5, score: 5.58, difficulty: 3  },
+  { rank: 23, name: "Orphan of Kos",     game: "Bloodborne",               telegraph: 6, hitbox: 5, recovery: 4, learning: 6,  friction: 4, camera: 5, score: 5.37, difficulty: 9  },
+  { rank: 24, name: "Absolute Radiance", game: "Hollow Knight",            telegraph: 5, hitbox: 6, recovery: 3, learning: 5,  friction: 2, camera: 7, score: 5.26, difficulty: 9  },
+  { rank: 25, name: "Dr. Wily",          game: "Mega Man 1",               telegraph: 5, hitbox: 6, recovery: 5, learning: 6,  friction: 8, camera: 7, score: 5.19, difficulty: 6  },
+  { rank: 26, name: "Mike Tyson",        game: "Punch-Out!!",              telegraph: 4, hitbox: 7, recovery: 3, learning: 5,  friction: 7, camera: 8, score: 4.75, difficulty: 8  },
+  { rank: 27, name: "Shao Kahn",         game: "Mortal Kombat",            telegraph: 2, hitbox: 5, recovery: 2, learning: 2,  friction: 4, camera: 6, score: 3.26, difficulty: 6  },
+  { rank: 28, name: "Yellow Devil",      game: "Mega Man 1",               telegraph: 2, hitbox: 6, recovery: 2, learning: 3,  friction: 9, camera: 7, score: 3.20, difficulty: 7  },
+  { rank: 29, name: "Capra Demon",       game: "Dark Souls 1",             telegraph: 3, hitbox: 4, recovery: 2, learning: 3,  friction: 7, camera: 1, score: 2.94, difficulty: 5  },
+  { rank: 30, name: "Bed of Chaos",      game: "Dark Souls 1",             telegraph: 1, hitbox: 1, recovery: 2, learning: 2,  friction: 8, camera: 2, score: 1.50, difficulty: 4  },
+];
+
+function getTierColor(score) {
+  if (score >= 7.5) return "#FFD700";
+  if (score >= 6.5) return "#82c3f0";
+  if (score >= 5.0) return "#7ecfa4";
+  if (score >= 3.5) return "#f0a07e";
+  return "#e05c5c";
+}
+
+function getTierLabel(score) {
+  if (score >= 7.5) return "S";
+  if (score >= 6.5) return "A";
+  if (score >= 5.0) return "B";
+  if (score >= 3.5) return "C";
+  return "D";
+}
+
+const sorted = [...DATA].sort((a, b) => b.score - a.score);
+const names = sorted.map(d => `#${d.rank} ${d.name}`).reverse();
+const scores = sorted.map(d => d.score).reverse();
+const reversedData = [...sorted].reverse();
+
+const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
+
+chart.setOption({
+  backgroundColor: "#0f0f1a",
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    backgroundColor: "#1e1e3a",
+    borderColor: "#333",
+    textStyle: { color: "#e0e0e0", fontSize: 12 },
+    formatter: params => {
+      const d = reversedData[params[0].dataIndex];
+      const tier = getTierLabel(d.score);
+      return `<b style="color:#FFD700">${d.name}</b><br/>
+              <span style="color:#aaa">${d.game}</span><br/>
+              <b>Fairness Score: ${d.score.toFixed(2)}</b> &nbsp; [Tier ${tier}]<br/>
+              <hr style="border-color:#333;margin:6px 0"/>
+              Telegraph Clarity: ${d.telegraph}/10<br/>
+              Hitbox Accuracy: ${d.hitbox}/10<br/>
+              Recovery Window: ${d.recovery}/10<br/>
+              Learning Curve: ${d.learning}/10<br/>
+              Retry Friction (raw): ${d.friction}/10<br/>
+              Camera/Arena: ${d.camera}/10<br/>
+              <span style="color:#aaa">Community Difficulty: ${d.difficulty}/10</span>`;
+    }
+  },
+  grid: { left: "24%", right: "12%", top: 16, bottom: 24 },
+  xAxis: {
+    type: "value",
+    name: "Fairness Score",
+    nameLocation: "center",
+    nameGap: 28,
+    max: 10,
+    splitLine: { lineStyle: { color: "#1e1e3a" } },
+    axisLine: { lineStyle: { color: "#444" } },
+    axisLabel: { color: "#888", fontSize: 11 },
+    nameTextStyle: { color: "#888", fontSize: 11 },
+  },
+  yAxis: {
+    type: "category",
+    data: names,
+    axisLabel: {
+      fontSize: 11,
+      color: "#ccc",
+      rich: {
+        gold: { color: "#FFD700", fontWeight: "bold" },
+        red: { color: "#e05c5c" },
+      }
+    },
+    axisLine: { lineStyle: { color: "#333" } },
+    splitLine: { show: false },
+  },
+  dataZoom: [
+    { type: "inside", yAxisIndex: 0, filterMode: "none" },
+    { type: "slider", yAxisIndex: 0, right: 4, width: 16, borderColor: "#333", fillerColor: "rgba(70,130,180,0.2)", handleStyle: { color: "#4682B4" } }
+  ],
+  series: [
+    {
+      type: "bar",
+      data: scores.map((v, i) => ({
+        value: v,
+        itemStyle: {
+          color: getTierColor(reversedData[i].score),
+          borderRadius: [0, 4, 4, 0],
+        }
+      })),
+      barWidth: "62%",
+      label: {
+        show: true,
+        position: "right",
+        formatter: params => reversedData[params.dataIndex].score.toFixed(2),
+        fontSize: 11,
+        color: "#ccc",
+      },
+      animationDuration: 1800,
+      animationEasing: "cubicOut",
+    },
+    {
+      // reference line at 5.0 (midpoint)
+      type: "line",
+      markLine: {
+        silent: true,
+        lineStyle: { color: "#555", type: "dashed", width: 1 },
+        data: [{ xAxis: 5.0 }],
+        label: { show: true, position: "end", formatter: "5.0 midpoint", color: "#555", fontSize: 10 }
+      },
+      data: [],
+    }
+  ],
+  graphic: [
+    {
+      type: "text", right: 68, bottom: 8,
+      style: { text: "RankMint", fontSize: 11, fill: "#333", fontStyle: "italic" },
+    }
+  ],
+});
+
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

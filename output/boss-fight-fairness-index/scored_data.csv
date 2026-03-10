@@ -1,0 +1,31 @@
+Rank,Boss,Game,TelegraphClarity,HitboxAccuracy,RecoveryWindow,LearningCurveDesign,RetryFriction,CameraArena,FairnessScore,CommunityDifficulty
+1,Baldur,God of War 2018,9,9,9,8,2,9,8.73,2
+2,Isshin,Sekiro,9,9,8,10,5,9,8.59,9
+3,Genichiro,Sekiro,9,9,8,9,5,9,8.42,6
+4,Vergil,DMC5,9,9,7,8,4,9,8.17,7
+5,Gael,Dark Souls 3,9,9,7,8,6,8,7.92,7
+6,Sigrun,God of War 2018,8,9,7,9,5,7,7.86,8
+7,Ganondorf,Ocarina of Time,8,8,8,8,4,8,7.80,3
+8,Margit,Elden Ring,8,8,7,9,5,8,7.69,5
+9,Senator Armstrong,Metal Gear Rising,7,8,6,7,4,8,6.99,6
+10,Sans,Undertale,7,8,4,7,2,9,6.88,9
+11,Lady Butterfly,Sekiro,7,8,6,7,5,7,6.84,6
+12,Malenia,Elden Ring,7,7,6,7,3,7,6.82,10
+13,Sephiroth,Final Fantasy VII,6,8,7,6,3,8,6.82,4
+14,Sister Friede,Dark Souls 3,7,8,6,7,6,6,6.69,7
+15,Ornstein & Smough,Dark Souls 1,7,7,6,7,5,7,6.62,8
+16,Ludwig,Bloodborne,7,7,6,7,5,6,6.57,7
+17,Radahn,Elden Ring,7,7,6,6,4,7,6.55,7
+18,Nameless King,Dark Souls 3,7,7,6,7,6,5,6.42,7
+19,Psycho Mantis,Metal Gear Solid,5,8,7,6,6,7,6.19,4
+20,Thunderblight Ganon,Breath of the Wild,5,7,6,6,3,7,6.09,7
+21,Bowser,Super Mario Bros NES,6,5,7,6,6,7,5.81,4
+22,Ender Dragon,Minecraft,5,6,7,5,5,5,5.58,3
+23,Orphan of Kos,Bloodborne,6,5,4,6,4,5,5.37,9
+24,Absolute Radiance,Hollow Knight,5,6,3,5,2,7,5.26,9
+25,Dr. Wily,Mega Man 1,5,6,5,6,8,7,5.19,6
+26,Mike Tyson,Punch-Out!!,4,7,3,5,7,8,4.75,8
+27,Shao Kahn,Mortal Kombat,2,5,2,2,4,6,3.26,6
+28,Yellow Devil,Mega Man 1,2,6,2,3,9,7,3.20,7
+29,Capra Demon,Dark Souls 1,3,4,2,3,7,1,2.94,5
+30,Bed of Chaos,Dark Souls 1,1,1,2,2,8,2,1.50,4

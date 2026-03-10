@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boss Fight Fairness Tier List | RankMint</title>
+<meta property="og:title" content="Boss Fight Fairness — S/A/B/C/D Tier List">
+<meta property="og:description" content="The internet agrees Malenia is harder than Bed of Chaos. The internet is wrong about which one is more unfair.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Boss Fight Fairness — Tier List">
+<meta name="twitter:description" content="The internet agrees Malenia is harder than Bed of Chaos. The internet is wrong about which one is more unfair.">
+<meta name="twitter:image" content="card.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f1a; color: #e0e0e0; min-height: 100vh; }
+  .header { padding: 28px 32px 10px; }
+  .header h1 { font-size: 1.5rem; color: #FFD700; font-weight: 900; letter-spacing: 0.5px; }
+  .header .subtitle { font-size: 0.82rem; color: #888; margin-top: 6px; }
+  .header .thesis { font-size: 0.88rem; color: #aaa; margin-top: 8px; font-style: italic; max-width: 700px; }
+  .tier-container { max-width: 1100px; margin: 20px auto; padding: 0 20px 40px; }
+  .tier-row { display: flex; margin-bottom: 6px; min-height: 72px; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.4); }
+  .tier-label {
+    width: 88px; min-width: 88px; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; font-size: 1.9rem; font-weight: 900; color: #fff;
+    text-shadow: 1px 2px 4px rgba(0,0,0,0.5); line-height: 1;
+  }
+  .tier-label .tier-desc { font-size: 0.6rem; font-weight: 500; margin-top: 3px; opacity: 0.85; text-align: center; padding: 0 4px; }
+  .tier-items {
+    flex: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    padding: 10px 18px; background: rgba(255,255,255,0.04);
+    border-left: 1px solid rgba(255,255,255,0.06);
+  }
+  .tier-item {
+    background: rgba(255,255,255,0.08); border-radius: 7px; padding: 9px 16px;
+    font-size: 0.83rem; cursor: default; transition: all 0.2s; position: relative;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .tier-item:hover {
+    background: rgba(255,255,255,0.16); transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  }
+  .tier-item .boss-name { font-weight: 600; color: #e0e0e0; }
+  .tier-item .boss-game { font-size: 0.68rem; color: #888; margin-top: 1px; }
+  .tier-item .boss-score { font-size: 0.7rem; color: #aaa; margin-top: 3px; font-weight: 700; }
+  .tooltip-box {
+    display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    background: #1a1a2e; color: #e0e0e0; padding: 10px 14px; border-radius: 8px; font-size: 0.75rem;
+    white-space: nowrap; z-index: 100; margin-bottom: 0; box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    border: 1px solid #333; min-width: 200px;
+  }
+  .tooltip-box table { border-collapse: collapse; width: 100%; }
+  .tooltip-box td { padding: 1px 4px; }
+  .tooltip-box td:last-child { text-align: right; color: #FFD700; font-weight: 600; }
+  .tier-item:hover .tooltip-box { display: block; }
+  .watermark { text-align: right; padding: 10px 36px; color: #333; font-size: 0.75rem; font-style: italic; }
+  .tier-note { font-size: 0.7rem; color: #666; padding: 4px 18px 0; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Boss Fight Fairness Index — Tier List</h1>
+  <div class="subtitle">Ranked by design honesty. Difficulty is irrelevant. Hover any boss for metric breakdown.</div>
+  <div class="thesis">"The hardest bosses in gaming are often NOT the most unfair. Fairness is a design virtue independent of difficulty."</div>
+</div>
+<div class="tier-container" id="tiers"></div>
+<div class="watermark">RankMint</div>
+
+<script>
+const DATA = [
+  { rank: 1,  name: "Baldur",             game: "God of War 2018",       score: 8.73, telegraph: 9, hitbox: 9, recovery: 9, learning: 8,  friction: 2, camera: 9, difficulty: 2  },
+  { rank: 2,  name: "Isshin",             game: "Sekiro",                score: 8.59, telegraph: 9, hitbox: 9, recovery: 8, learning: 10, friction: 5, camera: 9, difficulty: 9  },
+  { rank: 3,  name: "Genichiro",          game: "Sekiro",                score: 8.42, telegraph: 9, hitbox: 9, recovery: 8, learning: 9,  friction: 5, camera: 9, difficulty: 6  },
+  { rank: 4,  name: "Vergil",             game: "DMC5",                  score: 8.17, telegraph: 9, hitbox: 9, recovery: 7, learning: 8,  friction: 4, camera: 9, difficulty: 7  },
+  { rank: 5,  name: "Gael",              game: "Dark Souls 3",           score: 7.92, telegraph: 9, hitbox: 9, recovery: 7, learning: 8,  friction: 6, camera: 8, difficulty: 7  },
+  { rank: 6,  name: "Sigrun",            game: "God of War 2018",        score: 7.86, telegraph: 8, hitbox: 9, recovery: 7, learning: 9,  friction: 5, camera: 7, difficulty: 8  },
+  { rank: 7,  name: "Ganondorf",         game: "Ocarina of Time",        score: 7.80, telegraph: 8, hitbox: 8, recovery: 8, learning: 8,  friction: 4, camera: 8, difficulty: 3  },
+  { rank: 8,  name: "Margit",            game: "Elden Ring",             score: 7.69, telegraph: 8, hitbox: 8, recovery: 7, learning: 9,  friction: 5, camera: 8, difficulty: 5  },
+  { rank: 9,  name: "Armstrong",         game: "Metal Gear Rising",      score: 6.99, telegraph: 7, hitbox: 8, recovery: 6, learning: 7,  friction: 4, camera: 8, difficulty: 6  },
+  { rank: 10, name: "Sans",              game: "Undertale",              score: 6.88, telegraph: 7, hitbox: 8, recovery: 4, learning: 7,  friction: 2, camera: 9, difficulty: 9  },
+  { rank: 11, name: "Lady Butterfly",    game: "Sekiro",                 score: 6.84, telegraph: 7, hitbox: 8, recovery: 6, learning: 7,  friction: 5, camera: 7, difficulty: 6  },
+  { rank: 12, name: "Malenia",           game: "Elden Ring",             score: 6.82, telegraph: 7, hitbox: 7, recovery: 6, learning: 7,  friction: 3, camera: 7, difficulty: 10 },
+  { rank: 13, name: "Sephiroth",         game: "Final Fantasy VII",      score: 6.82, telegraph: 6, hitbox: 8, recovery: 7, learning: 6,  friction: 3, camera: 8, difficulty: 4  },
+  { rank: 14, name: "Sister Friede",     game: "Dark Souls 3",           score: 6.69, telegraph: 7, hitbox: 8, recovery: 6, learning: 7,  friction: 6, camera: 6, difficulty: 7  },
+  { rank: 15, name: "Ornstein & Smough", game: "Dark Souls 1",           score: 6.62, telegraph: 7, hitbox: 7, recovery: 6, learning: 7,  friction: 5, camera: 7, difficulty: 8  },
+  { rank: 16, name: "Ludwig",            game: "Bloodborne",             score: 6.57, telegraph: 7, hitbox: 7, recovery: 6, learning: 7,  friction: 5, camera: 6, difficulty: 7  },
+  { rank: 17, name: "Radahn",            game: "Elden Ring",             score: 6.55, telegraph: 7, hitbox: 7, recovery: 6, learning: 6,  friction: 4, camera: 7, difficulty: 7  },
+  { rank: 18, name: "Nameless King",     game: "Dark Souls 3",           score: 6.42, telegraph: 7, hitbox: 7, recovery: 6, learning: 7,  friction: 6, camera: 5, difficulty: 7  },
+  { rank: 19, name: "Psycho Mantis",     game: "Metal Gear Solid",       score: 6.19, telegraph: 5, hitbox: 8, recovery: 7, learning: 6,  friction: 6, camera: 7, difficulty: 4  },
+  { rank: 20, name: "Thunderblight Ganon",game: "Breath of the Wild",    score: 6.09, telegraph: 5, hitbox: 7, recovery: 6, learning: 6,  friction: 3, camera: 7, difficulty: 7  },
+  { rank: 21, name: "Bowser",            game: "Super Mario Bros NES",   score: 5.81, telegraph: 6, hitbox: 5, recovery: 7, learning: 6,  friction: 6, camera: 7, difficulty: 4  },
+  { rank: 22, name: "Ender Dragon",      game: "Minecraft",              score: 5.58, telegraph: 5, hitbox: 6, recovery: 7, learning: 5,  friction: 5, camera: 5, difficulty: 3  },
+  { rank: 23, name: "Orphan of Kos",     game: "Bloodborne",             score: 5.37, telegraph: 6, hitbox: 5, recovery: 4, learning: 6,  friction: 4, camera: 5, difficulty: 9  },
+  { rank: 24, name: "Absolute Radiance", game: "Hollow Knight",          score: 5.26, telegraph: 5, hitbox: 6, recovery: 3, learning: 5,  friction: 2, camera: 7, difficulty: 9  },
+  { rank: 25, name: "Dr. Wily",          game: "Mega Man 1",             score: 5.19, telegraph: 5, hitbox: 6, recovery: 5, learning: 6,  friction: 8, camera: 7, difficulty: 6  },
+  { rank: 26, name: "Mike Tyson",        game: "Punch-Out!!",            score: 4.75, telegraph: 4, hitbox: 7, recovery: 3, learning: 5,  friction: 7, camera: 8, difficulty: 8  },
+  { rank: 27, name: "Shao Kahn",         game: "Mortal Kombat",          score: 3.26, telegraph: 2, hitbox: 5, recovery: 2, learning: 2,  friction: 4, camera: 6, difficulty: 6  },
+  { rank: 28, name: "Yellow Devil",      game: "Mega Man 1",             score: 3.20, telegraph: 2, hitbox: 6, recovery: 2, learning: 3,  friction: 9, camera: 7, difficulty: 7  },
+  { rank: 29, name: "Capra Demon",       game: "Dark Souls 1",           score: 2.94, telegraph: 3, hitbox: 4, recovery: 2, learning: 3,  friction: 7, camera: 1, difficulty: 5  },
+  { rank: 30, name: "Bed of Chaos",      game: "Dark Souls 1",           score: 1.50, telegraph: 1, hitbox: 1, recovery: 2, learning: 2,  friction: 8, camera: 2, difficulty: 4  },
+];
+
+const TIERS = [
+  { label: "S", desc: "Design Perfection", min: 7.5,  color: "#c0392b", textColor: "#fff" },
+  { label: "A", desc: "Mostly Honest",     min: 6.5,  color: "#e67e22", textColor: "#fff" },
+  { label: "B", desc: "Acceptable",        min: 5.0,  color: "#2980b9", textColor: "#fff" },
+  { label: "C", desc: "Questionable",      min: 3.5,  color: "#8e44ad", textColor: "#fff" },
+  { label: "D", desc: "Pure BS",           min: 0,    color: "#4a4a5a", textColor: "#ccc" },
+];
+
+const sorted = [...DATA].sort((a, b) => b.score - a.score);
+const container = document.getElementById("tiers");
+
+TIERS.forEach(tier => {
+  const nextMin = TIERS.find(t => t.min > tier.min)?.min ?? Infinity;
+  const items = sorted.filter(d => d.score >= tier.min && d.score < nextMin);
+  if (items.length === 0) return;
+
+  const row = document.createElement("div");
+  row.className = "tier-row";
+
+  const label = document.createElement("div");
+  label.className = "tier-label";
+  label.style.background = tier.color;
+  label.style.color = tier.textColor;
+  label.innerHTML = `${tier.label}<div class="tier-desc">${tier.desc}</div>`;
+  row.appendChild(label);
+
+  const itemsDiv = document.createElement("div");
+  itemsDiv.className = "tier-items";
+
+  items.forEach(d => {
+    const el = document.createElement("div");
+    el.className = "tier-item";
+    el.innerHTML = `
+      <div class="boss-name">${d.name}</div>
+      <div class="boss-game">${d.game}</div>
+      <div class="boss-score">${d.score.toFixed(2)}</div>
+      <div class="tooltip-box">
+        <b>#${d.rank} ${d.name}</b><br/>
+        <table>
+          <tr><td>Telegraph Clarity</td><td>${d.telegraph}/10</td></tr>
+          <tr><td>Hitbox Accuracy</td><td>${d.hitbox}/10</td></tr>
+          <tr><td>Recovery Window</td><td>${d.recovery}/10</td></tr>
+          <tr><td>Learning Curve</td><td>${d.learning}/10</td></tr>
+          <tr><td>Retry Friction (raw)</td><td>${d.friction}/10</td></tr>
+          <tr><td>Camera/Arena</td><td>${d.camera}/10</td></tr>
+          <tr><td style="color:#aaa">Difficulty (community)</td><td style="color:#aaa">${d.difficulty}/10</td></tr>
+        </table>
+      </div>
+    `;
+    itemsDiv.appendChild(el);
+  });
+
+  row.appendChild(itemsDiv);
+  container.appendChild(row);
+
+  // Entrance animation
+  const bosses = itemsDiv.querySelectorAll(".tier-item");
+  bosses.forEach((el, i) => {
+    el.style.opacity = "0";
+    el.style.transform = "translateY(8px)";
+    setTimeout(() => {
+      el.style.transition = "opacity 0.35s, transform 0.35s";
+      el.style.opacity = "1";
+      el.style.transform = "translateY(0)";
+    }, 80 + i * 35);
+  });
+});
+</script>
+</body>
+</html>
