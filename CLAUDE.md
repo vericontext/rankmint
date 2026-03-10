@@ -51,6 +51,12 @@
 - Landing pages (`index.html`) must have a home nav bar: `← RankMint Home` linking to `../`
 - Chart pages (`chart*.html`) must have back nav: `← RankMint Home` (→ `../`) + `← Back to Rankings` (→ `index.html`)
 
+### Social Share Rules
+- Use "Share on X" (NOT "Share on Twitter") — Twitter is now X
+- Share URL: `https://x.com/intent/post` (NOT `twitter.com/intent/tweet`)
+- Button color: `#000` for X (NOT `#1DA1F2` Twitter blue)
+- Twitter Card meta tags (`twitter:card`, `twitter:title`, etc.) keep "twitter:" prefix — this is the HTML spec, not branding
+
 ### Chart Rules
 - All charts are **interactive HTML** using Apache ECharts via CDN
 - Chart HTML files are self-contained (single file, no external dependencies except CDN)

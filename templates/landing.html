@@ -98,7 +98,7 @@
   .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 8px;
     text-decoration: none; font-size: 0.85rem; font-weight: 600; color: #fff; transition: transform 0.2s; }
   .share-btn:hover { transform: translateY(-2px); }
-  .share-twitter { background: #1DA1F2; }
+  .share-twitter { background: #000; }
   .share-linkedin { background: #0A66C2; }
   .share-copy { background: #333; cursor: pointer; border: none; color: #fff; font-size: 0.85rem; font-weight: 600; }
 
@@ -202,7 +202,7 @@
 
 <!-- Share Bar -->
 <div class="share-bar">
-  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Twitter</a>
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on X</a>
   <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">LinkedIn</a>
   <button class="share-btn share-copy" id="share-copy">Copy Link</button>
 </div>
@@ -366,7 +366,7 @@ document.getElementById("table-search").addEventListener("input", e => {
 // ===== Share =====
 const url = CONFIG.shareUrl || window.location.href;
 const text = CONFIG.shareText || CONFIG.hook;
-document.getElementById("share-twitter").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+document.getElementById("share-twitter").href = `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
 document.getElementById("share-linkedin").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
 document.getElementById("share-copy").addEventListener("click", () => {
   navigator.clipboard.writeText(url).then(() => {

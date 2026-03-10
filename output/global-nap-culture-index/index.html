@@ -194,7 +194,7 @@
     color: #fff; transition: transform 0.15s, opacity 0.15s; border: none; cursor: pointer;
   }
   .share-btn:hover { transform: translateY(-2px); opacity: 0.9; }
-  .share-twitter { background: #1DA1F2; }
+  .share-twitter { background: #000; }
   .share-linkedin { background: #0A66C2; }
   .share-copy { background: #21262d; border: 1px solid var(--border); }
 
@@ -365,7 +365,7 @@
 
 <!-- Share Bar -->
 <div class="share-bar container">
-  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on Twitter</a>
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on X</a>
   <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">Share on LinkedIn</a>
   <button class="share-btn share-copy" id="share-copy">Copy Link</button>
 </div>
@@ -569,7 +569,7 @@ document.getElementById("table-search").addEventListener("input", e => {
 // ===== Share =====
 const shareUrl = window.location.href;
 const shareText = "Japan has the world's best nap culture and the world's worst sleep. The Netherlands nearly beat Spain for #1. The Global Nap Culture Index: #RankMint";
-document.getElementById("share-twitter").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+document.getElementById("share-twitter").href = `https://x.com/intent/post?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
 document.getElementById("share-linkedin").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
 document.getElementById("share-copy").addEventListener("click", () => {
   navigator.clipboard.writeText(shareUrl).then(() => {

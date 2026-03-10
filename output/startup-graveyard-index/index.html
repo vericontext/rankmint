@@ -307,7 +307,7 @@
     border: none;
   }
   .share-btn:hover { transform: translateY(-2px); opacity: 0.92; text-decoration: none; }
-  .share-twitter { background: #1DA1F2; }
+  .share-twitter { background: #000; }
   .share-linkedin { background: #0A66C2; }
   .share-copy { background: #333; }
 
@@ -694,7 +694,7 @@ document.getElementById("table-search").addEventListener("input", e => {
 const shareUrl = "https://rankmint.co/startup-graveyard-index/";
 const shareText = "Juicero beats Theranos. WeWork is #17. The Startup Graveyard Index ranks 30 failures by how avoidable they actually were. #RankMint";
 document.getElementById("share-twitter").href =
-  `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+  `https://x.com/intent/post?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
 document.getElementById("share-linkedin").href =
   `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
 document.getElementById("share-copy").addEventListener("click", () => {

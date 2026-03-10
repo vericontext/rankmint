@@ -191,7 +191,7 @@
     color: #fff; transition: transform 0.2s, opacity 0.2s;
   }
   .share-btn:hover { transform: translateY(-2px); opacity: 0.9; }
-  .share-twitter { background: #1DA1F2; }
+  .share-twitter { background: #000; }
   .share-linkedin { background: #0A66C2; }
   .share-copy { background: #333; cursor: pointer; border: none; color: #fff; font-size: 0.85rem; font-weight: 600; font-family: inherit; }
 
@@ -391,7 +391,7 @@
 
 <!-- Share Bar -->
 <div class="share-bar">
-  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on Twitter</a>
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on X</a>
   <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">Share on LinkedIn</a>
   <button class="share-btn share-copy" id="share-copy">Copy Link</button>
 </div>
@@ -639,7 +639,7 @@ document.getElementById("table-search").addEventListener("input", e => {
 const shareUrl = "https://rankmint.io/hangover-recovery-index/";
 const shareText = "Romania drinks 17.1L of alcohol/capita and ranks 25th for hangover recovery. Japan drinks 6.3L and ranks #1. The best hangover country isn't the one that drinks most — it's the one with the infrastructure. #RankMint";
 document.getElementById("share-twitter").href =
-  `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+  `https://x.com/intent/post?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
 document.getElementById("share-linkedin").href =
   `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
 document.getElementById("share-copy").addEventListener("click", () => {

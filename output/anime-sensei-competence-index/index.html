@@ -128,7 +128,7 @@
     border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600;
     color: #fff; transition: transform 0.2s; }
   .share-btn:hover { transform: translateY(-2px); }
-  .share-twitter { background: #1DA1F2; } .share-linkedin { background: #0A66C2; }
+  .share-twitter { background: #000; } .share-linkedin { background: #0A66C2; }
   .share-copy { background: #2e4e20; cursor: pointer; border: none; font-size: 0.85rem; font-weight: 600; color: #fff; }
 
   .footer { text-align: center; padding: 18px; color: #2a4a20; font-size: 0.75rem; font-style: italic; }
@@ -302,7 +302,7 @@
 
 <!-- Share Bar -->
 <div class="share-bar">
-  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on Twitter</a>
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on X</a>
   <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">Share on LinkedIn</a>
   <button class="share-btn share-copy" id="share-copy">Copy Link</button>
 </div>
@@ -494,7 +494,7 @@ document.getElementById("table-search").addEventListener("input", e => {
 // Share
 const shareUrl = window.location.href;
 const shareText = "Gojo Satoru scores lower than the volleyball manager from Haikyuu. The Anime Sensei Competence Index is brutal and backed by data.";
-document.getElementById("share-twitter").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}&hashtags=RankMint,AnimeSensei`;
+document.getElementById("share-twitter").href = `https://x.com/intent/post?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}&hashtags=RankMint,AnimeSensei`;
 document.getElementById("share-linkedin").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
 document.getElementById("share-copy").addEventListener("click", () => {
   navigator.clipboard.writeText(shareUrl).then(() => {
