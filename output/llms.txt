@@ -74,3 +74,35 @@ Ranks 30 countries by how well they equip citizens to recover from a big night o
 - #2 Finland — 79.0/100
 - #3 France — 77.5/100
 - Key finding: Japan turned hangover recovery into a billion-dollar science with dedicated recovery drinks and 24/7 convenience stores.
+
+### Airport Anxiety Index
+URL: https://rankmint.io/airport-anxiety-index/
+Ranks 30 major global airports by composite passenger anxiety score. Metrics: delay rate, security wait, congestion (pax/gate), wayfinding complexity, Wi-Fi speed, amenity quality (Skytrax), immigration queue.
+- #1 Delhi (DEL) — 81.4/100
+- #2 Sao Paulo (GRU) — 70.6/100
+- #3 Miami (MIA) — 69.2/100
+- Key finding: Paris CDG is ranked #6 by Skytrax but #10 in anxiety — worst wayfinding in the dataset. Atlanta handles 108M passengers but ranks only #12 thanks to its Plane Train layout. Doha is the calmest at 12.3.
+
+### Programming Language Mass Extinction Index
+URL: https://rankmint.io/programming-language-mass-extinction-index/
+Ranks 30 programming languages by extinction risk. Metrics: TIOBE search presence, Stack Overflow activity, GitHub repo creation, job market demand, ecosystem health, community vitality. Higher score = higher risk.
+- #1 ActionScript — 100.0/100 (already extinct)
+- #2 ColdFusion — 97.3/100
+- #3 Groovy — 86.5/100
+- Key finding: COBOL ranks #10 but has more jobs than Haskell or Perl. JavaScript scores 2.0 — the cockroach of programming. Perl's TIOBE rank #11 is a mirage of legacy pages.
+
+### Horror Movie Survival IQ Index
+URL: https://rankmint.io/horror-movie-survival-iq-index/
+Ranks 30 iconic horror movie characters by how smart their survival decisions actually are. Metrics: situational awareness, decision quality, weapon proficiency, group leadership, final outcome, panic resistance.
+- #1 Ellen Ripley (Alien/Aliens) — 93.3/100
+- #2 Erin (You're Next) — 90.0/100
+- #3 Grace (Ready or Not) — 83.3/100
+- Key finding: Micah (Paranormal Activity) scored lower than a 6-year-old (Georgie from IT). Ash Williams is mid-tier at 55.0 and the formula defends him.
+
+### Dating App Dark Pattern Index
+URL: https://rankmint.io/dating-app-dark-pattern-index/
+Ranks 23 dating apps by how aggressively they exploit users through dark patterns. Metrics: swipe addiction, paywall manipulation, notification spam, visibility throttling, subscription trap, data harvesting, FOMO mechanics, fake scarcity.
+- #1 Tinder — 92.5/100 (most manipulative)
+- #2 Hinge — 77.5/100
+- #3 Match.com — 76.2/100
+- Key finding: Match Group owns 7 of the top 12 most manipulative apps. Hinge is "designed to be deleted" but ranks #2 in manipulation. Raya is the least manipulative at 31.2.
