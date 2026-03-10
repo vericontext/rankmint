@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disney Villain CEO Index — Full Rankings | RankMint</title>
+<meta property="og:title" content="Disney Villain CEO Index — Full Rankings">
+<meta property="og:description" content="30 Disney villains ranked as Fortune 500 CEOs. Hades beats Maleficent. Gaston is a disaster. The data doesn't lie.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Disney Villain CEO Index — Full Rankings">
+<meta name="twitter:description" content="30 Disney villains ranked as Fortune 500 CEOs. Hades beats Maleficent. Gaston is a disaster. The data doesn't lie.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f1e; color: #e0e0e0; }
+  .header { padding: 28px 32px 10px; }
+  .header h1 { font-size: 1.5rem; color: #fff; }
+  .header h1 span { color: #e91e63; }
+  .header p { font-size: 0.82rem; color: #666; margin-top: 5px; }
+  #chart { width: 100%; height: 860px; min-height: 600px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Disney Villain <span>CEO</span> Index &mdash; All 30 Ranked</h1>
+  <p>Scored across 7 leadership metrics (0&ndash;10 each) &bull; Hover for full sub-scores &bull; Scroll to zoom &bull; RankMint 2026</p>
+</div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { rank:1,  name: "Hades",         film: "Hercules",              score: 86.9, sv: 8, rm: 10, cp: 8, cm: 9, ia: 9, ei: 7, ri: 10 },
+  { rank:2,  name: "Ursula",        film: "The Little Mermaid",    score: 80.8, sv: 8, rm: 8,  cp: 9, cm: 7, ia: 8, ei: 9, ri: 8  },
+  { rank:3,  name: "King Candy",    film: "Wreck-It Ralph",        score: 70.9, sv: 8, rm: 7,  cp: 6, cm: 6, ia: 8, ei: 6, ri: 9  },
+  { rank:4,  name: "Syndrome",      film: "The Incredibles",       score: 70.7, sv: 9, rm: 7,  cp: 5, cm: 5, ia: 10,ei: 4, ri: 8  },
+  { rank:5,  name: "Dr. Facilier",  film: "Princess & the Frog",   score: 70.0, sv: 6, rm: 6,  cp: 8, cm: 8, ia: 7, ei: 7, ri: 10 },
+  { rank:6,  name: "Lotso",         film: "Toy Story 3",           score: 69.1, sv: 7, rm: 8,  cp: 7, cm: 6, ia: 5, ei: 7, ri: 9  },
+  { rank:7,  name: "Scar",          film: "The Lion King",         score: 66.8, sv: 9, rm: 7,  cp: 8, cm: 4, ia: 4, ei: 5, ri: 7  },
+  { rank:8,  name: "Mother Gothel", film: "Tangled",               score: 65.5, sv: 8, rm: 5,  cp: 7, cm: 4, ia: 5, ei: 10,ri: 10 },
+  { rank:9,  name: "Bellwether",    film: "Zootopia",              score: 63.3, sv: 7, rm: 5,  cp: 7, cm: 4, ia: 7, ei: 8, ri: 9  },
+  { rank:10, name: "Ratigan",       film: "Great Mouse Detective", score: 62.7, sv: 7, rm: 6,  cp: 7, cm: 5, ia: 6, ei: 5, ri: 8  },
+  { rank:11, name: "Hans",          film: "Frozen",                score: 59.9, sv: 7, rm: 3,  cp: 8, cm: 5, ia: 5, ei: 8, ri: 9  },
+  { rank:12, name: "Jafar",         film: "Aladdin",               score: 59.1, sv: 6, rm: 5,  cp: 5, cm: 7, ia: 7, ei: 4, ri: 9  },
+  { rank:13, name: "AUTO",          film: "WALL-E",                score: 57.0, sv: 6, rm: 8,  cp: 1, cm: 8, ia: 6, ei: 1, ri: 9  },
+  { rank:14, name: "Shan Yu",       film: "Mulan",                 score: 55.7, sv: 6, rm: 7,  cp: 5, cm: 6, ia: 4, ei: 3, ri: 6  },
+  { rank:15, name: "Muntz",         film: "Up",                    score: 52.6, sv: 6, rm: 6,  cp: 4, cm: 4, ia: 6, ei: 3, ri: 8  },
+  { rank:16, name: "Frollo",        film: "Hunchback of ND",       score: 52.2, sv: 7, rm: 7,  cp: 5, cm: 3, ia: 3, ei: 2, ri: 7  },
+  { rank:17, name: "Maleficent",    film: "Sleeping Beauty",       score: 51.8, sv: 7, rm: 6,  cp: 5, cm: 2, ia: 6, ei: 2, ri: 6  },
+  { rank:18, name: "Bill Sykes",    film: "Oliver & Company",      score: 47.2, sv: 5, rm: 6,  cp: 4, cm: 5, ia: 3, ei: 2, ri: 8  },
+  { rank:19, name: "Yzma",          film: "Emperor's New Groove",  score: 44.8, sv: 5, rm: 3,  cp: 4, cm: 4, ia: 7, ei: 3, ri: 7  },
+  { rank:20, name: "Alameda Slim",  film: "Home on the Range",     score: 42.4, sv: 4, rm: 4,  cp: 5, cm: 3, ia: 5, ei: 3, ri: 8  },
+  { rank:21, name: "Stinky Pete",   film: "Toy Story 2",           score: 42.1, sv: 5, rm: 2,  cp: 5, cm: 3, ia: 4, ei: 6, ri: 8  },
+  { rank:22, name: "Evil Queen",    film: "Snow White",            score: 40.6, sv: 5, rm: 4,  cp: 3, cm: 3, ia: 5, ei: 2, ri: 7  },
+  { rank:23, name: "Horned King",   film: "The Black Cauldron",    score: 40.6, sv: 5, rm: 5,  cp: 3, cm: 3, ia: 4, ei: 1, ri: 7  },
+  { rank:24, name: "Cruella",       film: "101 Dalmatians",        score: 40.5, sv: 4, rm: 5,  cp: 5, cm: 2, ia: 3, ei: 3, ri: 8  },
+  { rank:25, name: "Gaston",        film: "Beauty & the Beast",    score: 39.0, sv: 2, rm: 3,  cp: 10,cm: 3, ia: 2, ei: 2, ri: 9  },
+  { rank:26, name: "Ratcliffe",     film: "Pocahontas",            score: 38.0, sv: 4, rm: 5,  cp: 4, cm: 2, ia: 2, ei: 2, ri: 10 },
+  { rank:27, name: "McLeach",       film: "Rescuers Down Under",   score: 37.9, sv: 4, rm: 4,  cp: 3, cm: 3, ia: 4, ei: 2, ri: 9  },
+  { rank:28, name: "Tamatoa",       film: "Moana",                 score: 37.2, sv: 2, rm: 4,  cp: 7, cm: 3, ia: 3, ei: 2, ri: 8  },
+  { rank:29, name: "Captain Hook",  film: "Peter Pan",             score: 33.8, sv: 3, rm: 4,  cp: 4, cm: 2, ia: 2, ei: 3, ri: 9  },
+  { rank:30, name: "Prince John",   film: "Robin Hood",            score: 28.7, sv: 3, rm: 5,  cp: 2, cm: 1, ia: 2, ei: 1, ri: 7  },
+];
+
+// Berry palette: pink -> deep purple, top scores get pink, bottom get purple
+function interpolateColor(c1, c2, t) {
+  const hex = s => parseInt(s, 16);
+  const r = Math.round(hex(c1.slice(1,3)) + (hex(c2.slice(1,3)) - hex(c1.slice(1,3))) * t);
+  const g = Math.round(hex(c1.slice(3,5)) + (hex(c2.slice(3,5)) - hex(c1.slice(3,5))) * t);
+  const b = Math.round(hex(c1.slice(5,7)) + (hex(c2.slice(5,7)) - hex(c1.slice(5,7))) * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+const sorted = [...DATA].sort((a, b) => b.score - a.score);
+const names = sorted.map(d => d.name).reverse();
+const scores = sorted.map(d => d.score).reverse();
+const colors = scores.map((_, i) => interpolateColor("#4A148C", "#E91E63", i / Math.max(scores.length - 1, 1)));
+
+const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
+chart.setOption({
+  backgroundColor: "#0f0f1e",
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    backgroundColor: "#1a1a2e",
+    borderColor: "#333",
+    textStyle: { color: "#eee", fontSize: 12 },
+    formatter: params => {
+      const idx = scores.length - 1 - params[0].dataIndex;
+      const d = sorted[idx];
+      return `<b style="font-size:13px;color:#E91E63">#${d.rank} ${d.name}</b>
+<span style="color:#888;font-size:11px">${d.film}</span><br/>
+<b style="color:#FFD700">CEO Score: ${d.score.toFixed(1)}</b><br/>
+Strategic Vision: ${d.sv}/10<br/>
+Resource Mgmt: ${d.rm}/10<br/>
+Charisma: ${d.cp}/10<br/>
+Crisis Mgmt: ${d.cm}/10<br/>
+Innovation: ${d.ia}/10<br/>
+Emotional IQ: ${d.ei}/10<br/>
+Ruthlessness (adj): ${d.ri}/10`;
+    }
+  },
+  grid: { left: "18%", right: "12%", top: 20, bottom: 40 },
+  xAxis: {
+    type: "value",
+    name: "CEO Score",
+    max: 100,
+    axisLine: { lineStyle: { color: "#444" } },
+    axisLabel: { color: "#888" },
+    splitLine: { lineStyle: { color: "#222" } },
+    nameTextStyle: { color: "#666" },
+  },
+  yAxis: {
+    type: "category",
+    data: names,
+    axisLabel: { fontSize: 11, color: "#ccc" },
+    axisLine: { lineStyle: { color: "#333" } },
+  },
+  dataZoom: [
+    { type: "inside", yAxisIndex: 0, filterMode: "none" },
+    { type: "slider", yAxisIndex: 0, right: 0, width: 14, borderColor: "#333",
+      fillerColor: "rgba(233,30,99,0.15)", handleStyle: { color: "#e91e63" },
+      textStyle: { color: "#666" }, filterMode: "none" },
+  ],
+  series: [{
+    type: "bar",
+    data: scores.map((v, i) => ({
+      value: v,
+      itemStyle: { color: colors[i], borderRadius: [0, 4, 4, 0] }
+    })),
+    barWidth: "55%",
+    label: {
+      show: true, position: "right",
+      formatter: "{c}",
+      fontSize: 10, color: "#aaa",
+    },
+    animationDuration: 1800,
+    animationEasing: "elasticOut",
+  }],
+  graphic: [
+    { type: "text", right: 6, bottom: 6,
+      style: { text: "RankMint", fontSize: 11, fill: "#444", fontStyle: "italic" } },
+  ],
+});
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

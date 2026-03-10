@@ -1,0 +1,144 @@
+<!--
+  Radar / Spider Chart Template (ECharts)
+  - Not used directly. The storyteller agent references this to create chart HTML files.
+  - Best for: 5-8 dimensional comparison of items (e.g., "Your country vs #1")
+  - Self-contained: single HTML file, only external dependency is ECharts CDN.
+  - Storyteller MUST replace the DATA and CONFIG sections below with actual values.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><!-- REPLACE: Chart Title --></title>
+<!-- OG / Twitter Card meta tags -->
+<meta property="og:title" content="<!-- REPLACE: Chart Title -->">
+<meta property="og:description" content="<!-- REPLACE: One-line hook -->">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<!-- REPLACE: Chart Title -->">
+<meta name="twitter:description" content="<!-- REPLACE: One-line hook -->">
+<meta name="twitter:image" content="card.png">
+<!-- __ANALYTICS_SNIPPET__ -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; }
+  #chart { width: 100%; height: 80vh; min-height: 600px; }
+  .header { padding: 24px 32px 8px; }
+  .header h1 { font-size: 1.4rem; color: #1a1a2e; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+  .controls { padding: 8px 32px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .controls select { padding: 6px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1><!-- REPLACE: Chart Title --></h1>
+  <p><!-- REPLACE: Subtitle / source note --></p>
+</div>
+<div class="controls">
+  <select id="item1"></select>
+  <span style="line-height:32px;color:#888">vs</span>
+  <select id="item2"></select>
+</div>
+<div id="chart"></div>
+<script>
+// ===== DATA — storyteller replaces this =====
+const DATA = [
+  // { name: "Item A", metric1: 80, metric2: 70, metric3: 90, metric4: 60, metric5: 85 },
+];
+
+// ===== CONFIG — storyteller customizes these =====
+const CONFIG = {
+  title: "Radar Comparison",
+  nameField: "name",
+  // List the metric fields to show on radar axes (5-8 recommended)
+  metrics: ["metric1", "metric2", "metric3", "metric4", "metric5"],
+  // Display labels for each metric axis
+  metricLabels: ["Metric 1", "Metric 2", "Metric 3", "Metric 4", "Metric 5"],
+  // Colors for the two compared items
+  colors: ["#5470c6", "#ee6666"],
+  // Max value for each axis (null = auto from data)
+  maxValues: null,
+};
+
+// ===== RENDERING (do not modify) =====
+const sel1 = document.getElementById("item1");
+const sel2 = document.getElementById("item2");
+DATA.forEach((d, i) => {
+  const o1 = document.createElement("option");
+  o1.value = i; o1.textContent = d[CONFIG.nameField];
+  sel1.appendChild(o1);
+  const o2 = document.createElement("option");
+  o2.value = i; o2.textContent = d[CONFIG.nameField];
+  sel2.appendChild(o2);
+});
+if (DATA.length > 1) sel2.value = 1;
+
+const maxVals = CONFIG.metrics.map((m, i) => {
+  if (CONFIG.maxValues && CONFIG.maxValues[i]) return CONFIG.maxValues[i];
+  return Math.ceil(Math.max(...DATA.map(d => d[m])) * 1.1);
+});
+
+const chart = echarts.init(document.getElementById("chart"));
+
+function render() {
+  const d1 = DATA[sel1.value];
+  const d2 = DATA[sel2.value];
+  chart.setOption({
+    legend: { data: [d1[CONFIG.nameField], d2[CONFIG.nameField]], top: 10 },
+    radar: {
+      indicator: CONFIG.metrics.map((m, i) => ({
+        name: CONFIG.metricLabels[i] || m,
+        max: maxVals[i],
+      })),
+      shape: "polygon",
+      splitArea: { areaStyle: { color: ["#fff", "#f5f5f5"] } },
+    },
+    tooltip: {
+      trigger: "item",
+      formatter: p => {
+        let tip = `<b>${p.name}</b>`;
+        p.value.forEach((v, i) => {
+          tip += `<br/>${CONFIG.metricLabels[i] || CONFIG.metrics[i]}: ${typeof v === "number" ? v.toFixed(1) : v}`;
+        });
+        return tip;
+      },
+    },
+    series: [{
+      type: "radar",
+      data: [
+        {
+          name: d1[CONFIG.nameField],
+          value: CONFIG.metrics.map(m => d1[m]),
+          areaStyle: { opacity: 0.15 },
+          lineStyle: { color: CONFIG.colors[0], width: 2 },
+          itemStyle: { color: CONFIG.colors[0] },
+        },
+        {
+          name: d2[CONFIG.nameField],
+          value: CONFIG.metrics.map(m => d2[m]),
+          areaStyle: { opacity: 0.15 },
+          lineStyle: { color: CONFIG.colors[1], width: 2 },
+          itemStyle: { color: CONFIG.colors[1] },
+        },
+      ],
+      animationDuration: 1500,
+      animationEasing: "cubicOut",
+    }],
+    graphic: [{
+      type: "text", right: 20, bottom: 10,
+      style: { text: "RankMint", fontSize: 12, fill: "#ccc", fontStyle: "italic" },
+    }],
+  });
+}
+
+sel1.addEventListener("change", render);
+sel2.addEventListener("change", render);
+render();
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

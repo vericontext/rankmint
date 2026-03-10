@@ -1,0 +1,132 @@
+<!--
+  Tier List Chart Template (ECharts)
+  - Not used directly. The storyteller agent references this to create chart HTML files.
+  - Best for: S/A/B/C/D tier classification — the most shared format on social media.
+  - Self-contained: single HTML file, only external dependency is ECharts CDN.
+  - Storyteller MUST replace the DATA and CONFIG sections below with actual values.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><!-- REPLACE: Chart Title --></title>
+<meta property="og:title" content="<!-- REPLACE: Chart Title -->">
+<meta property="og:description" content="<!-- REPLACE: One-line hook -->">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<!-- REPLACE: Chart Title -->">
+<meta name="twitter:description" content="<!-- REPLACE: One-line hook -->">
+<meta name="twitter:image" content="card.png">
+<!-- __ANALYTICS_SNIPPET__ -->
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; }
+  .header { padding: 24px 32px 8px; }
+  .header h1 { font-size: 1.6rem; color: #fff; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+  .tier-container { max-width: 1000px; margin: 20px auto; padding: 0 16px; }
+  .tier-row { display: flex; margin-bottom: 4px; min-height: 64px; border-radius: 8px; overflow: hidden; }
+  .tier-label { width: 80px; min-width: 80px; display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; font-weight: 900; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
+  .tier-items { flex: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    padding: 10px 16px; background: rgba(255,255,255,0.05); }
+  .tier-item { background: rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 14px;
+    font-size: 0.85rem; cursor: default; transition: all 0.2s; position: relative; }
+  .tier-item:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+  .tier-item .score { font-size: 0.7rem; color: #aaa; margin-top: 2px; }
+  .tooltip { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+    background: #333; color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 0.75rem;
+    white-space: nowrap; z-index: 10; margin-bottom: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .tier-item:hover .tooltip { display: block; }
+  .watermark { text-align: right; padding: 12px 32px; color: #555; font-size: 0.75rem; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1><!-- REPLACE: Chart Title --></h1>
+  <p><!-- REPLACE: Subtitle / source note --></p>
+</div>
+<div class="tier-container" id="tiers"></div>
+<div class="watermark">RankMint</div>
+<script>
+// ===== DATA — storyteller replaces this =====
+const DATA = [
+  // { name: "Item A", score: 92.3, metric1: 80, metric2: 95 },
+];
+
+// ===== CONFIG — storyteller customizes these =====
+const CONFIG = {
+  title: "Tier List",
+  nameField: "name",
+  scoreField: "score",
+  // Tier definitions: label, min score (inclusive), color
+  tiers: [
+    { label: "S", min: 85, color: "#FF7675" },
+    { label: "A", min: 70, color: "#FDCB6E" },
+    { label: "B", min: 55, color: "#74B9FF" },
+    { label: "C", min: 40, color: "#A29BFE" },
+    { label: "D", min: 0,  color: "#636E72" },
+  ],
+  // Extra fields to show in tooltip
+  tooltipFields: [],
+};
+
+// ===== RENDERING (do not modify) =====
+const sorted = [...DATA].sort((a, b) => b[CONFIG.scoreField] - a[CONFIG.scoreField]);
+const container = document.getElementById("tiers");
+
+CONFIG.tiers.forEach(tier => {
+  const items = sorted.filter(d => {
+    const s = d[CONFIG.scoreField];
+    const nextTier = CONFIG.tiers.find(t => t.min > tier.min && t.min <= s);
+    return s >= tier.min && (!nextTier || s < nextTier.min);
+  });
+  // Re-filter: item belongs to highest tier whose min it exceeds
+  const tierItems = sorted.filter(d => {
+    const s = d[CONFIG.scoreField];
+    const assigned = CONFIG.tiers.find(t => s >= t.min);
+    return assigned && assigned.label === tier.label;
+  });
+
+  const row = document.createElement("div");
+  row.className = "tier-row";
+  row.innerHTML = `<div class="tier-label" style="background:${tier.color}">${tier.label}</div>`;
+  const itemsDiv = document.createElement("div");
+  itemsDiv.className = "tier-items";
+
+  tierItems.forEach(d => {
+    const el = document.createElement("div");
+    el.className = "tier-item";
+    let tooltipHtml = `<b>${d[CONFIG.nameField]}</b><br/>Score: ${d[CONFIG.scoreField].toFixed(1)}`;
+    CONFIG.tooltipFields.forEach(f => {
+      if (d[f] !== undefined) {
+        tooltipHtml += `<br/>${f}: ${typeof d[f] === "number" ? d[f].toFixed(1) : d[f]}`;
+      }
+    });
+    el.innerHTML = `
+      ${d[CONFIG.nameField]}
+      <div class="score">${d[CONFIG.scoreField].toFixed(1)}</div>
+      <div class="tooltip">${tooltipHtml}</div>
+    `;
+    itemsDiv.appendChild(el);
+  });
+
+  row.appendChild(itemsDiv);
+  container.appendChild(row);
+});
+
+// Entrance animation
+document.querySelectorAll(".tier-item").forEach((el, i) => {
+  el.style.opacity = "0";
+  el.style.transform = "translateY(10px)";
+  setTimeout(() => {
+    el.style.transition = "opacity 0.4s, transform 0.4s";
+    el.style.opacity = "1";
+    el.style.transform = "translateY(0)";
+  }, 50 + i * 30);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!--
+  Pricing / Services Page Template
+  - Static page at output/pricing.html — manually maintained.
+  - Lists RankMint service offerings for custom ranking requests.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Rankings | RankMint</title>
+<meta property="og:title" content="Custom Rankings | RankMint">
+<meta property="og:description" content="Get a custom data-driven ranking built for your brand, report, or content.">
+<meta property="og:type" content="website">
+<!-- __ANALYTICS_SNIPPET__ -->
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; color: #1a1a2e; }
+  .header { text-align: center; padding: 60px 20px 40px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff; }
+  .header h1 { font-size: 2rem; margin-bottom: 8px; }
+  .header p { color: #aaa; font-size: 1rem; }
+  .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+  .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-bottom: 40px; }
+  .plan { background: #fff; border-radius: 12px; padding: 32px 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); text-align: center; }
+  .plan.featured { border: 2px solid #4682B4; position: relative; }
+  .plan.featured::before { content: "Most Popular"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: #4682B4; color: #fff; padding: 4px 16px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+  .plan h2 { font-size: 1.2rem; margin-bottom: 8px; }
+  .plan .price { font-size: 2rem; font-weight: 800; color: #4682B4; margin-bottom: 16px; }
+  .plan ul { list-style: none; text-align: left; margin-bottom: 24px; }
+  .plan li { padding: 6px 0; font-size: 0.85rem; color: #555; border-bottom: 1px solid #f0f0f0; }
+  .plan li::before { content: "\2713 "; color: #4682B4; font-weight: 600; }
+  .plan .cta { display: inline-block; padding: 10px 28px; background: #1a1a2e; color: #fff; border-radius: 8px;
+    text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+  .plan .cta:hover { background: #2d2d5e; }
+  .faq { margin-top: 40px; }
+  .faq h2 { font-size: 1.2rem; margin-bottom: 16px; }
+  .faq-item { margin-bottom: 16px; }
+  .faq-item h3 { font-size: 0.95rem; margin-bottom: 4px; }
+  .faq-item p { font-size: 0.85rem; color: #666; }
+  .footer { text-align: center; padding: 32px; color: #aaa; font-size: 0.75rem; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Custom Rankings</h1>
+  <p>Data-driven ranking content, built for your brand</p>
+</div>
+<div class="container">
+  <div class="plans">
+    <div class="plan">
+      <h2>Starter</h2>
+      <div class="price">$299</div>
+      <ul>
+        <li>1 ranking index (15-30 items)</li>
+        <li>Interactive HTML chart</li>
+        <li>Narrative report (1,000+ words)</li>
+        <li>Social card (OG image)</li>
+        <li>3-day delivery</li>
+      </ul>
+      <a class="cta" href="mailto:hello@rankmint.com?subject=Starter%20Ranking">Get Started</a>
+    </div>
+    <div class="plan featured">
+      <h2>Professional</h2>
+      <div class="price">$799</div>
+      <ul>
+        <li>1 ranking index (30-50 items)</li>
+        <li>3 interactive charts (bar + scatter + tier)</li>
+        <li>Full landing page with "Find Yourself"</li>
+        <li>Social kit (Twitter + LinkedIn excerpts)</li>
+        <li>Newsletter-ready export</li>
+        <li>5-day delivery</li>
+      </ul>
+      <a class="cta" href="mailto:hello@rankmint.com?subject=Professional%20Ranking">Get Started</a>
+    </div>
+    <div class="plan">
+      <h2>Enterprise</h2>
+      <div class="price">Custom</div>
+      <ul>
+        <li>Multiple rankings or series</li>
+        <li>Custom branding and design</li>
+        <li>API data integration</li>
+        <li>Embed license for your site</li>
+        <li>Ongoing updates</li>
+        <li>Priority support</li>
+      </ul>
+      <a class="cta" href="mailto:hello@rankmint.com?subject=Enterprise%20Ranking">Contact Us</a>
+    </div>
+  </div>
+
+  <div class="faq">
+    <h2>FAQ</h2>
+    <div class="faq-item">
+      <h3>What topics can you rank?</h3>
+      <p>Anything with measurable data: countries, cities, companies, products, people, concepts. We research and collect data from public sources, APIs, and datasets.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Can I embed the charts on my site?</h3>
+      <p>Yes. All charts are self-contained HTML files that work as iframes. Enterprise plans include an embed license.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Do you fabricate data?</h3>
+      <p>Never. All data comes from cited, verifiable sources. Our methodology section explains exactly how each score is calculated.</p>
+    </div>
+  </div>
+</div>
+<div class="footer">RankMint</div>
+</body>
+</html>

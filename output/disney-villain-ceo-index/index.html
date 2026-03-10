@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disney Villain CEO Index | RankMint</title>
+<!-- OG Meta Tags -->
+<meta property="og:title" content="Disney Villain CEO Index">
+<meta property="og:description" content="30 Disney villains. 7 leadership metrics. Hades beats Maleficent. Gaston is a disaster. The data is not on your side.">
+<meta property="og:image" content="card.png">
+<meta property="og:url" content="https://rankmint.co/disney-villain-ceo-index/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Disney Villain CEO Index">
+<meta name="twitter:description" content="30 Disney villains. 7 leadership metrics. Hades beats Maleficent. Gaston is a disaster. The data is not on your side.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #0d0d1a; --text: #e8e8f0; --muted: #777; --accent: #e91e63;
+    --card-bg: #14141f; --border: #222;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+  /* Hero */
+  .hero {
+    text-align: center; padding: 64px 20px 48px;
+    background: linear-gradient(160deg, #0d0d1a 0%, #1a0820 50%, #0d0d1a 100%);
+    border-bottom: 1px solid #1e1e2e;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #e91e63, #9c27b0, #3f51b5);
+  }
+  .hero .badge {
+    display: inline-block; background: rgba(233,30,99,0.15); border: 1px solid rgba(233,30,99,0.4);
+    color: #e91e63; font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 4px 14px; border-radius: 100px;
+    margin-bottom: 16px;
+  }
+  .hero h1 { font-size: 2.4rem; margin-bottom: 12px; color: #fff; line-height: 1.15; }
+  .hero h1 span { color: var(--accent); }
+  .hero .hook { font-size: 1.05rem; color: #999; max-width: 560px; margin: 0 auto 32px; }
+  .hero .counter { font-size: 4rem; font-weight: 900; color: #FFD700; font-variant-numeric: tabular-nums; }
+  .hero .counter-label { font-size: 0.88rem; color: #666; margin-top: 6px; }
+
+  /* Surprise Callout */
+  .surprise {
+    background: linear-gradient(135deg, #1e0830 0%, #2a0a1a 100%);
+    border: 1px solid rgba(233,30,99,0.3);
+    color: var(--text); padding: 28px 32px;
+    border-radius: 14px; margin: -28px auto 44px;
+    max-width: 700px; position: relative; z-index: 1;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  }
+  .surprise h2 { font-size: 1.1rem; margin-bottom: 8px; color: #e91e63; }
+  .surprise p { font-size: 0.9rem; color: #bbb; }
+  .surprise strong { color: #FFD700; }
+
+  /* Chart Nav */
+  .chart-nav { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 16px; }
+  .chart-nav a {
+    display: inline-block; padding: 6px 14px; border-radius: 6px;
+    background: rgba(233,30,99,0.1); border: 1px solid rgba(233,30,99,0.3);
+    color: #e91e63; text-decoration: none; font-size: 0.8rem; font-weight: 600;
+    transition: all 0.2s;
+  }
+  .chart-nav a:hover { background: rgba(233,30,99,0.25); }
+
+  /* Chart Section */
+  .chart-section { margin: 44px 0; }
+  .chart-section h2 { font-size: 1.25rem; margin-bottom: 16px; color: #eee; }
+  #main-chart { width: 100%; height: 520px; background: var(--card-bg); border-radius: 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+
+  /* Taxonomy */
+  .taxonomy { margin: 44px 0; }
+  .taxonomy h2 { font-size: 1.25rem; margin-bottom: 20px; color: #eee; }
+  .tax-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .tax-card { background: var(--card-bg); border-radius: 12px; padding: 22px 20px; border: 1px solid var(--border); }
+  .tax-card h3 { font-size: 0.95rem; margin-bottom: 6px; color: var(--accent); }
+  .tax-card p { font-size: 0.8rem; color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
+  .tax-card table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  .tax-card th, .tax-card td { padding: 5px 6px; text-align: left; border-bottom: 1px solid var(--border); }
+  .tax-card th { color: var(--muted); font-weight: 600; }
+  .tax-card td { color: #ccc; }
+
+  /* Find Yourself */
+  .find-yourself { margin: 44px 0; text-align: center; padding: 40px 20px; background: var(--card-bg); border-radius: 14px; border: 1px solid var(--border); }
+  .find-yourself h2 { font-size: 1.25rem; margin-bottom: 6px; color: #eee; }
+  .find-yourself .sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 20px; }
+  .find-yourself select {
+    padding: 11px 20px; font-size: 1rem; border: 2px solid var(--accent);
+    border-radius: 10px; background: #1a1a2e; color: #eee; min-width: 260px;
+    cursor: pointer; appearance: none;
+  }
+  .result-card {
+    display: none; margin: 24px auto 0; max-width: 400px; padding: 28px 24px;
+    background: linear-gradient(135deg, #1a0820 0%, #0d0d1a 100%);
+    border: 1px solid rgba(233,30,99,0.4);
+    color: #fff; border-radius: 14px; text-align: center;
+  }
+  .result-card .rank { font-size: 3rem; font-weight: 900; color: #FFD700; }
+  .result-card .res-name { font-size: 1.3rem; margin: 8px 0 4px; color: #eee; }
+  .result-card .res-score { font-size: 0.88rem; color: #888; }
+  .result-card .res-tier { display: inline-block; margin-top: 8px; padding: 3px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; }
+
+  /* Full Table */
+  .full-table { margin: 44px 0; }
+  .full-table h2 { font-size: 1.25rem; margin-bottom: 12px; color: #eee; }
+  .table-search {
+    width: 100%; padding: 10px 16px; border: 1px solid var(--border);
+    border-radius: 8px; font-size: 0.9rem; margin-bottom: 12px;
+    background: var(--card-bg); color: var(--text);
+  }
+  .table-search::placeholder { color: #555; }
+  .full-table table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: var(--card-bg); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .full-table th { background: #1e0830; color: #ccc; padding: 10px 12px; text-align: left; cursor: pointer; user-select: none; font-size: 0.78rem; }
+  .full-table th:hover { background: #2a1040; }
+  .full-table td { padding: 7px 12px; border-bottom: 1px solid var(--border); color: #ccc; }
+  .full-table tr:hover td { background: #1a1a2e; }
+
+  /* Methodology */
+  .methodology { margin: 44px 0; padding: 24px; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); font-size: 0.82rem; color: var(--muted); }
+  .methodology h2 { font-size: 1rem; color: var(--text); margin-bottom: 12px; }
+  .methodology p { margin-bottom: 8px; }
+  .methodology code { background: #1e1e2e; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; color: #e91e63; }
+
+  /* Share Bar */
+  .share-bar { display: flex; justify-content: center; gap: 12px; padding: 32px 0; flex-wrap: wrap; }
+  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 22px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 700; color: #fff; transition: transform 0.2s; }
+  .share-btn:hover { transform: translateY(-2px); }
+  .share-twitter { background: #1DA1F2; }
+  .share-linkedin { background: #0A66C2; }
+  .share-copy { background: #2c2c3e; cursor: pointer; border: none; color: #fff; font-size: 0.85rem; font-weight: 700; }
+
+  .footer { text-align: center; padding: 24px; color: #444; font-size: 0.75rem; font-style: italic; border-top: 1px solid var(--border); }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 1.6rem; }
+    .hero .counter { font-size: 2.8rem; }
+    .tax-grid { grid-template-columns: 1fr; }
+    .surprise { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="badge">RankMint &mdash; Pop Culture Data</div>
+    <h1>Disney Villain <span>CEO</span> Index</h1>
+    <p class="hook">30 Disney and Pixar villains. 7 boardroom metrics. One uncomfortable conclusion: the god of the dead is the most qualified executive in the room.</p>
+    <div class="counter" id="hero-counter">0.0</div>
+    <div class="counter-label">#1 Hades (Hercules) &mdash; the CEO score that started arguments</div>
+  </div>
+</section>
+
+<!-- Surprise Callout -->
+<section class="container">
+  <div class="surprise">
+    <h2>The Finding That Will Make You Defensive</h2>
+    <p><strong>Maleficent is #17.</strong> The Mistress of All Evil scores 51.8 out of 100. She cursed an infant over a party invitation she didn't receive. That's a 2/10 Crisis Management score and a 2/10 Emotional Intelligence score. Meanwhile, <strong>Hades — who runs a literal bureaucratic afterlife with impossible KPIs and a twelve-headed hydra for staff —</strong> scores 86.9 and is the most boardroom-ready villain Disney has ever produced. And <strong>Gaston</strong> scored 10/10 on Charisma and 2/10 on Strategic Vision. He is every LinkedIn influencer who has never read a P&L.</p>
+  </div>
+</section>
+
+<!-- Chart Nav -->
+<section class="chart-section container">
+  <h2>The Rankings</h2>
+  <div class="chart-nav">
+    <a href="chart_tier.html">S/A/B/C/D Tier List</a>
+    <a href="chart_radar.html">Head-to-Head Radar</a>
+    <a href="chart_heatmap.html">Metric Heatmap</a>
+  </div>
+  <div id="main-chart"></div>
+</section>
+
+<!-- Taxonomy -->
+<section class="taxonomy container">
+  <h2>The Taxonomy</h2>
+  <div class="tax-grid" id="tax-grid">
+    <div class="tax-card">
+      <h3>The C-Suite Predators</h3>
+      <p>Well-rounded profiles, calibrated ruthlessness. You'd hire them if you didn't know what they were.</p>
+      <table>
+        <tr><th>Rank</th><th>Villain</th><th>Score</th></tr>
+        <tr><td>1</td><td>Hades</td><td>86.9</td></tr>
+        <tr><td>2</td><td>Ursula</td><td>80.8</td></tr>
+        <tr><td>3</td><td>King Candy</td><td>70.9</td></tr>
+        <tr><td>4</td><td>Syndrome</td><td>70.7</td></tr>
+        <tr><td>5</td><td>Dr. Facilier</td><td>70.0</td></tr>
+      </table>
+    </div>
+    <div class="tax-card">
+      <h3>The Charming Frauds</h3>
+      <p>High charisma. Strategic vacuum. Every fast-growing company has one of these on the leadership team.</p>
+      <table>
+        <tr><th>Rank</th><th>Villain</th><th>Score</th></tr>
+        <tr><td>11</td><td>Hans</td><td>59.9</td></tr>
+        <tr><td>25</td><td>Gaston</td><td>39.0</td></tr>
+        <tr><td>28</td><td>Tamatoa</td><td>37.2</td></tr>
+      </table>
+    </div>
+    <div class="tax-card">
+      <h3>The Micromanagers from Hell</h3>
+      <p>Total conviction. Catastrophic execution. They'd write the most detailed OKRs you've ever seen.</p>
+      <table>
+        <tr><th>Rank</th><th>Villain</th><th>Score</th></tr>
+        <tr><td>8</td><td>Mother Gothel</td><td>65.5</td></tr>
+        <tr><td>9</td><td>Bellwether</td><td>63.3</td></tr>
+        <tr><td>16</td><td>Frollo</td><td>52.2</td></tr>
+        <tr><td>24</td><td>Cruella</td><td>40.5</td></tr>
+      </table>
+    </div>
+    <div class="tax-card">
+      <h3>The PowerPoint Villains</h3>
+      <p>Endless grievance. No follow-through. They would survive exactly one board meeting.</p>
+      <table>
+        <tr><th>Rank</th><th>Villain</th><th>Score</th></tr>
+        <tr><td>26</td><td>Ratcliffe</td><td>38.0</td></tr>
+        <tr><td>29</td><td>Captain Hook</td><td>33.8</td></tr>
+        <tr><td>30</td><td>Prince John</td><td>28.7</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Find Yourself -->
+<section class="find-yourself container" id="find-section">
+  <h2>Pick Your Villain</h2>
+  <p class="sub">Which Disney villain are you in the boardroom? (Be honest.)</p>
+  <select id="find-select">
+    <option value="">-- Pick Your Villain --</option>
+  </select>
+  <div class="result-card" id="result-card">
+    <div class="rank" id="result-rank"></div>
+    <div class="res-name" id="result-name"></div>
+    <div class="res-score" id="result-score"></div>
+    <div class="res-tier" id="result-tier"></div>
+  </div>
+</section>
+
+<!-- Full Table -->
+<section class="full-table container">
+  <h2>Full Rankings &mdash; All 30 Villains</h2>
+  <input type="text" class="table-search" id="table-search" placeholder="Search villain, film...">
+  <table id="ranking-table">
+    <thead id="table-head"></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</section>
+
+<!-- Methodology -->
+<section class="methodology container" id="methodology">
+  <h2>Methodology</h2>
+  <p><strong>Index:</strong> Disney Villain CEO Index &bull; <strong>Items:</strong> 30 Disney and Pixar villains (1937&ndash;2024) &bull; <strong>Scored:</strong> March 2026</p>
+  <p><strong>Formula:</strong> <code>CEO Score = (SV&times;0.25) + (RM&times;0.20) + (CP&times;0.15) + (CM&times;0.15) + (IA&times;0.12) + (EI&times;0.08) + (RI_adj&times;0.05)</code></p>
+  <p>All metrics scored 0&ndash;10 by qualitative rubric analysis of canonical film appearances. RI_adj (Ruthlessness, adjusted) = <code>10 &minus; |raw_ruthlessness &minus; 6|</code> — optimal CEO ruthlessness is 6/10; extremes in either direction are penalized.</p>
+  <p><strong>Data sources:</strong> Disney and Pixar animated films, analyzed in-context. No external data collection. Films available via Disney+.</p>
+</section>
+
+<!-- Share Bar -->
+<div class="share-bar">
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on X</a>
+  <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">Share on LinkedIn</a>
+  <button class="share-btn share-copy" id="share-copy">Copy Link</button>
+</div>
+
+<div class="footer">Generated by RankMint &mdash; disney-villain-ceo-index &mdash; March 2026</div>
+
+<script>
+const DATA = [
+  { rank:1,  name:"Hades",          film:"Hercules",              score:86.9, sv:8,  rm:10, cp:8,  cm:9, ia:9,  ei:7,  ri:10 },
+  { rank:2,  name:"Ursula",         film:"The Little Mermaid",    score:80.8, sv:8,  rm:8,  cp:9,  cm:7, ia:8,  ei:9,  ri:8  },
+  { rank:3,  name:"King Candy",     film:"Wreck-It Ralph",        score:70.9, sv:8,  rm:7,  cp:6,  cm:6, ia:8,  ei:6,  ri:9  },
+  { rank:4,  name:"Syndrome",       film:"The Incredibles",       score:70.7, sv:9,  rm:7,  cp:5,  cm:5, ia:10, ei:4,  ri:8  },
+  { rank:5,  name:"Dr. Facilier",   film:"Princess & the Frog",   score:70.0, sv:6,  rm:6,  cp:8,  cm:8, ia:7,  ei:7,  ri:10 },
+  { rank:6,  name:"Lotso",          film:"Toy Story 3",           score:69.1, sv:7,  rm:8,  cp:7,  cm:6, ia:5,  ei:7,  ri:9  },
+  { rank:7,  name:"Scar",           film:"The Lion King",         score:66.8, sv:9,  rm:7,  cp:8,  cm:4, ia:4,  ei:5,  ri:7  },
+  { rank:8,  name:"Mother Gothel",  film:"Tangled",               score:65.5, sv:8,  rm:5,  cp:7,  cm:4, ia:5,  ei:10, ri:10 },
+  { rank:9,  name:"Bellwether",     film:"Zootopia",              score:63.3, sv:7,  rm:5,  cp:7,  cm:4, ia:7,  ei:8,  ri:9  },
+  { rank:10, name:"Ratigan",        film:"Great Mouse Detective", score:62.7, sv:7,  rm:6,  cp:7,  cm:5, ia:6,  ei:5,  ri:8  },
+  { rank:11, name:"Hans",           film:"Frozen",                score:59.9, sv:7,  rm:3,  cp:8,  cm:5, ia:5,  ei:8,  ri:9  },
+  { rank:12, name:"Jafar",          film:"Aladdin",               score:59.1, sv:6,  rm:5,  cp:5,  cm:7, ia:7,  ei:4,  ri:9  },
+  { rank:13, name:"AUTO",           film:"WALL-E",                score:57.0, sv:6,  rm:8,  cp:1,  cm:8, ia:6,  ei:1,  ri:9  },
+  { rank:14, name:"Shan Yu",        film:"Mulan",                 score:55.7, sv:6,  rm:7,  cp:5,  cm:6, ia:4,  ei:3,  ri:6  },
+  { rank:15, name:"Muntz",          film:"Up",                    score:52.6, sv:6,  rm:6,  cp:4,  cm:4, ia:6,  ei:3,  ri:8  },
+  { rank:16, name:"Frollo",         film:"Hunchback of ND",       score:52.2, sv:7,  rm:7,  cp:5,  cm:3, ia:3,  ei:2,  ri:7  },
+  { rank:17, name:"Maleficent",     film:"Sleeping Beauty",       score:51.8, sv:7,  rm:6,  cp:5,  cm:2, ia:6,  ei:2,  ri:6  },
+  { rank:18, name:"Bill Sykes",     film:"Oliver & Company",      score:47.2, sv:5,  rm:6,  cp:4,  cm:5, ia:3,  ei:2,  ri:8  },
+  { rank:19, name:"Yzma",           film:"Emperor's New Groove",  score:44.8, sv:5,  rm:3,  cp:4,  cm:4, ia:7,  ei:3,  ri:7  },
+  { rank:20, name:"Alameda Slim",   film:"Home on the Range",     score:42.4, sv:4,  rm:4,  cp:5,  cm:3, ia:5,  ei:3,  ri:8  },
+  { rank:21, name:"Stinky Pete",    film:"Toy Story 2",           score:42.1, sv:5,  rm:2,  cp:5,  cm:3, ia:4,  ei:6,  ri:8  },
+  { rank:22, name:"Evil Queen",     film:"Snow White",            score:40.6, sv:5,  rm:4,  cp:3,  cm:3, ia:5,  ei:2,  ri:7  },
+  { rank:23, name:"Horned King",    film:"The Black Cauldron",    score:40.6, sv:5,  rm:5,  cp:3,  cm:3, ia:4,  ei:1,  ri:7  },
+  { rank:24, name:"Cruella",        film:"101 Dalmatians",        score:40.5, sv:4,  rm:5,  cp:5,  cm:2, ia:3,  ei:3,  ri:8  },
+  { rank:25, name:"Gaston",         film:"Beauty & the Beast",    score:39.0, sv:2,  rm:3,  cp:10, cm:3, ia:2,  ei:2,  ri:9  },
+  { rank:26, name:"Ratcliffe",      film:"Pocahontas",            score:38.0, sv:4,  rm:5,  cp:4,  cm:2, ia:2,  ei:2,  ri:10 },
+  { rank:27, name:"McLeach",        film:"Rescuers Down Under",   score:37.9, sv:4,  rm:4,  cp:3,  cm:3, ia:4,  ei:2,  ri:9  },
+  { rank:28, name:"Tamatoa",        film:"Moana",                 score:37.2, sv:2,  rm:4,  cp:7,  cm:3, ia:3,  ei:2,  ri:8  },
+  { rank:29, name:"Captain Hook",   film:"Peter Pan",             score:33.8, sv:3,  rm:4,  cp:4,  cm:2, ia:2,  ei:3,  ri:9  },
+  { rank:30, name:"Prince John",    film:"Robin Hood",            score:28.7, sv:3,  rm:5,  cp:2,  cm:1, ia:2,  ei:1,  ri:7  },
+];
+
+const TIERS = [
+  { label: "S", min: 80,  text: "Fortune 500 Ready", color: "#c0392b" },
+  { label: "A", min: 70,  text: "Strong C-Suite",    color: "#e67e22" },
+  { label: "B", min: 60,  text: "Middle Management", color: "#2980b9" },
+  { label: "C", min: 50,  text: "Needs Coaching",    color: "#8e44ad" },
+  { label: "D", min: 0,   text: "Don't Give Them a Budget", color: "#555" },
+];
+
+function getTier(score) {
+  for (const t of TIERS) { if (score >= t.min) return t; }
+  return TIERS[TIERS.length - 1];
+}
+
+// Counter animation
+const counterEl = document.getElementById("hero-counter");
+const target = 86.9;
+let count = 0;
+const step = target / 70;
+function animateCounter() {
+  count += step;
+  if (count >= target) { counterEl.textContent = target.toFixed(1); return; }
+  counterEl.textContent = count.toFixed(1);
+  requestAnimationFrame(animateCounter);
+}
+animateCounter();
+
+// Berry color interpolation
+function interpolateColor(c1, c2, t) {
+  const hex = s => parseInt(s, 16);
+  const r = Math.round(hex(c1.slice(1,3)) + (hex(c2.slice(1,3)) - hex(c1.slice(1,3))) * t);
+  const g = Math.round(hex(c1.slice(3,5)) + (hex(c2.slice(3,5)) - hex(c1.slice(3,5))) * t);
+  const b = Math.round(hex(c1.slice(5,7)) + (hex(c2.slice(5,7)) - hex(c1.slice(5,7))) * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+// Bar Chart (top 15)
+const sorted = [...DATA].sort((a, b) => b.score - a.score).slice(0, 15);
+const names = sorted.map(d => d.name).reverse();
+const scores = sorted.map(d => d.score).reverse();
+const colors = scores.map((_, i) => interpolateColor("#4A148C", "#E91E63", i / Math.max(scores.length - 1, 1)));
+
+const chart = echarts.init(document.getElementById("main-chart"), null, { renderer: "canvas" });
+chart.setOption({
+  backgroundColor: "#14141f",
+  tooltip: {
+    trigger: "axis", axisPointer: { type: "shadow" },
+    backgroundColor: "#1a1a2e", borderColor: "#333",
+    textStyle: { color: "#eee" },
+    formatter: params => {
+      const idx = scores.length - 1 - params[0].dataIndex;
+      const d = sorted[idx];
+      return `<b style="color:#E91E63">#${d.rank} ${d.name}</b><br/><span style="color:#888">${d.film}</span><br/><b style="color:#FFD700">CEO Score: ${d.score.toFixed(1)}</b>`;
+    }
+  },
+  grid: { left: "22%", right: "14%", top: 16, bottom: 30 },
+  xAxis: {
+    type: "value", max: 100,
+    axisLabel: { color: "#666" }, splitLine: { lineStyle: { color: "#222" } },
+    axisLine: { lineStyle: { color: "#333" } },
+  },
+  yAxis: {
+    type: "category", data: names,
+    axisLabel: { fontSize: 11, color: "#ccc" },
+    axisLine: { lineStyle: { color: "#333" } },
+  },
+  dataZoom: [{ type: "inside", yAxisIndex: 0, filterMode: "none" }],
+  series: [{
+    type: "bar", barWidth: "58%",
+    data: scores.map((v, i) => ({ value: v, itemStyle: { color: colors[i], borderRadius: [0, 4, 4, 0] } })),
+    label: { show: true, position: "right", formatter: "{c}", fontSize: 10, color: "#888" },
+    animationDuration: 1600, animationEasing: "elasticOut",
+  }],
+  graphic: [{ type: "text", right: 6, bottom: 6, style: { text: "RankMint", fontSize: 10, fill: "#333", fontStyle: "italic" } }],
+});
+window.addEventListener("resize", () => chart.resize());
+
+// Find Yourself
+const findSelect = document.getElementById("find-select");
+DATA.sort((a,b) => a.rank - b.rank).forEach(d => {
+  const opt = document.createElement("option");
+  opt.value = d.rank - 1;
+  opt.textContent = `${d.name} (${d.film})`;
+  findSelect.appendChild(opt);
+});
+findSelect.addEventListener("change", () => {
+  if (!findSelect.value) { document.getElementById("result-card").style.display = "none"; return; }
+  const d = DATA[findSelect.value];
+  const tier = getTier(d.score);
+  document.getElementById("result-card").style.display = "block";
+  document.getElementById("result-rank").textContent = `#${d.rank}`;
+  document.getElementById("result-name").textContent = d.name;
+  document.getElementById("result-score").textContent = `CEO Score: ${d.score.toFixed(1)} | ${d.film}`;
+  const tierEl = document.getElementById("result-tier");
+  tierEl.textContent = `${tier.label}-Tier: ${tier.text}`;
+  tierEl.style.background = tier.color + "33";
+  tierEl.style.border = `1px solid ${tier.color}88`;
+  tierEl.style.color = tier.color;
+});
+
+// Full Table
+const columns = ["rank", "name", "film", "score", "sv", "rm", "cp", "cm", "ia", "ei", "ri"];
+const headers = ["#", "Villain", "Film", "Score", "Vision", "Resource", "Charisma", "Crisis", "Innov.", "EQ", "Ruthless"];
+
+const thead = document.getElementById("table-head");
+const tbody = document.getElementById("table-body");
+const hRow = document.createElement("tr");
+headers.forEach((h, i) => {
+  const th = document.createElement("th");
+  th.textContent = h;
+  th.addEventListener("click", () => sortTable(i));
+  hRow.appendChild(th);
+});
+thead.appendChild(hRow);
+
+let tableData = [...DATA].sort((a, b) => a.rank - b.rank);
+let sortDir = {};
+function renderTable(data) {
+  tbody.innerHTML = "";
+  data.forEach(d => {
+    const tr = document.createElement("tr");
+    columns.forEach(col => {
+      const td = document.createElement("td");
+      const v = d[col];
+      td.textContent = typeof v === "number" ? (v % 1 === 0 ? v : v.toFixed(1)) : v;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+renderTable(tableData);
+
+function sortTable(colIdx) {
+  const col = columns[colIdx];
+  sortDir[col] = !sortDir[col];
+  tableData.sort((a, b) => {
+    const va = a[col], vb = b[col];
+    const cmp = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb));
+    return sortDir[col] ? cmp : -cmp;
+  });
+  renderTable(tableData);
+}
+
+document.getElementById("table-search").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  renderTable([...DATA].sort((a,b) => a.rank - b.rank).filter(d =>
+    Object.values(d).some(v => String(v).toLowerCase().includes(q))
+  ));
+});
+
+// Share
+const shareUrl = window.location.href;
+const shareText = "We ranked 30 Disney villains as Fortune 500 CEOs. Hades #1 (86.9). Maleficent #17. Gaston is a Populist Demagogue. The data is not on your side. #DisneyVillainCEO #RankMint";
+document.getElementById("share-twitter").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+document.getElementById("share-linkedin").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+document.getElementById("share-copy").addEventListener("click", () => {
+  navigator.clipboard.writeText(shareUrl).then(() => {
+    document.getElementById("share-copy").textContent = "Copied!";
+    setTimeout(() => document.getElementById("share-copy").textContent = "Copy Link", 2000);
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hangover Recovery Quadrant Map | RankMint</title>
+<meta property="og:title" content="Hangover Recovery Quadrant Map">
+<meta property="og:description" content="Who drinks hard and recovers well? Who drinks the most and is least equipped to handle it? The quadrant tells all.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hangover Recovery Quadrant Map">
+<meta name="twitter:description" content="Who drinks hard and recovers well? Who drinks the most and is least equipped to handle it? The quadrant tells all.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; }
+  .header {
+    padding: 28px 36px 12px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #fff;
+  }
+  .header h1 { font-size: 1.5rem; }
+  .header p { font-size: 0.85rem; color: #aaa; margin-top: 6px; }
+  .header .sub { font-size: 0.78rem; color: #888; margin-top: 4px; }
+  #chart { width: 100%; height: 88vh; min-height: 600px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Drinking vs. Recovery — The Quadrant Map</h1>
+  <p>X-axis: Alcohol consumption per capita (litres/year) &nbsp;|&nbsp; Y-axis: Hangover Recovery Score &nbsp;|&nbsp; Bubble size: Healthcare Access Score</p>
+  <div class="sub">Hover for details &nbsp;|&nbsp; Scroll to zoom &nbsp;|&nbsp; RankMint 2026</div>
+</div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { name: "Japan",          score: 81.8, healthcare: 79.3, recovery_infra: 100.0, scheduling_slack: 71.5, water_quality: 78.1, cultural_cure: 80.0, alcohol: 6.3  },
+  { name: "Finland",        score: 79.0, healthcare: 77.3, recovery_infra: 74.2,  scheduling_slack: 86.7, water_quality: 100.0,cultural_cure: 50.0, alcohol: 9.5  },
+  { name: "France",         score: 77.5, healthcare: 78.1, recovery_infra: 74.6,  scheduling_slack: 82.1, water_quality: 88.2, cultural_cure: 60.0, alcohol: 11.2 },
+  { name: "United Kingdom", score: 77.3, healthcare: 73.5, recovery_infra: 66.6,  scheduling_slack: 67.9, water_quality: 100.0,cultural_cure: 80.0, alcohol: 10.9 },
+  { name: "South Korea",    score: 76.8, healthcare: 82.7, recovery_infra: 60.3,  scheduling_slack: 55.3, water_quality: 90.1, cultural_cure: 100.0,alcohol: 8.4  },
+  { name: "Germany",        score: 76.3, healthcare: 71.7, recovery_infra: 57.5,  scheduling_slack: 81.9, water_quality: 100.0,cultural_cure: 70.0, alcohol: 11.2 },
+  { name: "Norway",         score: 75.7, healthcare: 75.7, recovery_infra: 51.5,  scheduling_slack: 95.0, water_quality: 99.8, cultural_cure: 50.0, alcohol: 7.5  },
+  { name: "Austria",        score: 75.3, healthcare: 76.6, recovery_infra: 57.1,  scheduling_slack: 89.9, water_quality: 96.0, cultural_cure: 50.0, alcohol: 11.8 },
+  { name: "Spain",          score: 74.7, healthcare: 77.6, recovery_infra: 58.6,  scheduling_slack: 79.3, water_quality: 93.8, cultural_cure: 60.0, alcohol: 11.0 },
+  { name: "Denmark",        score: 73.7, healthcare: 78.0, recovery_infra: 52.7,  scheduling_slack: 87.2, water_quality: 93.6, cultural_cure: 50.0, alcohol: 10.0 },
+  { name: "Sweden",         score: 73.5, healthcare: 68.6, recovery_infra: 61.1,  scheduling_slack: 86.5, water_quality: 96.9, cultural_cure: 50.0, alcohol: 9.6  },
+  { name: "Australia",      score: 72.8, healthcare: 69.8, recovery_infra: 71.8,  scheduling_slack: 67.6, water_quality: 99.5, cultural_cure: 50.0, alcohol: 11.2 },
+  { name: "Canada",         score: 71.6, healthcare: 69.1, recovery_infra: 72.6,  scheduling_slack: 66.1, water_quality: 95.5, cultural_cure: 50.0, alcohol: 10.0 },
+  { name: "Netherlands",    score: 70.8, healthcare: 78.9, recovery_infra: 40.0,  scheduling_slack: 86.7, water_quality: 91.1, cultural_cure: 50.0, alcohol: 8.7  },
+  { name: "Ireland",        score: 70.7, healthcare: 51.8, recovery_infra: 69.4,  scheduling_slack: 71.5, water_quality: 95.6, cultural_cure: 70.0, alcohol: 10.5 },
+  { name: "Taiwan",         score: 67.8, healthcare: 86.0, recovery_infra: 58.7,  scheduling_slack: 51.1, water_quality: 69.0, cultural_cure: 70.0, alcohol: 3.5  },
+  { name: "Czech Republic", score: 64.3, healthcare: 75.5, recovery_infra: 35.1,  scheduling_slack: 67.6, water_quality: 79.3, cultural_cure: 60.0, alcohol: 13.7 },
+  { name: "United States",  score: 62.5, healthcare: 67.6, recovery_infra: 69.8,  scheduling_slack: 24.6, water_quality: 96.2, cultural_cure: 50.0, alcohol: 9.8  },
+  { name: "Singapore",      score: 62.1, healthcare: 70.6, recovery_infra: 50.3,  scheduling_slack: 27.8, water_quality: 99.2, cultural_cure: 60.0, alcohol: 2.0  },
+  { name: "Russia",         score: 59.7, healthcare: 60.9, recovery_infra: 31.9,  scheduling_slack: 69.7, water_quality: 76.0, cultural_cure: 60.0, alcohol: 10.5 },
+  { name: "Poland",         score: 58.1, healthcare: 55.4, recovery_infra: 40.7,  scheduling_slack: 62.9, water_quality: 80.1, cultural_cure: 50.0, alcohol: 11.9 },
+  { name: "Latvia",         score: 57.4, healthcare: 62.6, recovery_infra: 39.1,  scheduling_slack: 64.7, water_quality: 82.4, cultural_cure: 30.0, alcohol: 14.7 },
+  { name: "Brazil",         score: 52.3, healthcare: 58.9, recovery_infra: 45.4,  scheduling_slack: 53.3, water_quality: 59.1, cultural_cure: 40.0, alcohol: 9.4  },
+  { name: "Colombia",       score: 50.8, healthcare: 68.3, recovery_infra: 23.6,  scheduling_slack: 47.1, water_quality: 60.6, cultural_cure: 50.0, alcohol: 4.3  },
+  { name: "Romania",        score: 50.2, healthcare: 56.3, recovery_infra: 33.1,  scheduling_slack: 57.2, water_quality: 68.0, cultural_cure: 30.0, alcohol: 17.1 },
+  { name: "Mexico",         score: 49.9, healthcare: 72.5, recovery_infra: 22.8,  scheduling_slack: 25.4, water_quality: 58.2, cultural_cure: 70.0, alcohol: 6.0  },
+  { name: "China",          score: 48.9, healthcare: 68.1, recovery_infra: 26.8,  scheduling_slack: 21.2, water_quality: 73.9, cultural_cure: 50.0, alcohol: 4.5  },
+  { name: "Georgia",        score: 45.0, healthcare: 54.5, recovery_infra: 8.7,   scheduling_slack: 59.6, water_quality: 73.5, cultural_cure: 20.0, alcohol: 15.5 },
+  { name: "Vietnam",        score: 42.3, healthcare: 60.8, recovery_infra: 20.8,  scheduling_slack: 30.3, water_quality: 54.3, cultural_cure: 40.0, alcohol: 10.7 },
+  { name: "India",          score: 32.8, healthcare: 64.9, recovery_infra: 8.4,   scheduling_slack: 26.7, water_quality: 25.4, cultural_cure: 30.0, alcohol: 4.5  },
+];
+
+// Fixed quadrant lines
+const xMid = 8.9;
+const yMid = 63.0;
+const xMin = 0;
+const xMax = 20;
+const yMin = 20;
+const yMax = 95;
+
+const maxHealthcare = Math.max(...DATA.map(d => d.healthcare));
+
+function getQuadrant(d) {
+  if (d.alcohol >= xMid && d.score >= yMid) return "professionals";
+  if (d.alcohol < xMid && d.score >= yMid) return "abstainers";
+  if (d.alcohol >= xMid && d.score < yMid) return "wounded";
+  return "innocent";
+}
+
+const COLORS = {
+  professionals: "#4CAF50",
+  abstainers:    "#FF9800",
+  wounded:       "#FF6B6B",
+  innocent:      "#9E9E9E",
+};
+
+const QUAD_LABELS = {
+  professionals: "The Professionals",
+  abstainers:    "The Prepared Abstainers",
+  wounded:       "The Walking Wounded",
+  innocent:      "The Innocent Sufferers",
+};
+
+const seriesData = DATA.map(d => ({
+  value: [d.alcohol, d.score],
+  name: d.name,
+  symbolSize: 14 + (d.healthcare / maxHealthcare) * 28,
+  itemStyle: {
+    color: COLORS[getQuadrant(d)],
+    borderColor: "rgba(255,255,255,0.5)",
+    borderWidth: 1.5,
+    opacity: 0.88,
+  },
+  _raw: d,
+}));
+
+const chart = echarts.init(document.getElementById("chart"));
+chart.setOption({
+  backgroundColor: "#fff",
+  tooltip: {
+    formatter: p => {
+      const d = p.data._raw;
+      const quad = QUAD_LABELS[getQuadrant(d)];
+      return `
+        <div style="font-weight:700;margin-bottom:6px;font-size:14px">${d.name}</div>
+        <div style="color:#888;font-size:11px;margin-bottom:8px;font-style:italic">${quad}</div>
+        <table style="font-size:12px;line-height:1.8;border-collapse:collapse">
+          <tr><td style="color:#888;padding-right:12px">Recovery Score</td><td><b>${d.score.toFixed(1)}</b></td></tr>
+          <tr><td style="color:#888;padding-right:12px">Alcohol (L/capita)</td><td><b>${d.alcohol.toFixed(1)}</b></td></tr>
+          <tr><td style="color:#888;padding-right:12px">Healthcare Access</td><td><b>${d.healthcare.toFixed(1)}</b></td></tr>
+          <tr><td style="color:#888;padding-right:12px">Recovery Infra</td><td><b>${d.recovery_infra.toFixed(1)}</b></td></tr>
+          <tr><td style="color:#888;padding-right:12px">Scheduling Slack</td><td><b>${d.scheduling_slack.toFixed(1)}</b></td></tr>
+          <tr><td style="color:#888;padding-right:12px">Water Quality</td><td><b>${d.water_quality.toFixed(1)}</b></td></tr>
+          <tr><td style="color:#888;padding-right:12px">Cultural Cure</td><td><b>${d.cultural_cure.toFixed(1)}</b></td></tr>
+        </table>
+      `;
+    }
+  },
+  grid: { left: "10%", right: "8%", top: 60, bottom: 70 },
+  xAxis: {
+    type: "value",
+    name: "Alcohol Consumption Per Capita (litres/year)",
+    nameLocation: "center",
+    nameGap: 40,
+    min: xMin,
+    max: xMax,
+    splitLine: { show: false },
+    axisLabel: { fontSize: 11 },
+  },
+  yAxis: {
+    type: "value",
+    name: "Hangover Recovery Score",
+    nameLocation: "center",
+    nameGap: 50,
+    min: yMin,
+    max: yMax,
+    splitLine: { show: false },
+    axisLabel: { fontSize: 11 },
+  },
+  dataZoom: [
+    { type: "inside", xAxisIndex: 0 },
+    { type: "inside", yAxisIndex: 0 },
+    { type: "slider", bottom: 8, height: 18 },
+  ],
+  series: [{
+    type: "scatter",
+    data: seriesData,
+    label: {
+      show: true,
+      formatter: p => p.data.name,
+      position: "right",
+      fontSize: 10,
+      color: "#444",
+      offset: [4, 0],
+    },
+    emphasis: {
+      scale: 1.3,
+      label: { fontSize: 12, fontWeight: "bold", color: "#111" },
+    },
+    animationDuration: 2000,
+    animationEasing: "cubicOut",
+    markArea: {
+      silent: true,
+      data: [
+        // Prepared Abstainers — top-left (low drink, high recovery)
+        [{ coord: [xMin, yMid], itemStyle: { color: "rgba(255,152,0,0.07)" } }, { coord: [xMid, yMax] }],
+        // Professionals — top-right (high drink, high recovery)
+        [{ coord: [xMid, yMid], itemStyle: { color: "rgba(76,175,80,0.07)" } }, { coord: [xMax, yMax] }],
+        // Innocent Sufferers — bottom-left
+        [{ coord: [xMin, yMin], itemStyle: { color: "rgba(158,158,158,0.07)" } }, { coord: [xMid, yMid] }],
+        // Walking Wounded — bottom-right
+        [{ coord: [xMid, yMin], itemStyle: { color: "rgba(255,107,107,0.09)" } }, { coord: [xMax, yMid] }],
+      ]
+    },
+    markLine: {
+      silent: true,
+      lineStyle: { color: "#ccc", type: "dashed", width: 1.5 },
+      data: [
+        { xAxis: xMid },
+        { yAxis: yMid },
+      ],
+      label: { show: false },
+    },
+  }],
+  graphic: [
+    // Quadrant labels
+    {
+      type: "text", left: "11%", top: 62,
+      style: { text: "The Prepared Abstainers", fontSize: 12, fill: "rgba(255,152,0,0.6)", fontStyle: "italic", fontWeight: "bold" }
+    },
+    {
+      type: "text", right: "9%", top: 62,
+      style: { text: "The Professionals", fontSize: 12, fill: "rgba(76,175,80,0.7)", fontStyle: "italic", fontWeight: "bold" }
+    },
+    {
+      type: "text", left: "11%", bottom: 72,
+      style: { text: "The Innocent Sufferers", fontSize: 12, fill: "rgba(100,100,100,0.55)", fontStyle: "italic", fontWeight: "bold" }
+    },
+    {
+      type: "text", right: "9%", bottom: 72,
+      style: { text: "The Walking Wounded", fontSize: 12, fill: "rgba(255,107,107,0.7)", fontStyle: "italic", fontWeight: "bold" }
+    },
+    // Bubble size legend note
+    {
+      type: "text", right: 20, bottom: 32,
+      style: { text: "Bubble size = Healthcare Access Score", fontSize: 10, fill: "#bbb", fontStyle: "italic" }
+    },
+    // Watermark
+    {
+      type: "text", right: 20, bottom: 12,
+      style: { text: "RankMint", fontSize: 12, fill: "#ccc", fontStyle: "italic" }
+    },
+  ],
+});
+
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

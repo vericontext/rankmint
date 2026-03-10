@@ -1,0 +1,128 @@
+<!--
+  Bar / Lollipop Ranking Chart Template (ECharts)
+  - Not used directly. The storyteller agent references this to create chart HTML files.
+  - Chart files are saved to output/<slug>/chart.html.
+  - Self-contained: single HTML file, only external dependency is ECharts CDN.
+  - Storyteller MUST replace the DATA and CONFIG sections below with actual values.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><!-- REPLACE: Chart Title --></title>
+<!-- OG / Twitter Card meta tags -->
+<meta property="og:title" content="<!-- REPLACE: Chart Title -->">
+<meta property="og:description" content="<!-- REPLACE: One-line hook -->">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<!-- REPLACE: Chart Title -->">
+<meta name="twitter:description" content="<!-- REPLACE: One-line hook -->">
+<meta name="twitter:image" content="card.png">
+<!-- __ANALYTICS_SNIPPET__ -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; }
+  #chart { width: 100%; height: 90vh; min-height: 600px; }
+  .header { padding: 24px 32px 8px; }
+  .header h1 { font-size: 1.4rem; color: #1a1a2e; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1><!-- REPLACE: Chart Title --></h1>
+  <p><!-- REPLACE: Subtitle / source note --></p>
+</div>
+<div id="chart"></div>
+<script>
+// ===== DATA — storyteller replaces this =====
+const DATA = [
+  // { name: "Item A", score: 92.3, metric1: 80, metric2: 95 },
+  // { name: "Item B", score: 87.1, metric1: 70, metric2: 90 },
+];
+
+// ===== CONFIG — storyteller customizes these =====
+const CONFIG = {
+  title: "Ranking",           // chart title
+  scoreField: "score",        // field name for bar length
+  nameField: "name",          // field name for labels
+  topN: 15,                   // show top N items
+  // Color options — pick ONE or define custom:
+  //   "gold-steel"  : gold → steelblue gradient (default)
+  //   "sunset"      : coral → purple
+  //   "forest"      : lime → dark green
+  //   "ocean"       : cyan → navy
+  //   "custom"      : use customColors array below
+  //   "berry"       : pink → deep purple
+  //   "ember"       : orange → dark red
+  palette: "gold-steel",
+  customColors: [],           // only used if palette === "custom"
+};
+
+// ===== RENDERING (do not modify) =====
+const PALETTES = {
+  "gold-steel": ["#FFD700", "#4682B4"],
+  "sunset":     ["#FF6B6B", "#6B2FA0"],
+  "forest":     ["#A8E06C", "#1B5E20"],
+  "ocean":      ["#00E5FF", "#0D47A1"],
+  "berry":      ["#E91E63", "#4A148C"],
+  "ember":      ["#FF9800", "#BF360C"],
+};
+
+function interpolateColor(c1, c2, t) {
+  const hex = s => parseInt(s, 16);
+  const r = Math.round(hex(c1.slice(1,3)) + (hex(c2.slice(1,3)) - hex(c1.slice(1,3))) * t);
+  const g = Math.round(hex(c1.slice(3,5)) + (hex(c2.slice(3,5)) - hex(c1.slice(3,5))) * t);
+  const b = Math.round(hex(c1.slice(5,7)) + (hex(c2.slice(5,7)) - hex(c1.slice(5,7))) * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+const sorted = [...DATA].sort((a, b) => b[CONFIG.scoreField] - a[CONFIG.scoreField]).slice(0, CONFIG.topN);
+const names = sorted.map(d => d[CONFIG.nameField]).reverse();
+const scores = sorted.map(d => d[CONFIG.scoreField]).reverse();
+
+const [c1, c2] = PALETTES[CONFIG.palette] || PALETTES["gold-steel"];
+const colors = scores.map((_, i) => interpolateColor(c2, c1, i / Math.max(scores.length - 1, 1)));
+
+const chart = echarts.init(document.getElementById("chart"));
+chart.setOption({
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    formatter: params => {
+      const d = sorted[scores.length - 1 - params[0].dataIndex];
+      let tip = `<b>${d[CONFIG.nameField]}</b><br/>Score: ${d[CONFIG.scoreField].toFixed(1)}`;
+      // Show all extra fields in tooltip
+      for (const [k, v] of Object.entries(d)) {
+        if (k !== CONFIG.nameField && k !== CONFIG.scoreField && k !== "rank") {
+          tip += `<br/>${k}: ${typeof v === "number" ? v.toFixed(1) : v}`;
+        }
+      }
+      return tip;
+    }
+  },
+  grid: { left: "22%", right: "10%", top: 20, bottom: 30 },
+  xAxis: { type: "value", name: "Score", max: Math.ceil(Math.max(...scores) * 1.1) },
+  yAxis: { type: "category", data: names, axisLabel: { fontSize: 12 } },
+  dataZoom: [{ type: "inside", yAxisIndex: 0, filterMode: "none" }],
+  series: [{
+    type: "bar",
+    data: scores.map((v, i) => ({ value: v, itemStyle: { color: colors[i] } })),
+    barWidth: "60%",
+    label: { show: true, position: "right", formatter: "{c}", fontSize: 11 },
+    animationDuration: 1500,
+    animationEasing: "elasticOut",
+  }],
+  graphic: [{
+    type: "text", right: 20, bottom: 10,
+    style: { text: "RankMint", fontSize: 12, fill: "#ccc", fontStyle: "italic" },
+  }],
+});
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

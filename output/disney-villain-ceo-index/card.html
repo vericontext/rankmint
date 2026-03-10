@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 630px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .card {
+    width: 1200px; height: 630px;
+    background: linear-gradient(140deg, #0d0d1a 0%, #1a0820 40%, #0d0820 70%, #0d0d1a 100%);
+    color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 56px 72px;
+    position: relative; overflow: hidden;
+  }
+  /* Decorative orbs */
+  .orb1 {
+    position: absolute; width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(233,30,99,0.12) 0%, transparent 70%);
+    top: -100px; right: -60px; border-radius: 50%;
+  }
+  .orb2 {
+    position: absolute; width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(156,39,176,0.1) 0%, transparent 70%);
+    bottom: -80px; left: -40px; border-radius: 50%;
+  }
+  .accent-line {
+    position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+    background: linear-gradient(90deg, #e91e63, #9c27b0, #3f51b5, #e91e63);
+  }
+  .badge {
+    display: inline-block; background: rgba(233,30,99,0.15);
+    border: 1px solid rgba(233,30,99,0.5); color: #e91e63;
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; padding: 4px 14px; border-radius: 100px;
+    margin-bottom: 18px;
+  }
+  .title { font-size: 48px; font-weight: 800; margin-bottom: 12px; line-height: 1.1; }
+  .title span { color: #e91e63; }
+  .hook { font-size: 19px; color: #999; margin-bottom: 38px; max-width: 680px; line-height: 1.4; }
+  .top3 { display: flex; gap: 20px; }
+  .top-item {
+    border-radius: 14px; padding: 20px 26px; min-width: 196px;
+    position: relative;
+  }
+  .top-item.gold   { background: linear-gradient(135deg, rgba(255,215,0,0.18), rgba(255,165,0,0.08)); border: 1px solid rgba(255,215,0,0.4); }
+  .top-item.silver { background: linear-gradient(135deg, rgba(192,192,192,0.15), rgba(160,160,160,0.06)); border: 1px solid rgba(192,192,192,0.35); }
+  .top-item.bronze { background: linear-gradient(135deg, rgba(205,127,50,0.18), rgba(180,100,30,0.08)); border: 1px solid rgba(205,127,50,0.4); }
+  .medal { font-size: 30px; font-weight: 900; margin-bottom: 4px; }
+  .medal.gold   { color: #FFD700; }
+  .medal.silver { color: #C0C0C0; }
+  .medal.bronze { color: #CD7F32; }
+  .item-name  { font-size: 20px; font-weight: 700; color: #eee; }
+  .item-film  { font-size: 12px; color: #888; margin-top: 2px; }
+  .item-score { font-size: 15px; color: #bbb; margin-top: 6px; font-weight: 600; }
+  .watermark {
+    position: absolute; bottom: 28px; right: 40px;
+    font-size: 15px; color: rgba(255,255,255,0.25); font-weight: 700; letter-spacing: 3px;
+  }
+  .stat-line {
+    position: absolute; bottom: 28px; left: 72px;
+    font-size: 12px; color: rgba(255,255,255,0.2); letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="accent-line"></div>
+  <div class="orb1"></div>
+  <div class="orb2"></div>
+  <div class="badge">RankMint &mdash; Disney Villain CEO Index</div>
+  <div class="title">Disney Villain <span>CEO</span> Index</div>
+  <div class="hook">30 villains. 7 boardroom metrics. Hades beats Maleficent. Gaston is a disaster. The data is not on your side.</div>
+  <div class="top3">
+    <div class="top-item gold">
+      <div class="medal gold">#1</div>
+      <div class="item-name">Hades</div>
+      <div class="item-film">Hercules (1997)</div>
+      <div class="item-score">86.9 pts &mdash; S-Tier</div>
+    </div>
+    <div class="top-item silver">
+      <div class="medal silver">#2</div>
+      <div class="item-name">Ursula</div>
+      <div class="item-film">The Little Mermaid (1989)</div>
+      <div class="item-score">80.8 pts &mdash; S-Tier</div>
+    </div>
+    <div class="top-item bronze">
+      <div class="medal bronze">#3</div>
+      <div class="item-name">King Candy</div>
+      <div class="item-film">Wreck-It Ralph (2012)</div>
+      <div class="item-score">70.9 pts &mdash; A-Tier</div>
+    </div>
+  </div>
+  <div class="stat-line">Maleficent #17 &bull; Gaston #25 &bull; Prince John dead last &bull; 7 metrics &bull; 30 villains</div>
+  <div class="watermark">RANKMINT</div>
+</div>
+</body>
+</html>

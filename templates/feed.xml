@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  RSS Feed Template
+  - Generates output/feed.xml — RSS 2.0 feed of all rankings.
+  - SKILL.md Step 5 regenerates this after every pipeline run.
+  - Storyteller/Skill replaces ITEMS section with actual entries.
+-->
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>RankMint — Data-Driven Rankings</title>
+  <link><!-- REPLACE: site URL --></link>
+  <description>Surprising, data-driven ranking indices on topics you never knew you cared about.</description>
+  <language>en</language>
+  <lastBuildDate><!-- REPLACE: RFC 2822 date --></lastBuildDate>
+  <atom:link href="<!-- REPLACE: feed URL -->" rel="self" type="application/rss+xml"/>
+
+  <!-- REPLACE: Skill step 5 generates items here -->
+  <!--
+  <item>
+    <title>Coffee Obsession Index</title>
+    <link>https://example.com/coffee-obsession-index/</link>
+    <description>Which country is truly addicted to coffee? The answer isn't what you think. #1: Finland with 94.2 points.</description>
+    <pubDate>Mon, 10 Mar 2026 00:00:00 +0000</pubDate>
+    <guid>https://example.com/coffee-obsession-index/</guid>
+  </item>
+  -->
+
+</channel>
+</rss>

@@ -1,0 +1,187 @@
+<!--
+  Bar Race / Weight Slider Chart Template (ECharts)
+  - Not used directly. The storyteller agent references this to create chart HTML files.
+  - Best for: showing how rankings change when weights are adjusted — drives replay and engagement.
+  - Self-contained: single HTML file, only external dependency is ECharts CDN.
+  - Storyteller MUST replace the DATA and CONFIG sections below with actual values.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><!-- REPLACE: Chart Title --></title>
+<meta property="og:title" content="<!-- REPLACE: Chart Title -->">
+<meta property="og:description" content="<!-- REPLACE: One-line hook -->">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<!-- REPLACE: Chart Title -->">
+<meta name="twitter:description" content="<!-- REPLACE: One-line hook -->">
+<meta name="twitter:image" content="card.png">
+<!-- __ANALYTICS_SNIPPET__ -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; }
+  #chart { width: 100%; height: 70vh; min-height: 500px; }
+  .header { padding: 24px 32px 8px; }
+  .header h1 { font-size: 1.4rem; color: #1a1a2e; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+  .controls { padding: 12px 32px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+  .slider-group { display: flex; flex-direction: column; gap: 4px; min-width: 200px; }
+  .slider-group label { font-size: 0.8rem; color: #555; display: flex; justify-content: space-between; }
+  .slider-group input[type="range"] { width: 100%; }
+  .btn-reset { padding: 6px 16px; background: #1a1a2e; color: #fff; border: none; border-radius: 6px;
+    cursor: pointer; font-size: 0.8rem; }
+  .btn-reset:hover { background: #2d2d5e; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1><!-- REPLACE: Chart Title --></h1>
+  <p><!-- REPLACE: Subtitle — drag sliders to change metric weights and watch rankings shift --></p>
+</div>
+<div class="controls" id="sliders"></div>
+<div id="chart"></div>
+<script>
+// ===== DATA — storyteller replaces this =====
+const DATA = [
+  // { name: "Item A", metric1: 80, metric2: 70, metric3: 90 },
+];
+
+// ===== CONFIG — storyteller customizes these =====
+const CONFIG = {
+  title: "Weight Race",
+  nameField: "name",
+  topN: 15,
+  // Metrics and their default weights (must sum to 1.0)
+  metrics: [
+    { field: "metric1", label: "Metric 1", weight: 0.4 },
+    { field: "metric2", label: "Metric 2", weight: 0.3 },
+    { field: "metric3", label: "Metric 3", weight: 0.3 },
+  ],
+  palette: "gold-steel",
+};
+
+const PALETTES = {
+  "gold-steel": ["#FFD700", "#4682B4"],
+  "sunset":     ["#FF6B6B", "#6B2FA0"],
+  "forest":     ["#A8E06C", "#1B5E20"],
+  "ocean":      ["#00E5FF", "#0D47A1"],
+  "berry":      ["#E91E63", "#4A148C"],
+  "ember":      ["#FF9800", "#BF360C"],
+};
+
+function interpolateColor(c1, c2, t) {
+  const hex = s => parseInt(s, 16);
+  const r = Math.round(hex(c1.slice(1,3)) + (hex(c2.slice(1,3)) - hex(c1.slice(1,3))) * t);
+  const g = Math.round(hex(c1.slice(3,5)) + (hex(c2.slice(3,5)) - hex(c1.slice(3,5))) * t);
+  const b = Math.round(hex(c1.slice(5,7)) + (hex(c2.slice(5,7)) - hex(c1.slice(5,7))) * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+// ===== RENDERING (do not modify) =====
+// Normalize each metric to 0-100
+const normalized = {};
+CONFIG.metrics.forEach(m => {
+  const vals = DATA.map(d => d[m.field]);
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const range = max - min || 1;
+  normalized[m.field] = DATA.map(d => ((d[m.field] - min) / range) * 100);
+});
+
+let weights = CONFIG.metrics.map(m => m.weight);
+
+// Build sliders
+const slidersDiv = document.getElementById("sliders");
+CONFIG.metrics.forEach((m, i) => {
+  const group = document.createElement("div");
+  group.className = "slider-group";
+  group.innerHTML = `
+    <label>${m.label}: <span id="w${i}">${(weights[i] * 100).toFixed(0)}%</span></label>
+    <input type="range" min="0" max="100" value="${weights[i] * 100}" data-idx="${i}">
+  `;
+  slidersDiv.appendChild(group);
+});
+const resetBtn = document.createElement("button");
+resetBtn.className = "btn-reset";
+resetBtn.textContent = "Reset";
+slidersDiv.appendChild(resetBtn);
+
+const chart = echarts.init(document.getElementById("chart"));
+
+function computeScores() {
+  return DATA.map((d, di) => {
+    let score = 0;
+    CONFIG.metrics.forEach((m, mi) => {
+      score += normalized[m.field][di] * weights[mi];
+    });
+    return { name: d[CONFIG.nameField], score, _raw: d };
+  }).sort((a, b) => b.score - a.score).slice(0, CONFIG.topN);
+}
+
+function render() {
+  const scored = computeScores();
+  const names = scored.map(d => d.name).reverse();
+  const scores = scored.map(d => d.score).reverse();
+  const [c1, c2] = PALETTES[CONFIG.palette] || PALETTES["gold-steel"];
+  const colors = scores.map((_, i) => interpolateColor(c2, c1, i / Math.max(scores.length - 1, 1)));
+
+  chart.setOption({
+    tooltip: {
+      trigger: "axis", axisPointer: { type: "shadow" },
+      formatter: params => {
+        const d = scored[scores.length - 1 - params[0].dataIndex];
+        let tip = `<b>${d.name}</b><br/>Score: ${d.score.toFixed(1)}`;
+        CONFIG.metrics.forEach((m, i) => {
+          tip += `<br/>${m.label}: ${d._raw[m.field]}`;
+        });
+        return tip;
+      },
+    },
+    grid: { left: "22%", right: "10%", top: 20, bottom: 30 },
+    xAxis: { type: "value", name: "Score", max: 100 },
+    yAxis: { type: "category", data: names, axisLabel: { fontSize: 12 } },
+    series: [{
+      type: "bar",
+      data: scores.map((v, i) => ({ value: v, itemStyle: { color: colors[i] } })),
+      barWidth: "60%",
+      label: { show: true, position: "right", formatter: p => p.value.toFixed(1), fontSize: 11 },
+      animationDuration: 800,
+      animationEasing: "cubicOut",
+    }],
+    graphic: [{
+      type: "text", right: 20, bottom: 10,
+      style: { text: "RankMint", fontSize: 12, fill: "#ccc", fontStyle: "italic" },
+    }],
+  }, { notMerge: false, lazyUpdate: false });
+}
+
+document.querySelectorAll('input[type="range"]').forEach(slider => {
+  slider.addEventListener("input", () => {
+    const idx = parseInt(slider.dataset.idx);
+    const rawWeights = Array.from(document.querySelectorAll('input[type="range"]')).map(s => parseInt(s.value));
+    const sum = rawWeights.reduce((a, b) => a + b, 0) || 1;
+    weights = rawWeights.map(w => w / sum);
+    CONFIG.metrics.forEach((_, i) => {
+      document.getElementById(`w${i}`).textContent = `${(weights[i] * 100).toFixed(0)}%`;
+    });
+    render();
+  });
+});
+
+resetBtn.addEventListener("click", () => {
+  CONFIG.metrics.forEach((m, i) => {
+    weights[i] = m.weight;
+    document.querySelectorAll('input[type="range"]')[i].value = m.weight * 100;
+    document.getElementById(`w${i}`).textContent = `${(m.weight * 100).toFixed(0)}%`;
+  });
+  render();
+});
+
+render();
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

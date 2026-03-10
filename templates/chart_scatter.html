@@ -1,0 +1,184 @@
+<!--
+  Scatter / Quadrant Chart Template (ECharts)
+  - Not used directly. The storyteller agent references this to create chart HTML files.
+  - Chart files are saved to output/<slug>/chart_matrix.html.
+  - Self-contained: single HTML file, only external dependency is ECharts CDN.
+  - Storyteller MUST replace the DATA and CONFIG sections below with actual values.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><!-- REPLACE: Chart Title --></title>
+<!-- OG / Twitter Card meta tags -->
+<meta property="og:title" content="<!-- REPLACE: Chart Title -->">
+<meta property="og:description" content="<!-- REPLACE: One-line hook -->">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<!-- REPLACE: Chart Title -->">
+<meta name="twitter:description" content="<!-- REPLACE: One-line hook -->">
+<meta name="twitter:image" content="card.png">
+<!-- __ANALYTICS_SNIPPET__ -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; }
+  #chart { width: 100%; height: 90vh; min-height: 600px; }
+  .header { padding: 24px 32px 8px; }
+  .header h1 { font-size: 1.4rem; color: #1a1a2e; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1><!-- REPLACE: Chart Title --></h1>
+  <p><!-- REPLACE: Subtitle / source note --></p>
+</div>
+<div id="chart"></div>
+<script>
+// ===== DATA — storyteller replaces this =====
+const DATA = [
+  // { name: "Item A", x: 75, y: 82, score: 92.3 },
+  // { name: "Item B", x: 40, y: 91, score: 87.1 },
+];
+
+// ===== CONFIG — storyteller customizes these =====
+const CONFIG = {
+  title: "Quadrant Analysis",
+  xField: "x",               // column for x-axis
+  yField: "y",               // column for y-axis
+  nameField: "name",
+  scoreField: "score",        // used for bubble size (optional)
+  xLabel: "X Axis",
+  yLabel: "Y Axis",
+  // Quadrant labels — 4 creative names
+  quadrants: {
+    topRight:    "High-High",
+    topLeft:     "Low X, High Y",
+    bottomRight: "High X, Low Y",
+    bottomLeft:  "Low-Low",
+  },
+  // Quadrant background colors
+  quadrantColors: {
+    topRight:    "rgba(76,175,80,0.06)",
+    topLeft:     "rgba(255,152,0,0.06)",
+    bottomRight: "rgba(33,150,243,0.06)",
+    bottomLeft:  "rgba(244,67,54,0.06)",
+  },
+  // Point color by quadrant
+  pointColors: {
+    topRight:    "#4CAF50",
+    topLeft:     "#FF9800",
+    bottomRight: "#2196F3",
+    bottomLeft:  "#F44336",
+  },
+};
+
+// ===== RENDERING (do not modify) =====
+const xs = DATA.map(d => d[CONFIG.xField]);
+const ys = DATA.map(d => d[CONFIG.yField]);
+const xMid = xs.reduce((a, b) => a + b, 0) / xs.length;
+const yMid = ys.reduce((a, b) => a + b, 0) / ys.length;
+const xMin = Math.min(...xs) * 0.9;
+const xMax = Math.max(...xs) * 1.1;
+const yMin = Math.min(...ys) * 0.9;
+const yMax = Math.max(...ys) * 1.1;
+
+function getQuadrant(d) {
+  const x = d[CONFIG.xField], y = d[CONFIG.yField];
+  if (x >= xMid && y >= yMid) return "topRight";
+  if (x < xMid && y >= yMid) return "topLeft";
+  if (x >= xMid && y < yMid) return "bottomRight";
+  return "bottomLeft";
+}
+
+const maxScore = Math.max(...DATA.map(d => d[CONFIG.scoreField] || 1));
+const seriesData = DATA.map(d => ({
+  value: [d[CONFIG.xField], d[CONFIG.yField]],
+  name: d[CONFIG.nameField],
+  symbolSize: CONFIG.scoreField ? 10 + (d[CONFIG.scoreField] / maxScore) * 30 : 18,
+  itemStyle: { color: CONFIG.pointColors[getQuadrant(d)] },
+  _raw: d,
+}));
+
+const chart = echarts.init(document.getElementById("chart"));
+chart.setOption({
+  tooltip: {
+    formatter: p => {
+      const d = p.data._raw;
+      let tip = `<b>${d[CONFIG.nameField]}</b>`;
+      for (const [k, v] of Object.entries(d)) {
+        if (k !== CONFIG.nameField) {
+          tip += `<br/>${k}: ${typeof v === "number" ? v.toFixed(1) : v}`;
+        }
+      }
+      return tip;
+    }
+  },
+  grid: { left: "12%", right: "8%", top: 60, bottom: 60 },
+  xAxis: {
+    type: "value", name: CONFIG.xLabel, nameLocation: "center", nameGap: 35,
+    min: xMin, max: xMax, splitLine: { show: false },
+  },
+  yAxis: {
+    type: "value", name: CONFIG.yLabel, nameLocation: "center", nameGap: 45,
+    min: yMin, max: yMax, splitLine: { show: false },
+  },
+  dataZoom: [
+    { type: "inside", xAxisIndex: 0 },
+    { type: "inside", yAxisIndex: 0 },
+  ],
+  // Quadrant shading via markArea
+  series: [{
+    type: "scatter",
+    data: seriesData,
+    label: {
+      show: true, formatter: p => p.data.name,
+      position: "right", fontSize: 10, color: "#555",
+    },
+    emphasis: { label: { fontSize: 13, fontWeight: "bold" } },
+    animationDuration: 2000,
+    animationEasing: "cubicOut",
+    markArea: {
+      silent: true,
+      data: [
+        // top-left
+        [{ coord: [xMin, yMid], itemStyle: { color: CONFIG.quadrantColors.topLeft } },
+         { coord: [xMid, yMax] }],
+        // top-right
+        [{ coord: [xMid, yMid], itemStyle: { color: CONFIG.quadrantColors.topRight } },
+         { coord: [xMax, yMax] }],
+        // bottom-left
+        [{ coord: [xMin, yMin], itemStyle: { color: CONFIG.quadrantColors.bottomLeft } },
+         { coord: [xMid, yMid] }],
+        // bottom-right
+        [{ coord: [xMid, yMin], itemStyle: { color: CONFIG.quadrantColors.bottomRight } },
+         { coord: [xMax, yMid] }],
+      ]
+    },
+    markLine: {
+      silent: true,
+      lineStyle: { color: "#ccc", type: "dashed" },
+      data: [
+        { xAxis: xMid },
+        { yAxis: yMid },
+      ],
+      label: { show: false },
+    },
+  }],
+  // Quadrant label annotations
+  graphic: [
+    { type: "text", left: "14%", top: 65, style: { text: CONFIG.quadrants.topLeft, fontSize: 13, fill: "#bbb", fontStyle: "italic" } },
+    { type: "text", right: "10%", top: 65, style: { text: CONFIG.quadrants.topRight, fontSize: 13, fill: "#bbb", fontStyle: "italic" } },
+    { type: "text", left: "14%", bottom: 65, style: { text: CONFIG.quadrants.bottomLeft, fontSize: 13, fill: "#bbb", fontStyle: "italic" } },
+    { type: "text", right: "10%", bottom: 65, style: { text: CONFIG.quadrants.bottomRight, fontSize: 13, fill: "#bbb", fontStyle: "italic" } },
+    { type: "text", right: 20, bottom: 10, style: { text: "RankMint", fontSize: 12, fill: "#ccc", fontStyle: "italic" } },
+  ],
+});
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

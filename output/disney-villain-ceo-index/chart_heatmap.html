@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disney Villain CEO — Metric Heatmap | RankMint</title>
+<meta property="og:title" content="Disney Villain CEO Metric Heatmap">
+<meta property="og:description" content="30 villains x 7 leadership metrics — find every strength and fatal flaw in one grid.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Disney Villain CEO Metric Heatmap">
+<meta name="twitter:description" content="30 villains x 7 leadership metrics — find every strength and fatal flaw in one grid.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #111; color: #e0e0e0; }
+  .header { padding: 24px 32px 10px; }
+  .header h1 { font-size: 1.4rem; color: #fff; }
+  .header h1 span { color: #e91e63; }
+  .header p { font-size: 0.82rem; color: #555; margin-top: 5px; }
+  #chart { width: 100%; height: 920px; min-height: 700px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Disney Villain <span>CEO</span> &mdash; Metric Heatmap</h1>
+  <p>All 30 villains &times; 7 leadership metrics &bull; Sorted by CEO Score (top to bottom) &bull; Scroll to zoom &bull; Hover for details &bull; RankMint 2026</p>
+</div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { rank:1,  name: "Hades",         film: "Hercules",              score: 86.9, sv: 8, rm: 10, cp: 8, cm: 9, ia: 9, ei: 7, ri: 10 },
+  { rank:2,  name: "Ursula",        film: "The Little Mermaid",    score: 80.8, sv: 8, rm: 8,  cp: 9, cm: 7, ia: 8, ei: 9, ri: 8  },
+  { rank:3,  name: "King Candy",    film: "Wreck-It Ralph",        score: 70.9, sv: 8, rm: 7,  cp: 6, cm: 6, ia: 8, ei: 6, ri: 9  },
+  { rank:4,  name: "Syndrome",      film: "The Incredibles",       score: 70.7, sv: 9, rm: 7,  cp: 5, cm: 5, ia: 10,ei: 4, ri: 8  },
+  { rank:5,  name: "Dr. Facilier",  film: "Princess & the Frog",   score: 70.0, sv: 6, rm: 6,  cp: 8, cm: 8, ia: 7, ei: 7, ri: 10 },
+  { rank:6,  name: "Lotso",         film: "Toy Story 3",           score: 69.1, sv: 7, rm: 8,  cp: 7, cm: 6, ia: 5, ei: 7, ri: 9  },
+  { rank:7,  name: "Scar",          film: "The Lion King",         score: 66.8, sv: 9, rm: 7,  cp: 8, cm: 4, ia: 4, ei: 5, ri: 7  },
+  { rank:8,  name: "Mother Gothel", film: "Tangled",               score: 65.5, sv: 8, rm: 5,  cp: 7, cm: 4, ia: 5, ei: 10,ri: 10 },
+  { rank:9,  name: "Bellwether",    film: "Zootopia",              score: 63.3, sv: 7, rm: 5,  cp: 7, cm: 4, ia: 7, ei: 8, ri: 9  },
+  { rank:10, name: "Ratigan",       film: "Great Mouse Detective", score: 62.7, sv: 7, rm: 6,  cp: 7, cm: 5, ia: 6, ei: 5, ri: 8  },
+  { rank:11, name: "Hans",          film: "Frozen",                score: 59.9, sv: 7, rm: 3,  cp: 8, cm: 5, ia: 5, ei: 8, ri: 9  },
+  { rank:12, name: "Jafar",         film: "Aladdin",               score: 59.1, sv: 6, rm: 5,  cp: 5, cm: 7, ia: 7, ei: 4, ri: 9  },
+  { rank:13, name: "AUTO",          film: "WALL-E",                score: 57.0, sv: 6, rm: 8,  cp: 1, cm: 8, ia: 6, ei: 1, ri: 9  },
+  { rank:14, name: "Shan Yu",       film: "Mulan",                 score: 55.7, sv: 6, rm: 7,  cp: 5, cm: 6, ia: 4, ei: 3, ri: 6  },
+  { rank:15, name: "Muntz",         film: "Up",                    score: 52.6, sv: 6, rm: 6,  cp: 4, cm: 4, ia: 6, ei: 3, ri: 8  },
+  { rank:16, name: "Frollo",        film: "Hunchback of ND",       score: 52.2, sv: 7, rm: 7,  cp: 5, cm: 3, ia: 3, ei: 2, ri: 7  },
+  { rank:17, name: "Maleficent",    film: "Sleeping Beauty",       score: 51.8, sv: 7, rm: 6,  cp: 5, cm: 2, ia: 6, ei: 2, ri: 6  },
+  { rank:18, name: "Bill Sykes",    film: "Oliver & Company",      score: 47.2, sv: 5, rm: 6,  cp: 4, cm: 5, ia: 3, ei: 2, ri: 8  },
+  { rank:19, name: "Yzma",          film: "Emperor's New Groove",  score: 44.8, sv: 5, rm: 3,  cp: 4, cm: 4, ia: 7, ei: 3, ri: 7  },
+  { rank:20, name: "Alameda Slim",  film: "Home on the Range",     score: 42.4, sv: 4, rm: 4,  cp: 5, cm: 3, ia: 5, ei: 3, ri: 8  },
+  { rank:21, name: "Stinky Pete",   film: "Toy Story 2",           score: 42.1, sv: 5, rm: 2,  cp: 5, cm: 3, ia: 4, ei: 6, ri: 8  },
+  { rank:22, name: "Evil Queen",    film: "Snow White",            score: 40.6, sv: 5, rm: 4,  cp: 3, cm: 3, ia: 5, ei: 2, ri: 7  },
+  { rank:23, name: "Horned King",   film: "The Black Cauldron",    score: 40.6, sv: 5, rm: 5,  cp: 3, cm: 3, ia: 4, ei: 1, ri: 7  },
+  { rank:24, name: "Cruella",       film: "101 Dalmatians",        score: 40.5, sv: 4, rm: 5,  cp: 5, cm: 2, ia: 3, ei: 3, ri: 8  },
+  { rank:25, name: "Gaston",        film: "Beauty & the Beast",    score: 39.0, sv: 2, rm: 3,  cp: 10,cm: 3, ia: 2, ei: 2, ri: 9  },
+  { rank:26, name: "Ratcliffe",     film: "Pocahontas",            score: 38.0, sv: 4, rm: 5,  cp: 4, cm: 2, ia: 2, ei: 2, ri: 10 },
+  { rank:27, name: "McLeach",       film: "Rescuers Down Under",   score: 37.9, sv: 4, rm: 4,  cp: 3, cm: 3, ia: 4, ei: 2, ri: 9  },
+  { rank:28, name: "Tamatoa",       film: "Moana",                 score: 37.2, sv: 2, rm: 4,  cp: 7, cm: 3, ia: 3, ei: 2, ri: 8  },
+  { rank:29, name: "Captain Hook",  film: "Peter Pan",             score: 33.8, sv: 3, rm: 4,  cp: 4, cm: 2, ia: 2, ei: 3, ri: 9  },
+  { rank:30, name: "Prince John",   film: "Robin Hood",            score: 28.7, sv: 3, rm: 5,  cp: 2, cm: 1, ia: 2, ei: 1, ri: 7  },
+];
+
+const METRICS = ["sv", "rm", "cp", "cm", "ia", "ei", "ri"];
+const LABELS = ["Strategic\nVision", "Resource\nMgmt", "Charisma &\nPersuasion", "Crisis\nMgmt", "Innovation &\nAdaptability", "Emotional\nIntelligence", "Ruthlessness\n(adj)"];
+
+// Sort by score descending (top = best, row 0 = best)
+const sorted = [...DATA].sort((a, b) => b.score - a.score);
+const names = sorted.map(d => `#${d.rank} ${d.name}`);
+
+const heatData = [];
+sorted.forEach((d, yi) => {
+  METRICS.forEach((m, xi) => {
+    heatData.push([xi, yi, d[m]]);
+  });
+});
+
+const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
+
+chart.setOption({
+  backgroundColor: "#111",
+  tooltip: {
+    position: "top",
+    backgroundColor: "#1a1a2e",
+    borderColor: "#333",
+    textStyle: { color: "#eee", fontSize: 12 },
+    formatter: p => {
+      const d = sorted[p.value[1]];
+      const metric = LABELS[p.value[0]].replace("\n", " ");
+      const val = p.value[2];
+      return `<b style="color:#E91E63">#${d.rank} ${d.name}</b><br/>${d.film}<br/>
+<b>${metric.replace(/\n/g," ")}: ${val}/10</b><br/>
+<span style="color:#aaa">CEO Score: ${d.score.toFixed(1)}</span>`;
+    },
+  },
+  grid: { left: "18%", right: "6%", top: 70, bottom: 30 },
+  xAxis: {
+    type: "category",
+    data: LABELS.map(l => l.replace("\n", " ")),
+    position: "top",
+    axisLabel: { fontSize: 10, color: "#aaa", rotate: 20, interval: 0 },
+    splitArea: { show: true, areaStyle: { color: ["rgba(255,255,255,0.02)", "rgba(255,255,255,0.04)"] } },
+    axisLine: { lineStyle: { color: "#333" } },
+  },
+  yAxis: {
+    type: "category",
+    data: names,
+    inverse: false,
+    axisLabel: { fontSize: 10, color: "#ccc" },
+    splitArea: { show: true, areaStyle: { color: ["rgba(255,255,255,0.01)", "rgba(255,255,255,0.03)"] } },
+    axisLine: { lineStyle: { color: "#333" } },
+  },
+  visualMap: {
+    min: 0, max: 10, calculable: true,
+    orient: "horizontal", left: "center", top: 8,
+    inRange: {
+      color: ["#2d2d2d", "#4a1a1a", "#7a1a1a", "#a01515", "#c0281a", "#d43c1e", "#dc4e20", "#e06030", "#e07a3a", "#e09050"]
+    },
+    text: ["Score 10", "Score 0"],
+    textStyle: { color: "#888", fontSize: 10 },
+    itemWidth: 14, itemHeight: 80,
+  },
+  dataZoom: [
+    { type: "inside", yAxisIndex: 0, filterMode: "none" },
+    { type: "slider", yAxisIndex: 0, right: 0, width: 12,
+      borderColor: "#333", fillerColor: "rgba(233,30,99,0.2)",
+      handleStyle: { color: "#e91e63" }, textStyle: { color: "#555" },
+      filterMode: "none" },
+  ],
+  series: [{
+    type: "heatmap",
+    data: heatData,
+    label: {
+      show: true,
+      formatter: p => p.value[2],
+      fontSize: 11, color: "#eee",
+      fontWeight: 600,
+    },
+    emphasis: {
+      itemStyle: { borderColor: "#e91e63", borderWidth: 2 },
+    },
+    animationDuration: 1500,
+    animationEasing: "cubicOut",
+  }],
+  graphic: [{
+    type: "text", right: 8, bottom: 6,
+    style: { text: "RankMint", fontSize: 10, fill: "#444", fontStyle: "italic" },
+  }],
+});
+
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disney Villain CEO — Head-to-Head Radar | RankMint</title>
+<meta property="og:title" content="Disney Villain CEO Head-to-Head Radar">
+<meta property="og:description" content="Compare any two Disney villains across 7 CEO metrics. Who wins the boardroom battle?">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Disney Villain CEO Head-to-Head Radar">
+<meta name="twitter:description" content="Compare any two Disney villains across 7 CEO metrics. Who wins the boardroom battle?">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d0d1a; color: #e0e0e0; }
+  .header { padding: 28px 32px 10px; text-align: center; }
+  .header h1 { font-size: 1.5rem; color: #fff; }
+  .header h1 span { color: #e91e63; }
+  .header p { font-size: 0.82rem; color: #666; margin-top: 5px; }
+
+  .controls {
+    padding: 16px 32px 8px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .controls label { font-size: 0.85rem; color: #888; }
+  .controls select {
+    padding: 8px 14px; border-radius: 8px;
+    background: #1a1a2e; color: #eee;
+    border: 1px solid #333; font-size: 0.9rem;
+    cursor: pointer; min-width: 180px;
+    appearance: none;
+  }
+  .controls select:focus { outline: none; border-color: #e91e63; }
+  .vs-label {
+    font-size: 1.2rem; font-weight: 900; color: #e91e63;
+    padding: 0 4px;
+  }
+
+  .score-bar {
+    display: flex; justify-content: center; gap: 40px;
+    padding: 8px 32px 0;
+    text-align: center;
+  }
+  .score-item { display: flex; flex-direction: column; align-items: center; }
+  .score-num { font-size: 2rem; font-weight: 900; }
+  .score-name { font-size: 0.8rem; color: #888; margin-top: 2px; }
+
+  #chart { width: 100%; height: 72vh; min-height: 460px; }
+
+  .verdict {
+    max-width: 600px; margin: 0 auto; padding: 12px 24px 24px;
+    text-align: center; font-size: 0.88rem; color: #888;
+    line-height: 1.6;
+  }
+  .verdict strong { color: #FFD700; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Disney Villain <span>CEO</span> &mdash; Head-to-Head</h1>
+  <p>7-axis radar comparison &bull; Who wins the boardroom battle? &bull; RankMint 2026</p>
+</div>
+
+<div class="controls">
+  <div>
+    <label for="item1">Villain 1</label><br/>
+    <select id="item1"></select>
+  </div>
+  <div class="vs-label">VS</div>
+  <div>
+    <label for="item2">Villain 2</label><br/>
+    <select id="item2"></select>
+  </div>
+</div>
+
+<div class="score-bar">
+  <div class="score-item">
+    <div class="score-num" id="score1" style="color:#00b4d8">—</div>
+    <div class="score-name" id="label1">Villain 1</div>
+  </div>
+  <div class="score-item">
+    <div class="score-num" id="score2" style="color:#e91e63">—</div>
+    <div class="score-name" id="label2">Villain 2</div>
+  </div>
+</div>
+
+<div id="chart"></div>
+<div class="verdict" id="verdict"></div>
+
+<script>
+const DATA = [
+  { name: "Hades",         film: "Hercules",              score: 86.9, sv: 8, rm: 10, cp: 8, cm: 9, ia: 9, ei: 7, ri: 10 },
+  { name: "Ursula",        film: "The Little Mermaid",    score: 80.8, sv: 8, rm: 8,  cp: 9, cm: 7, ia: 8, ei: 9, ri: 8  },
+  { name: "King Candy",    film: "Wreck-It Ralph",        score: 70.9, sv: 8, rm: 7,  cp: 6, cm: 6, ia: 8, ei: 6, ri: 9  },
+  { name: "Syndrome",      film: "The Incredibles",       score: 70.7, sv: 9, rm: 7,  cp: 5, cm: 5, ia: 10,ei: 4, ri: 8  },
+  { name: "Dr. Facilier",  film: "Princess & the Frog",   score: 70.0, sv: 6, rm: 6,  cp: 8, cm: 8, ia: 7, ei: 7, ri: 10 },
+  { name: "Lotso",         film: "Toy Story 3",           score: 69.1, sv: 7, rm: 8,  cp: 7, cm: 6, ia: 5, ei: 7, ri: 9  },
+  { name: "Scar",          film: "The Lion King",         score: 66.8, sv: 9, rm: 7,  cp: 8, cm: 4, ia: 4, ei: 5, ri: 7  },
+  { name: "Mother Gothel", film: "Tangled",               score: 65.5, sv: 8, rm: 5,  cp: 7, cm: 4, ia: 5, ei: 10,ri: 10 },
+  { name: "Bellwether",    film: "Zootopia",              score: 63.3, sv: 7, rm: 5,  cp: 7, cm: 4, ia: 7, ei: 8, ri: 9  },
+  { name: "Ratigan",       film: "Great Mouse Detective", score: 62.7, sv: 7, rm: 6,  cp: 7, cm: 5, ia: 6, ei: 5, ri: 8  },
+  { name: "Hans",          film: "Frozen",                score: 59.9, sv: 7, rm: 3,  cp: 8, cm: 5, ia: 5, ei: 8, ri: 9  },
+  { name: "Jafar",         film: "Aladdin",               score: 59.1, sv: 6, rm: 5,  cp: 5, cm: 7, ia: 7, ei: 4, ri: 9  },
+  { name: "AUTO",          film: "WALL-E",                score: 57.0, sv: 6, rm: 8,  cp: 1, cm: 8, ia: 6, ei: 1, ri: 9  },
+  { name: "Shan Yu",       film: "Mulan",                 score: 55.7, sv: 6, rm: 7,  cp: 5, cm: 6, ia: 4, ei: 3, ri: 6  },
+  { name: "Muntz",         film: "Up",                    score: 52.6, sv: 6, rm: 6,  cp: 4, cm: 4, ia: 6, ei: 3, ri: 8  },
+  { name: "Frollo",        film: "Hunchback of ND",       score: 52.2, sv: 7, rm: 7,  cp: 5, cm: 3, ia: 3, ei: 2, ri: 7  },
+  { name: "Maleficent",    film: "Sleeping Beauty",       score: 51.8, sv: 7, rm: 6,  cp: 5, cm: 2, ia: 6, ei: 2, ri: 6  },
+  { name: "Bill Sykes",    film: "Oliver & Company",      score: 47.2, sv: 5, rm: 6,  cp: 4, cm: 5, ia: 3, ei: 2, ri: 8  },
+  { name: "Yzma",          film: "Emperor's New Groove",  score: 44.8, sv: 5, rm: 3,  cp: 4, cm: 4, ia: 7, ei: 3, ri: 7  },
+  { name: "Alameda Slim",  film: "Home on the Range",     score: 42.4, sv: 4, rm: 4,  cp: 5, cm: 3, ia: 5, ei: 3, ri: 8  },
+  { name: "Stinky Pete",   film: "Toy Story 2",           score: 42.1, sv: 5, rm: 2,  cp: 5, cm: 3, ia: 4, ei: 6, ri: 8  },
+  { name: "Evil Queen",    film: "Snow White",            score: 40.6, sv: 5, rm: 4,  cp: 3, cm: 3, ia: 5, ei: 2, ri: 7  },
+  { name: "Horned King",   film: "The Black Cauldron",    score: 40.6, sv: 5, rm: 5,  cp: 3, cm: 3, ia: 4, ei: 1, ri: 7  },
+  { name: "Cruella",       film: "101 Dalmatians",        score: 40.5, sv: 4, rm: 5,  cp: 5, cm: 2, ia: 3, ei: 3, ri: 8  },
+  { name: "Gaston",        film: "Beauty & the Beast",    score: 39.0, sv: 2, rm: 3,  cp: 10,cm: 3, ia: 2, ei: 2, ri: 9  },
+  { name: "Ratcliffe",     film: "Pocahontas",            score: 38.0, sv: 4, rm: 5,  cp: 4, cm: 2, ia: 2, ei: 2, ri: 10 },
+  { name: "McLeach",       film: "Rescuers Down Under",   score: 37.9, sv: 4, rm: 4,  cp: 3, cm: 3, ia: 4, ei: 2, ri: 9  },
+  { name: "Tamatoa",       film: "Moana",                 score: 37.2, sv: 2, rm: 4,  cp: 7, cm: 3, ia: 3, ei: 2, ri: 8  },
+  { name: "Captain Hook",  film: "Peter Pan",             score: 33.8, sv: 3, rm: 4,  cp: 4, cm: 2, ia: 2, ei: 3, ri: 9  },
+  { name: "Prince John",   film: "Robin Hood",            score: 28.7, sv: 3, rm: 5,  cp: 2, cm: 1, ia: 2, ei: 1, ri: 7  },
+];
+
+const METRICS = ["sv", "rm", "cp", "cm", "ia", "ei", "ri"];
+const LABELS = ["Strategic Vision", "Resource Mgmt", "Charisma", "Crisis Mgmt", "Innovation", "Emotional IQ", "Ruthlessness (adj)"];
+const COLOR1 = "#00b4d8";
+const COLOR2 = "#e91e63";
+
+const sel1 = document.getElementById("item1");
+const sel2 = document.getElementById("item2");
+
+DATA.forEach((d, i) => {
+  [sel1, sel2].forEach(sel => {
+    const o = document.createElement("option");
+    o.value = i; o.textContent = `${d.name} (${d.score.toFixed(1)})`;
+    sel.appendChild(o);
+  });
+});
+
+// Default: Hades (0) vs Maleficent (16)
+sel1.value = 0;
+sel2.value = 16;
+
+const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
+
+function getVerdictText(d1, d2) {
+  const diff = (d1.score - d2.score).toFixed(1);
+  const winner = d1.score > d2.score ? d1 : d2;
+  const loser = d1.score > d2.score ? d2 : d1;
+
+  const edges = [];
+  METRICS.forEach((m, i) => {
+    if (d1[m] > d2[m]) edges.push(`${d1.name} leads on ${LABELS[i]}`);
+    else if (d2[m] > d1[m]) edges.push(`${d2.name} leads on ${LABELS[i]}`);
+  });
+
+  return `<strong>${winner.name}</strong> wins the boardroom battle by <strong>${Math.abs(diff)} points</strong>.
+  ${loser.name} (${loser.film}) would not survive Q3 earnings.`;
+}
+
+function render() {
+  const d1 = DATA[sel1.value];
+  const d2 = DATA[sel2.value];
+
+  document.getElementById("score1").textContent = d1.score.toFixed(1);
+  document.getElementById("label1").textContent = d1.name;
+  document.getElementById("score2").textContent = d2.score.toFixed(1);
+  document.getElementById("label2").textContent = d2.name;
+  document.getElementById("verdict").innerHTML = getVerdictText(d1, d2);
+
+  chart.setOption({
+    backgroundColor: "#0d0d1a",
+    legend: {
+      data: [d1.name, d2.name],
+      top: 12,
+      textStyle: { color: "#ccc", fontSize: 12 },
+    },
+    radar: {
+      indicator: METRICS.map((m, i) => ({ name: LABELS[i], max: 10 })),
+      shape: "polygon",
+      center: ["50%", "52%"],
+      radius: "62%",
+      splitNumber: 5,
+      name: { textStyle: { color: "#aaa", fontSize: 12 } },
+      splitArea: { areaStyle: { color: ["rgba(255,255,255,0.02)", "rgba(255,255,255,0.04)"] } },
+      splitLine: { lineStyle: { color: "rgba(255,255,255,0.1)" } },
+      axisLine: { lineStyle: { color: "rgba(255,255,255,0.12)" } },
+    },
+    tooltip: {
+      trigger: "item",
+      backgroundColor: "#1a1a2e",
+      borderColor: "#333",
+      textStyle: { color: "#eee", fontSize: 12 },
+      formatter: p => {
+        const d = p.seriesIndex === 0 ? d1 : d2;
+        let tip = `<b style="font-size:13px">${d.name}</b> &mdash; ${d.film}<br/><b style="color:#FFD700">CEO Score: ${d.score.toFixed(1)}</b><br/>`;
+        METRICS.forEach((m, i) => { tip += `${LABELS[i]}: <b>${d[m]}/10</b><br/>`; });
+        return tip;
+      },
+    },
+    series: [{
+      type: "radar",
+      name: d1.name,
+      data: [{
+        name: d1.name,
+        value: METRICS.map(m => d1[m]),
+        areaStyle: { color: COLOR1, opacity: 0.18 },
+        lineStyle: { color: COLOR1, width: 2.5 },
+        itemStyle: { color: COLOR1 },
+        symbol: "circle", symbolSize: 6,
+      }],
+      animationDuration: 1200,
+      animationEasing: "cubicOut",
+    }, {
+      type: "radar",
+      name: d2.name,
+      data: [{
+        name: d2.name,
+        value: METRICS.map(m => d2[m]),
+        areaStyle: { color: COLOR2, opacity: 0.18 },
+        lineStyle: { color: COLOR2, width: 2.5 },
+        itemStyle: { color: COLOR2 },
+        symbol: "circle", symbolSize: 6,
+      }],
+      animationDuration: 1200,
+      animationEasing: "cubicOut",
+    }],
+    graphic: [{
+      type: "text", right: 20, bottom: 10,
+      style: { text: "RankMint", fontSize: 11, fill: "#333", fontStyle: "italic" },
+    }],
+  });
+}
+
+sel1.addEventListener("change", render);
+sel2.addEventListener("change", render);
+render();
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

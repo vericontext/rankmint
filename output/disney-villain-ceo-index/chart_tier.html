@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disney Villain CEO Tier List | RankMint</title>
+<meta property="og:title" content="Disney Villain CEO Tier List">
+<meta property="og:description" content="Which Disney villain would survive a Fortune 500 board meeting? S through D — the definitive tier list.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Disney Villain CEO Tier List">
+<meta name="twitter:description" content="Which Disney villain would survive a Fortune 500 board meeting? S through D — the definitive tier list.">
+<meta name="twitter:image" content="card.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d0d1a; color: #e0e0e0; min-height: 100vh; }
+
+  .header { padding: 32px 32px 12px; text-align: center; }
+  .header h1 { font-size: 1.8rem; color: #fff; letter-spacing: 0.5px; }
+  .header h1 span { color: #e91e63; }
+  .header p { font-size: 0.88rem; color: #777; margin-top: 6px; }
+
+  .tier-container { max-width: 900px; margin: 24px auto 8px; padding: 0 16px; }
+
+  .tier-row {
+    display: flex; margin-bottom: 6px; min-height: 72px;
+    border-radius: 10px; overflow: visible;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .tier-label {
+    width: 90px; min-width: 90px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 2rem; font-weight: 900; color: #fff;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    border-radius: 10px 0 0 10px;
+    padding: 8px 4px;
+  }
+  .tier-sublabel {
+    font-size: 0.5rem; font-weight: 600; color: rgba(255,255,255,0.8);
+    text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px;
+    text-align: center; line-height: 1.2;
+    max-width: 80px;
+  }
+  .tier-items {
+    flex: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 0 10px 10px 0;
+  }
+  .tier-item {
+    border-radius: 8px; padding: 9px 16px;
+    font-size: 0.88rem; font-weight: 600;
+    cursor: default; transition: all 0.2s ease;
+    position: relative; user-select: none;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .tier-item:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+  .tier-item .item-name { color: #eee; }
+  .tier-item .item-film { font-size: 0.68rem; color: #999; margin-top: 1px; font-weight: 400; }
+  .tier-item .item-score { font-size: 0.7rem; color: #bbb; margin-top: 2px; font-weight: 700; }
+
+  .tooltip-box {
+    display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: #1a1a2e; color: #eee; padding: 10px 14px;
+    border-radius: 8px; font-size: 0.75rem; white-space: nowrap; z-index: 100;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+    pointer-events: none;
+  }
+  .tooltip-box::after {
+    content: ''; position: absolute; top: 100%; left: 50%;
+    transform: translateX(-50%); border: 6px solid transparent;
+    border-top-color: #1a1a2e;
+  }
+  .tier-item:hover .tooltip-box { display: block; }
+  .tooltip-box .t-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; }
+  .tooltip-box .t-row { display: flex; justify-content: space-between; gap: 16px; margin-top: 2px; }
+  .tooltip-box .t-label { color: #888; }
+  .tooltip-box .t-val { font-weight: 600; color: #eee; }
+
+  .watermark {
+    text-align: right; padding: 16px 32px 24px;
+    color: #444; font-size: 0.75rem; font-style: italic;
+  }
+
+  .legend {
+    max-width: 900px; margin: 0 auto 20px; padding: 0 16px;
+    display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;
+  }
+  .legend-item {
+    font-size: 0.7rem; color: #777; padding: 3px 10px;
+    border-radius: 4px; border: 1px solid rgba(255,255,255,0.07);
+  }
+
+  @media (max-width: 600px) {
+    .header h1 { font-size: 1.3rem; }
+    .tier-label { width: 60px; min-width: 60px; font-size: 1.5rem; }
+    .tier-sublabel { font-size: 0.4rem; }
+    .tier-item { padding: 7px 10px; font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Disney Villain <span>CEO</span> Tier List</h1>
+  <p>30 villains ranked by 7 leadership metrics &mdash; because evil comes in many management styles &bull; RankMint &bull; 2026</p>
+</div>
+
+<div class="legend" id="legend"></div>
+<div class="tier-container" id="tiers"></div>
+<div class="watermark">RankMint &mdash; disney-villain-ceo-index</div>
+
+<script>
+const DATA = [
+  { name: "Hades",        film: "Hercules",              score: 86.9, sv: 8, rm: 10, cp: 8, cm: 9, ia: 9, ei: 7, ri: 10 },
+  { name: "Ursula",       film: "The Little Mermaid",    score: 80.8, sv: 8, rm: 8,  cp: 9, cm: 7, ia: 8, ei: 9, ri: 8  },
+  { name: "King Candy",   film: "Wreck-It Ralph",        score: 70.9, sv: 8, rm: 7,  cp: 6, cm: 6, ia: 8, ei: 6, ri: 9  },
+  { name: "Syndrome",     film: "The Incredibles",       score: 70.7, sv: 9, rm: 7,  cp: 5, cm: 5, ia: 10,ei: 4, ri: 8  },
+  { name: "Dr. Facilier", film: "Princess & the Frog",   score: 70.0, sv: 6, rm: 6,  cp: 8, cm: 8, ia: 7, ei: 7, ri: 10 },
+  { name: "Lotso",        film: "Toy Story 3",           score: 69.1, sv: 7, rm: 8,  cp: 7, cm: 6, ia: 5, ei: 7, ri: 9  },
+  { name: "Scar",         film: "The Lion King",         score: 66.8, sv: 9, rm: 7,  cp: 8, cm: 4, ia: 4, ei: 5, ri: 7  },
+  { name: "Mother Gothel",film: "Tangled",               score: 65.5, sv: 8, rm: 5,  cp: 7, cm: 4, ia: 5, ei: 10,ri: 10 },
+  { name: "Bellwether",   film: "Zootopia",              score: 63.3, sv: 7, rm: 5,  cp: 7, cm: 4, ia: 7, ei: 8, ri: 9  },
+  { name: "Ratigan",      film: "Great Mouse Detective", score: 62.7, sv: 7, rm: 6,  cp: 7, cm: 5, ia: 6, ei: 5, ri: 8  },
+  { name: "Hans",         film: "Frozen",                score: 59.9, sv: 7, rm: 3,  cp: 8, cm: 5, ia: 5, ei: 8, ri: 9  },
+  { name: "Jafar",        film: "Aladdin",               score: 59.1, sv: 6, rm: 5,  cp: 5, cm: 7, ia: 7, ei: 4, ri: 9  },
+  { name: "AUTO",         film: "WALL-E",                score: 57.0, sv: 6, rm: 8,  cp: 1, cm: 8, ia: 6, ei: 1, ri: 9  },
+  { name: "Shan Yu",      film: "Mulan",                 score: 55.7, sv: 6, rm: 7,  cp: 5, cm: 6, ia: 4, ei: 3, ri: 6  },
+  { name: "Muntz",        film: "Up",                    score: 52.6, sv: 6, rm: 6,  cp: 4, cm: 4, ia: 6, ei: 3, ri: 8  },
+  { name: "Frollo",       film: "Hunchback of ND",       score: 52.2, sv: 7, rm: 7,  cp: 5, cm: 3, ia: 3, ei: 2, ri: 7  },
+  { name: "Maleficent",   film: "Sleeping Beauty",       score: 51.8, sv: 7, rm: 6,  cp: 5, cm: 2, ia: 6, ei: 2, ri: 6  },
+  { name: "Bill Sykes",   film: "Oliver & Company",      score: 47.2, sv: 5, rm: 6,  cp: 4, cm: 5, ia: 3, ei: 2, ri: 8  },
+  { name: "Yzma",         film: "Emperor's New Groove",  score: 44.8, sv: 5, rm: 3,  cp: 4, cm: 4, ia: 7, ei: 3, ri: 7  },
+  { name: "Alameda Slim", film: "Home on the Range",     score: 42.4, sv: 4, rm: 4,  cp: 5, cm: 3, ia: 5, ei: 3, ri: 8  },
+  { name: "Stinky Pete",  film: "Toy Story 2",           score: 42.1, sv: 5, rm: 2,  cp: 5, cm: 3, ia: 4, ei: 6, ri: 8  },
+  { name: "Evil Queen",   film: "Snow White",            score: 40.6, sv: 5, rm: 4,  cp: 3, cm: 3, ia: 5, ei: 2, ri: 7  },
+  { name: "Horned King",  film: "The Black Cauldron",    score: 40.6, sv: 5, rm: 5,  cp: 3, cm: 3, ia: 4, ei: 1, ri: 7  },
+  { name: "Cruella",      film: "101 Dalmatians",        score: 40.5, sv: 4, rm: 5,  cp: 5, cm: 2, ia: 3, ei: 3, ri: 8  },
+  { name: "Gaston",       film: "Beauty and the Beast",  score: 39.0, sv: 2, rm: 3,  cp: 10,cm: 3, ia: 2, ei: 2, ri: 9  },
+  { name: "Ratcliffe",    film: "Pocahontas",            score: 38.0, sv: 4, rm: 5,  cp: 4, cm: 2, ia: 2, ei: 2, ri: 10 },
+  { name: "McLeach",      film: "Rescuers Down Under",   score: 37.9, sv: 4, rm: 4,  cp: 3, cm: 3, ia: 4, ei: 2, ri: 9  },
+  { name: "Tamatoa",      film: "Moana",                 score: 37.2, sv: 2, rm: 4,  cp: 7, cm: 3, ia: 3, ei: 2, ri: 8  },
+  { name: "Captain Hook", film: "Peter Pan",             score: 33.8, sv: 3, rm: 4,  cp: 4, cm: 2, ia: 2, ei: 3, ri: 9  },
+  { name: "Prince John",  film: "Robin Hood",            score: 28.7, sv: 3, rm: 5,  cp: 2, cm: 1, ia: 2, ei: 1, ri: 7  },
+];
+
+const TIERS = [
+  { label: "S", sublabel: "Fortune 500\nReady",      min: 80,  color: "#c0392b", glow: "rgba(192,57,43,0.3)"   },
+  { label: "A", sublabel: "Strong\nC-Suite",         min: 70,  color: "#e67e22", glow: "rgba(230,126,34,0.25)" },
+  { label: "B", sublabel: "Middle\nManagement",      min: 60,  color: "#2980b9", glow: "rgba(41,128,185,0.25)" },
+  { label: "C", sublabel: "Needs\nCoaching",         min: 50,  color: "#8e44ad", glow: "rgba(142,68,173,0.25)" },
+  { label: "D", sublabel: "Don't Give Them\na Budget",min: 0,  color: "#555",    glow: "rgba(80,80,80,0.2)"    },
+];
+
+const ITEM_COLORS = {
+  "S": { bg: "rgba(192,57,43,0.18)",  border: "rgba(192,57,43,0.5)"  },
+  "A": { bg: "rgba(230,126,34,0.15)", border: "rgba(230,126,34,0.4)" },
+  "B": { bg: "rgba(41,128,185,0.15)", border: "rgba(41,128,185,0.4)" },
+  "C": { bg: "rgba(142,68,173,0.15)", border: "rgba(142,68,173,0.4)" },
+  "D": { bg: "rgba(80,80,80,0.12)",   border: "rgba(100,100,100,0.35)" },
+};
+
+const sorted = [...DATA].sort((a, b) => b.score - a.score);
+
+function assignTier(score) {
+  for (const t of TIERS) { if (score >= t.min) return t.label; }
+  return "D";
+}
+
+// Build legend
+const legendEl = document.getElementById("legend");
+TIERS.forEach(t => {
+  const el = document.createElement("div");
+  el.className = "legend-item";
+  el.style.borderColor = t.color + "88";
+  el.style.color = t.color;
+  el.innerHTML = `<b>${t.label}</b> &ge; ${t.min === 0 ? "0" : t.min} &mdash; ${t.sublabel.replace("\n", " ")}`;
+  legendEl.appendChild(el);
+});
+
+const container = document.getElementById("tiers");
+
+TIERS.forEach(tier => {
+  const tierItems = sorted.filter(d => assignTier(d.score) === tier.label);
+  if (tierItems.length === 0) return;
+
+  const row = document.createElement("div");
+  row.className = "tier-row";
+
+  const labelDiv = document.createElement("div");
+  labelDiv.className = "tier-label";
+  labelDiv.style.background = tier.color;
+  labelDiv.style.boxShadow = `inset 0 0 20px rgba(0,0,0,0.2), 0 0 12px ${tier.glow}`;
+  labelDiv.innerHTML = `${tier.label}<div class="tier-sublabel">${tier.sublabel.replace("\n", "<br/>")}</div>`;
+  row.appendChild(labelDiv);
+
+  const itemsDiv = document.createElement("div");
+  itemsDiv.className = "tier-items";
+
+  tierItems.forEach(d => {
+    const colors = ITEM_COLORS[tier.label];
+    const el = document.createElement("div");
+    el.className = "tier-item";
+    el.style.background = colors.bg;
+    el.style.borderColor = colors.border;
+
+    el.innerHTML = `
+      <div class="item-name">${d.name}</div>
+      <div class="item-film">${d.film}</div>
+      <div class="item-score">${d.score.toFixed(1)}</div>
+      <div class="tooltip-box">
+        <div class="t-title">${d.name}</div>
+        <div class="t-row"><span class="t-label">CEO Score</span><span class="t-val">${d.score.toFixed(1)}</span></div>
+        <div class="t-row"><span class="t-label">Strategic Vision</span><span class="t-val">${d.sv}/10</span></div>
+        <div class="t-row"><span class="t-label">Resource Mgmt</span><span class="t-val">${d.rm}/10</span></div>
+        <div class="t-row"><span class="t-label">Charisma</span><span class="t-val">${d.cp}/10</span></div>
+        <div class="t-row"><span class="t-label">Crisis Mgmt</span><span class="t-val">${d.cm}/10</span></div>
+        <div class="t-row"><span class="t-label">Innovation</span><span class="t-val">${d.ia}/10</span></div>
+        <div class="t-row"><span class="t-label">Emotional IQ</span><span class="t-val">${d.ei}/10</span></div>
+        <div class="t-row"><span class="t-label">Ruthlessness (adj)</span><span class="t-val">${d.ri}/10</span></div>
+      </div>
+    `;
+    itemsDiv.appendChild(el);
+  });
+
+  row.appendChild(itemsDiv);
+  container.appendChild(row);
+});
+
+// Staggered entrance animation
+document.querySelectorAll(".tier-item").forEach((el, i) => {
+  el.style.opacity = "0";
+  el.style.transform = "scale(0.85) translateY(8px)";
+  setTimeout(() => {
+    el.style.transition = "opacity 0.35s ease, transform 0.35s ease";
+    el.style.opacity = "1";
+    el.style.transform = "scale(1) translateY(0)";
+  }, 80 + i * 35);
+});
+</script>
+</body>
+</html>

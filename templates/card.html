@@ -1,0 +1,69 @@
+<!--
+  Social Card Template (1200x630)
+  - Generates output/<slug>/card.html — screenshot with Playwright for OG image.
+  - Fixed 1200x630px dimensions for social media preview cards.
+  - Storyteller MUST replace DATA and CONFIG with actual values.
+  - After generating, screenshot to output/<slug>/card.png using Playwright MCP.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 630px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .card {
+    width: 1200px; height: 630px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 60px 80px;
+    position: relative;
+  }
+  .title { font-size: 42px; font-weight: 800; margin-bottom: 16px; line-height: 1.2; max-width: 800px; }
+  .hook { font-size: 20px; color: #ccc; margin-bottom: 40px; max-width: 700px; line-height: 1.4; }
+  .top3 { display: flex; gap: 24px; }
+  .top-item { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 20px 28px; min-width: 200px; }
+  .top-item .medal { font-size: 28px; font-weight: 900; margin-bottom: 4px; }
+  .top-item .medal.gold { color: #FFD700; }
+  .top-item .medal.silver { color: #C0C0C0; }
+  .top-item .medal.bronze { color: #CD7F32; }
+  .top-item .item-name { font-size: 18px; font-weight: 600; }
+  .top-item .item-score { font-size: 14px; color: #aaa; margin-top: 4px; }
+  .watermark {
+    position: absolute; bottom: 30px; right: 40px;
+    font-size: 16px; color: rgba(255,255,255,0.3); font-weight: 700; letter-spacing: 2px;
+  }
+  .accent-line {
+    position: absolute; top: 0; left: 0; width: 100%; height: 6px;
+    background: linear-gradient(90deg, #FFD700, #FF6B6B, #4682B4);
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="accent-line"></div>
+  <div class="title" id="card-title"><!-- REPLACE: Index Name --></div>
+  <div class="hook" id="card-hook"><!-- REPLACE: One-line hook --></div>
+  <div class="top3" id="top3">
+    <!-- REPLACE: Storyteller generates top 3 items here -->
+    <!--
+    <div class="top-item">
+      <div class="medal gold">#1</div>
+      <div class="item-name">Finland</div>
+      <div class="item-score">94.2 pts</div>
+    </div>
+    <div class="top-item">
+      <div class="medal silver">#2</div>
+      <div class="item-name">Norway</div>
+      <div class="item-score">91.8 pts</div>
+    </div>
+    <div class="top-item">
+      <div class="medal bronze">#3</div>
+      <div class="item-name">Iceland</div>
+      <div class="item-score">89.5 pts</div>
+    </div>
+    -->
+  </div>
+  <div class="watermark">RANKMINT</div>
+</div>
+</body>
+</html>
