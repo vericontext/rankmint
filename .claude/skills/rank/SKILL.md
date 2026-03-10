@@ -101,7 +101,10 @@ Read output/<slug>/plan.md and output/<slug>/scored_data.csv, then:
 **Verification:**
 - `output/<slug>/report.md` exists + report does NOT start with a table
 - At least 2 `.html` chart files exist
-- `output/<slug>/index.html` exists + contains `og:title` meta tag
+- `output/<slug>/index.html` exists + contains `og:title` meta tag + has navigation link to `../` (home)
+- ALL chart HTML files have navigation link to `index.html` (back) and `../` (home)
+- No tier list has duplicate items across tiers
+- Text content is not truncated by CSS (no `text-overflow: ellipsis` or `overflow: hidden` on content)
 - `output/<slug>/card.html` exists
 - `output/<slug>/social.md` exists
 
