@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dating App Dark Pattern Heatmap | RankMint</title>
+<meta property="og:title" content="Dating App Dark Pattern Heatmap">
+<meta property="og:description" content="See WHY each dating app is manipulative: 23 apps × 8 dark pattern types. Grindr's red column is data harvesting. Bumble's is FOMO. Tinder is red everywhere.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dating App Dark Pattern Heatmap">
+<meta name="twitter:description" content="See WHY each app is manipulative: Grindr's red column is data harvesting. Bumble's is FOMO. Tinder is red everywhere.">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; }
+  #chart { width: 100%; height: 92vh; min-height: 700px; }
+  .header { padding: 24px 32px 8px; }
+  .header h1 { font-size: 1.4rem; color: #1a1a2e; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+</style>
+</head>
+<body>
+<nav style="background:#1a1a2e;padding:10px 20px;display:flex;gap:16px;align-items:center;">
+  <a href="../" style="color:#E91E63;text-decoration:none;font-size:0.85rem;">← RankMint Home</a>
+  <a href="index.html" style="color:#E91E63;text-decoration:none;font-size:0.85rem;">← Back to Rankings</a>
+</nav>
+<div class="header">
+  <h1>Dating App Dark Pattern Heatmap</h1>
+  <p>23 apps × 8 manipulation dimensions. Red = maximum predatory (10/10). Green = minimal. Sorted by overall score. RankMint · March 2026</p>
+</div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { name: "Tinder",             score: 92.5, swipe: 10, paywall: 10, notifications: 9, visibility: 10, subtrap: 8, data: 9, fomo: 8,  scarcity: 10 },
+  { name: "Hinge",              score: 77.5, swipe: 8,  paywall: 9,  notifications: 6, visibility: 8,  subtrap: 7, data: 8, fomo: 7,  scarcity: 9  },
+  { name: "Match.com",          score: 76.2, swipe: 5,  paywall: 9,  notifications: 10,visibility: 7,  subtrap: 10,data: 7, fomo: 6,  scarcity: 7  },
+  { name: "Bumble",             score: 75.0, swipe: 7,  paywall: 8,  notifications: 7, visibility: 7,  subtrap: 7, data: 6, fomo: 10, scarcity: 8  },
+  { name: "Badoo",              score: 73.8, swipe: 9,  paywall: 7,  notifications: 8, visibility: 8,  subtrap: 6, data: 8, fomo: 6,  scarcity: 7  },
+  { name: "Zoosk",              score: 68.8, swipe: 6,  paywall: 8,  notifications: 8, visibility: 7,  subtrap: 7, data: 6, fomo: 5,  scarcity: 8  },
+  { name: "Happn",              score: 68.8, swipe: 7,  paywall: 8,  notifications: 9, visibility: 8,  subtrap: 5, data: 6, fomo: 5,  scarcity: 7  },
+  { name: "Tantan",             score: 68.8, swipe: 8,  paywall: 7,  notifications: 7, visibility: 7,  subtrap: 6, data: 9, fomo: 5,  scarcity: 6  },
+  { name: "Plenty of Fish",     score: 65.0, swipe: 6,  paywall: 7,  notifications: 8, visibility: 7,  subtrap: 8, data: 6, fomo: 4,  scarcity: 6  },
+  { name: "OkCupid",            score: 62.5, swipe: 6,  paywall: 6,  notifications: 7, visibility: 6,  subtrap: 6, data: 8, fomo: 5,  scarcity: 6  },
+  { name: "The League",         score: 62.5, swipe: 4,  paywall: 9,  notifications: 5, visibility: 7,  subtrap: 7, data: 5, fomo: 6,  scarcity: 7  },
+  { name: "Pairs",              score: 61.3, swipe: 6,  paywall: 7,  notifications: 6, visibility: 7,  subtrap: 6, data: 7, fomo: 5,  scarcity: 5  },
+  { name: "Grindr",             score: 58.8, swipe: 7,  paywall: 5,  notifications: 6, visibility: 5,  subtrap: 5, data: 10,fomo: 4,  scarcity: 5  },
+  { name: "Coffee Meets Bagel", score: 56.2, swipe: 3,  paywall: 8,  notifications: 5, visibility: 5,  subtrap: 6, data: 5, fomo: 6,  scarcity: 7  },
+  { name: "eHarmony",           score: 56.2, swipe: 3,  paywall: 8,  notifications: 6, visibility: 5,  subtrap: 10,data: 5, fomo: 3,  scarcity: 5  },
+  { name: "Lumen",              score: 53.8, swipe: 4,  paywall: 7,  notifications: 6, visibility: 6,  subtrap: 6, data: 5, fomo: 4,  scarcity: 5  },
+  { name: "Her",                score: 46.2, swipe: 5,  paywall: 5,  notifications: 5, visibility: 4,  subtrap: 5, data: 5, fomo: 4,  scarcity: 4  },
+  { name: "Snack",              score: 42.5, swipe: 5,  paywall: 4,  notifications: 4, visibility: 4,  subtrap: 4, data: 5, fomo: 4,  scarcity: 4  },
+  { name: "Feeld",              score: 41.2, swipe: 4,  paywall: 5,  notifications: 3, visibility: 4,  subtrap: 4, data: 7, fomo: 3,  scarcity: 3  },
+  { name: "Ship",               score: 41.2, swipe: 4,  paywall: 4,  notifications: 5, visibility: 4,  subtrap: 4, data: 4, fomo: 4,  scarcity: 4  },
+  { name: "Thursday",           score: 37.5, swipe: 2,  paywall: 4,  notifications: 3, visibility: 2,  subtrap: 4, data: 3, fomo: 8,  scarcity: 4  },
+  { name: "Archer",             score: 32.5, swipe: 3,  paywall: 4,  notifications: 3, visibility: 3,  subtrap: 3, data: 4, fomo: 3,  scarcity: 3  },
+  { name: "Raya",               score: 31.2, swipe: 3,  paywall: 5,  notifications: 2, visibility: 3,  subtrap: 3, data: 3, fomo: 3,  scarcity: 3  },
+];
+
+const CONFIG = {
+  nameField: "name",
+  scoreField: "score",
+  metrics: ["swipe", "paywall", "notifications", "visibility", "subtrap", "data", "fomo", "scarcity"],
+  metricLabels: ["Swipe Addiction", "Paywall Manip.", "Notif. Spam", "Visibility Throttle", "Sub Trap", "Data Harvest", "FOMO Mechanics", "Fake Scarcity"],
+  // Red-hot for high manipulation (bad for user), cooling to green for low
+  colorRange: ["#1B5E20", "#388E3C", "#81C784", "#FFF9C4", "#FFB74D", "#EF5350", "#B71C1C"],
+};
+
+const sorted = [...DATA].sort((a, b) => b[CONFIG.scoreField] - a[CONFIG.scoreField]);
+// For heatmap, display top apps at top (index 0) — so we reverse for y-axis
+const displayOrder = [...sorted].reverse();
+const names = displayOrder.map(d => d[CONFIG.nameField]);
+const metrics = CONFIG.metrics;
+const labels = CONFIG.metricLabels;
+
+// Use raw 1-10 values directly, map to 0-100 for visual map
+const heatData = [];
+displayOrder.forEach((d, yi) => {
+  metrics.forEach((m, xi) => {
+    const raw = d[m];
+    // 1-10 scale → 0-100 for visualMap
+    const norm = ((raw - 1) / 9) * 100;
+    heatData.push([xi, yi, norm, raw]);
+  });
+});
+
+const chart = echarts.init(document.getElementById("chart"));
+chart.setOption({
+  tooltip: {
+    position: "top",
+    formatter: p => {
+      const d = displayOrder[p.value[1]];
+      const metric = labels[p.value[0]];
+      const raw = p.value[3];
+      return `<b>${d[CONFIG.nameField]}</b><br/>${metric}: <b>${raw}/10</b><br/>Overall Score: ${d[CONFIG.scoreField].toFixed(1)}`;
+    },
+  },
+  grid: { left: "22%", right: "8%", top: 80, bottom: 30 },
+  xAxis: {
+    type: "category",
+    data: labels,
+    position: "top",
+    axisLabel: { fontSize: 10, rotate: 25, color: "#333" },
+    splitArea: { show: true },
+  },
+  yAxis: {
+    type: "category",
+    data: names,
+    inverse: false,
+    axisLabel: { fontSize: 10, color: "#333" },
+    splitArea: { show: true },
+  },
+  visualMap: {
+    min: 0,
+    max: 100,
+    calculable: true,
+    orient: "horizontal",
+    left: "center",
+    top: 10,
+    inRange: { color: CONFIG.colorRange },
+    text: ["Max Manipulation (10)", "Min Manipulation (1)"],
+    textStyle: { fontSize: 10, color: "#333" },
+  },
+  dataZoom: [
+    { type: "inside", yAxisIndex: 0, filterMode: "none" },
+  ],
+  series: [{
+    type: "heatmap",
+    data: heatData,
+    label: {
+      show: true,
+      formatter: p => p.value[3],
+      fontSize: 10,
+      color: "#333",
+      fontWeight: "bold",
+    },
+    emphasis: {
+      itemStyle: { borderColor: "#1a1a2e", borderWidth: 2 },
+    },
+    animationDuration: 1800,
+    animationEasing: "cubicOut",
+  }],
+  graphic: [{
+    type: "text", right: 20, bottom: 10,
+    style: { text: "RankMint", fontSize: 12, fill: "#ccc", fontStyle: "italic" },
+  }],
+});
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

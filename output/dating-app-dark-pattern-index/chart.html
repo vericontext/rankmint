@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dating App Dark Pattern Index — Bar Chart | RankMint</title>
+<meta property="og:title" content="Dating App Dark Pattern Index — Bar Chart">
+<meta property="og:description" content="23 dating apps ranked by how manipulative they are. Tinder scores 92.5/100. Your loneliness is their business model.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dating App Dark Pattern Index — Bar Chart">
+<meta name="twitter:description" content="23 dating apps ranked by how manipulative they are. Tinder scores 92.5/100.">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; }
+  #chart { width: 100%; height: 90vh; min-height: 600px; }
+  .header { padding: 24px 32px 8px; }
+  .header h1 { font-size: 1.4rem; color: #1a1a2e; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+</style>
+</head>
+<body>
+<nav style="background:#1a1a2e;padding:10px 20px;display:flex;gap:16px;align-items:center;">
+  <a href="../" style="color:#E91E63;text-decoration:none;font-size:0.85rem;">← RankMint Home</a>
+  <a href="index.html" style="color:#E91E63;text-decoration:none;font-size:0.85rem;">← Back to Rankings</a>
+</nav>
+<div class="header">
+  <h1>Dating App Dark Pattern Index</h1>
+  <p>23 apps ranked by manipulation score (0–100). Higher = more predatory. Data: RankMint · March 2026</p>
+</div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { rank: 1,  name: "Tinder",             score: 92.5, swipe: 10, paywall: 10, notifications: 9, visibility: 10, subtrap: 8, data: 9, fomo: 8,  scarcity: 10, tier: "S", owner: "Match Group" },
+  { rank: 2,  name: "Hinge",              score: 77.5, swipe: 8,  paywall: 9,  notifications: 6, visibility: 8,  subtrap: 7, data: 8, fomo: 7,  scarcity: 9,  tier: "A", owner: "Match Group" },
+  { rank: 3,  name: "Match.com",          score: 76.2, swipe: 5,  paywall: 9,  notifications: 10,visibility: 7,  subtrap: 10,data: 7, fomo: 6,  scarcity: 7,  tier: "A", owner: "Match Group" },
+  { rank: 4,  name: "Bumble",             score: 75.0, swipe: 7,  paywall: 8,  notifications: 7, visibility: 7,  subtrap: 7, data: 6, fomo: 10, scarcity: 8,  tier: "A", owner: "Bumble Inc." },
+  { rank: 5,  name: "Badoo",              score: 73.8, swipe: 9,  paywall: 7,  notifications: 8, visibility: 8,  subtrap: 6, data: 8, fomo: 6,  scarcity: 7,  tier: "A", owner: "Bumble Inc." },
+  { rank: 6,  name: "Zoosk",              score: 68.8, swipe: 6,  paywall: 8,  notifications: 8, visibility: 7,  subtrap: 7, data: 6, fomo: 5,  scarcity: 8,  tier: "B", owner: "Spark Networks" },
+  { rank: 7,  name: "Happn",              score: 68.8, swipe: 7,  paywall: 8,  notifications: 9, visibility: 8,  subtrap: 5, data: 6, fomo: 5,  scarcity: 7,  tier: "B", owner: "Happn SAS" },
+  { rank: 8,  name: "Tantan",             score: 68.8, swipe: 8,  paywall: 7,  notifications: 7, visibility: 7,  subtrap: 6, data: 9, fomo: 5,  scarcity: 6,  tier: "B", owner: "Momo Inc." },
+  { rank: 9,  name: "Plenty of Fish",     score: 65.0, swipe: 6,  paywall: 7,  notifications: 8, visibility: 7,  subtrap: 8, data: 6, fomo: 4,  scarcity: 6,  tier: "B", owner: "Match Group" },
+  { rank: 10, name: "OkCupid",            score: 62.5, swipe: 6,  paywall: 6,  notifications: 7, visibility: 6,  subtrap: 6, data: 8, fomo: 5,  scarcity: 6,  tier: "B", owner: "Match Group" },
+  { rank: 11, name: "The League",         score: 62.5, swipe: 4,  paywall: 9,  notifications: 5, visibility: 7,  subtrap: 7, data: 5, fomo: 6,  scarcity: 7,  tier: "B", owner: "Match Group" },
+  { rank: 12, name: "Pairs",              score: 61.3, swipe: 6,  paywall: 7,  notifications: 6, visibility: 7,  subtrap: 6, data: 7, fomo: 5,  scarcity: 5,  tier: "B", owner: "Match Group" },
+  { rank: 13, name: "Grindr",             score: 58.8, swipe: 7,  paywall: 5,  notifications: 6, visibility: 5,  subtrap: 5, data: 10,fomo: 4,  scarcity: 5,  tier: "B", owner: "Grindr LLC" },
+  { rank: 14, name: "Coffee Meets Bagel", score: 56.2, swipe: 3,  paywall: 8,  notifications: 5, visibility: 5,  subtrap: 6, data: 5, fomo: 6,  scarcity: 7,  tier: "B", owner: "CMB Inc." },
+  { rank: 15, name: "eHarmony",           score: 56.2, swipe: 3,  paywall: 8,  notifications: 6, visibility: 5,  subtrap: 10,data: 5, fomo: 3,  scarcity: 5,  tier: "B", owner: "IAC" },
+  { rank: 16, name: "Lumen",              score: 53.8, swipe: 4,  paywall: 7,  notifications: 6, visibility: 6,  subtrap: 6, data: 5, fomo: 4,  scarcity: 5,  tier: "C", owner: "Lumen Dating" },
+  { rank: 17, name: "Her",                score: 46.2, swipe: 5,  paywall: 5,  notifications: 5, visibility: 4,  subtrap: 5, data: 5, fomo: 4,  scarcity: 4,  tier: "C", owner: "Bloomer Inc." },
+  { rank: 18, name: "Snack",              score: 42.5, swipe: 5,  paywall: 4,  notifications: 4, visibility: 4,  subtrap: 4, data: 5, fomo: 4,  scarcity: 4,  tier: "C", owner: "Snack Media" },
+  { rank: 19, name: "Feeld",              score: 41.2, swipe: 4,  paywall: 5,  notifications: 3, visibility: 4,  subtrap: 4, data: 7, fomo: 3,  scarcity: 3,  tier: "C", owner: "Feeld Ltd." },
+  { rank: 20, name: "Ship",               score: 41.2, swipe: 4,  paywall: 4,  notifications: 5, visibility: 4,  subtrap: 4, data: 4, fomo: 4,  scarcity: 4,  tier: "C", owner: "Match Group" },
+  { rank: 21, name: "Thursday",           score: 37.5, swipe: 2,  paywall: 4,  notifications: 3, visibility: 2,  subtrap: 4, data: 3, fomo: 8,  scarcity: 4,  tier: "D", owner: "Thursday Ltd." },
+  { rank: 22, name: "Archer",             score: 32.5, swipe: 3,  paywall: 4,  notifications: 3, visibility: 3,  subtrap: 3, data: 4, fomo: 3,  scarcity: 3,  tier: "D", owner: "Archer Dating" },
+  { rank: 23, name: "Raya",               score: 31.2, swipe: 3,  paywall: 5,  notifications: 2, visibility: 3,  subtrap: 3, data: 3, fomo: 3,  scarcity: 3,  tier: "D", owner: "Raya Inc." },
+];
+
+const CONFIG = {
+  scoreField: "score",
+  nameField: "name",
+  topN: 23,
+  palette: "berry",
+};
+
+const PALETTES = {
+  "berry": ["#E91E63", "#4A148C"],
+};
+
+function interpolateColor(c1, c2, t) {
+  const hex = s => parseInt(s, 16);
+  const r = Math.round(hex(c1.slice(1,3)) + (hex(c2.slice(1,3)) - hex(c1.slice(1,3))) * t);
+  const g = Math.round(hex(c1.slice(3,5)) + (hex(c2.slice(3,5)) - hex(c1.slice(3,5))) * t);
+  const b = Math.round(hex(c1.slice(5,7)) + (hex(c2.slice(5,7)) - hex(c1.slice(5,7))) * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+const sorted = [...DATA].sort((a, b) => b[CONFIG.scoreField] - a[CONFIG.scoreField]).slice(0, CONFIG.topN);
+const names = sorted.map(d => d[CONFIG.nameField]).reverse();
+const scores = sorted.map(d => d[CONFIG.scoreField]).reverse();
+
+const [c1, c2] = PALETTES[CONFIG.palette];
+const colors = scores.map((_, i) => interpolateColor(c2, c1, i / Math.max(scores.length - 1, 1)));
+
+const TIER_COLORS = { S: "#FF4C4C", A: "#FF9800", B: "#42A5F5", C: "#AB47BC", D: "#78909C" };
+const sortedReversed = [...sorted].reverse();
+
+const chart = echarts.init(document.getElementById("chart"));
+chart.setOption({
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    formatter: params => {
+      const d = sortedReversed[params[0].dataIndex];
+      return `<b>${d.name}</b> (${d.owner})<br/>
+        Dark Pattern Score: <b>${d.score.toFixed(1)}</b> — Tier ${d.tier}<br/>
+        Swipe Addiction: ${d.swipe} &nbsp; Paywall: ${d.paywall}<br/>
+        Notifications: ${d.notifications} &nbsp; Visibility: ${d.visibility}<br/>
+        Sub Trap: ${d.subtrap} &nbsp; Data Harvesting: ${d.data}<br/>
+        FOMO: ${d.fomo} &nbsp; Fake Scarcity: ${d.scarcity}`;
+    }
+  },
+  grid: { left: "24%", right: "12%", top: 20, bottom: 30 },
+  xAxis: {
+    type: "value",
+    name: "Dark Pattern Score (0–100)",
+    max: 100,
+    axisLabel: { fontSize: 11 }
+  },
+  yAxis: {
+    type: "category",
+    data: names,
+    axisLabel: { fontSize: 11, color: "#333" }
+  },
+  dataZoom: [{ type: "inside", yAxisIndex: 0, filterMode: "none" }],
+  series: [{
+    type: "bar",
+    data: scores.map((v, i) => ({
+      value: v,
+      itemStyle: { color: colors[i], borderRadius: [0, 4, 4, 0] }
+    })),
+    barWidth: "60%",
+    label: {
+      show: true,
+      position: "right",
+      formatter: p => p.value.toFixed(1),
+      fontSize: 11,
+      color: "#333"
+    },
+    animationDuration: 1800,
+    animationEasing: "elasticOut",
+  }],
+  graphic: [{
+    type: "text", right: 20, bottom: 10,
+    style: { text: "RankMint", fontSize: 12, fill: "#ccc", fontStyle: "italic" },
+  }],
+});
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

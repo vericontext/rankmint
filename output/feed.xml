@@ -8,6 +8,38 @@
   <lastBuildDate>Tue, 10 Mar 2026 00:00:00 +0000</lastBuildDate>
 
   <item>
+    <title>Airport Anxiety Index</title>
+    <link>https://rankmint.io/airport-anxiety-index/</link>
+    <description>Delhi is the world's most anxiety-inducing airport (81.4/100). CDG ranks #6 by Skytrax but #10 in anxiety — worst wayfinding in the dataset. ATL handles 108M passengers but ranks only #12 thanks to its simple Plane Train layout. 30 airports scored across 7 stress metrics.</description>
+    <pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate>
+    <guid>https://rankmint.io/airport-anxiety-index/</guid>
+  </item>
+
+  <item>
+    <title>Programming Language Mass Extinction Index</title>
+    <link>https://rankmint.io/programming-language-mass-extinction-index/</link>
+    <description>ActionScript is already dead (100/100 extinction risk). COBOL refuses to die — banks need it more than Haskell or Erlang. Perl's TIOBE rank 11 is a mirage of legacy pages. JavaScript is the cockroach of programming (2.0 extinction risk). 30 languages ranked by how close they are to disappearing.</description>
+    <pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate>
+    <guid>https://rankmint.io/programming-language-mass-extinction-index/</guid>
+  </item>
+
+  <item>
+    <title>Horror Movie Survival IQ Index</title>
+    <link>https://rankmint.io/horror-movie-survival-iq-index/</link>
+    <description>Micah (Paranormal Activity) scored lower than a 6-year-old. Ash Williams is mid-tier and the formula defends him. Ripley is the curve-setter at 93.3. 30 iconic horror characters ranked by how smart (or catastrophically dumb) their survival decisions actually are.</description>
+    <pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate>
+    <guid>https://rankmint.io/horror-movie-survival-iq-index/</guid>
+  </item>
+
+  <item>
+    <title>Dating App Dark Pattern Index</title>
+    <link>https://rankmint.io/dating-app-dark-pattern-index/</link>
+    <description>Tinder scores 92.5/100 on dark patterns — the worst in every category. Hinge is "designed to be deleted" but ranks #2 in manipulation. Match Group owns 7 of the top 12 most manipulative apps. 23 dating apps ranked by how aggressively they exploit users.</description>
+    <pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate>
+    <guid>https://rankmint.io/dating-app-dark-pattern-index/</guid>
+  </item>
+
+  <item>
     <title>Boss Fight Fairness Index</title>
     <link>https://rankmint.io/boss-fight-fairness-index/</link>
     <description>The easiest boss in the dataset is the fairest. Baldur #1, Isshin #2, Bed of Chaos dead last. Malenia is top 12 fairest despite being the hardest. Difficulty and fairness are independent.</description>

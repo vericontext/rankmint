@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programming Language Mass Extinction Index | RankMint</title>
+<meta property="og:title" content="Programming Language Mass Extinction Index">
+<meta property="og:description" content="Which programming languages are already dead — and which will outlive us all? 30 languages ranked by forensic extinction risk.">
+<meta property="og:image" content="card.png">
+<meta property="og:url" content="https://rankmint.io/programming-language-mass-extinction-index/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Programming Language Mass Extinction Index">
+<meta name="twitter:description" content="Which programming languages are already dead — and which will outlive us all? 30 languages ranked by forensic extinction risk.">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #fafafa; --text: #1a1a2e; --muted: #888; --accent: #c0392b;
+    --card-bg: #fff; --border: #eee;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; }
+
+  /* Scrollytelling narrative */
+  .story { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+  .story-block { padding: 48px 0; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .story-block.visible { opacity: 1; transform: translateY(0); }
+
+  /* Opening */
+  .opening { padding: 80px 0 40px; border-bottom: 1px solid var(--border); }
+  .opening .index-tag { font-size: 0.75rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 14px; font-family: -apple-system, sans-serif; }
+  .opening h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.25; margin-bottom: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .opening .byline { font-size: 0.82rem; color: var(--muted); margin-bottom: 28px; font-family: -apple-system, sans-serif; }
+  .opening .lede { font-size: 1.15rem; line-height: 1.85; }
+  .opening .lede p { margin-bottom: 1.4em; }
+
+  /* Narrative paragraphs */
+  .narrative { font-size: 1.05rem; line-height: 1.9; }
+  .narrative p { margin-bottom: 1.5em; }
+  .narrative strong { color: var(--accent); }
+  .narrative blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 1.5em 0;
+    font-style: italic; color: #555; font-size: 1.08rem; }
+
+  /* Inline chart */
+  .inline-chart { width: 100%; height: 480px; background: var(--card-bg); border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin: 28px 0; }
+  .chart-caption { font-size: 0.78rem; color: var(--muted); text-align: center; margin-top: 6px;
+    font-family: -apple-system, sans-serif; }
+  .chart-link { font-size: 0.82rem; text-align: center; margin-top: 8px; font-family: -apple-system, sans-serif; }
+  .chart-link a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(192,57,43,0.3); }
+  .chart-link a:hover { border-bottom-color: var(--accent); }
+
+  /* Taxonomy blocks woven into narrative */
+  .story-taxonomy { background: var(--card-bg); border-radius: 12px; padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin: 28px 0; border-left: 4px solid var(--accent); }
+  .story-taxonomy h3 { font-size: 1.05rem; margin-bottom: 6px; color: var(--accent);
+    font-family: -apple-system, sans-serif; font-weight: 700; }
+  .story-taxonomy .tax-desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 14px; font-style: italic; }
+  .story-taxonomy .items { display: flex; flex-wrap: wrap; gap: 8px; }
+  .story-taxonomy .item-tag { background: #f9f0f0; border-radius: 20px; padding: 6px 14px;
+    font-size: 0.8rem; font-family: -apple-system, sans-serif; color: var(--text); }
+  .story-taxonomy .item-tag .score { color: var(--accent); margin-left: 5px; font-weight: 600; }
+
+  /* Callout box */
+  .callout { background: linear-gradient(135deg, #c0392b 0%, #6B2FA0 100%); color: #fff;
+    padding: 28px 32px; border-radius: 12px; margin: 28px 0; font-family: -apple-system, sans-serif; }
+  .callout h3 { font-size: 1.15rem; margin-bottom: 10px; font-weight: 800; }
+  .callout p { font-size: 0.92rem; line-height: 1.7; opacity: 0.92; }
+
+  /* Mid-story interactive break (Find Yourself) */
+  .story-interact { background: linear-gradient(135deg, #1a1a2e 0%, #2d0a0a 100%); color: #fff;
+    border-radius: 12px; padding: 40px 32px; text-align: center; margin: 28px 0; }
+  .story-interact h2 { font-size: 1.4rem; margin-bottom: 8px; font-family: -apple-system, sans-serif; font-weight: 800; }
+  .story-interact .interact-sub { font-size: 0.88rem; color: #aaa; margin-bottom: 22px; font-family: -apple-system, sans-serif; }
+  .story-interact select { padding: 10px 20px; font-size: 1rem; border: 2px solid #FF6B6B; border-radius: 8px;
+    background: rgba(255,255,255,0.08); color: #fff; min-width: 260px; }
+  .story-interact select option { color: #1a1a2e; background: #fff; }
+  .story-interact .result { display: none; margin: 24px auto 0; max-width: 400px; }
+  .story-interact .result .rank { font-size: 3rem; font-weight: 900; color: #FF6B6B; line-height: 1; }
+  .story-interact .result .name { font-size: 1.2rem; margin: 6px auto; font-family: -apple-system, sans-serif; font-weight: 700; }
+  .story-interact .result .score-text { font-size: 0.88rem; color: #bbb; font-family: -apple-system, sans-serif; }
+  .story-interact .result .tier-text { font-size: 0.82rem; color: #FF6B6B; font-family: -apple-system, sans-serif;
+    margin-top: 6px; font-style: italic; }
+
+  /* Full Table */
+  .full-table { margin: 40px auto; max-width: 720px; padding: 0 24px; }
+  .full-table h2 { font-size: 1.3rem; margin-bottom: 12px; font-family: -apple-system, sans-serif; }
+  .table-search { width: 100%; padding: 10px 16px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 0.9rem; margin-bottom: 12px; font-family: -apple-system, sans-serif; }
+  .full-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; background: var(--card-bg);
+    border-radius: 8px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    font-family: -apple-system, sans-serif; }
+  .full-table th { background: #1a1a2e; color: #fff; padding: 10px 12px; text-align: left; cursor: pointer; user-select: none; }
+  .full-table th:hover { background: #2d0a0a; }
+  .full-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  .full-table tr:hover td { background: #fff5f5; }
+  .tier-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700;
+    font-family: -apple-system, sans-serif; }
+  .tier-S { background: #c0392b; color: #fff; }
+  .tier-A { background: #e67e22; color: #fff; }
+  .tier-B { background: #f39c12; color: #fff; }
+  .tier-C { background: #27ae60; color: #fff; }
+  .tier-D { background: #2980b9; color: #fff; }
+
+  /* Methodology */
+  .methodology { max-width: 720px; margin: 40px auto; padding: 24px; background: var(--card-bg);
+    border-radius: 12px; font-size: 0.85rem; color: var(--muted); font-family: -apple-system, sans-serif;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+  .methodology h2 { font-size: 1.1rem; color: var(--text); margin-bottom: 12px; font-weight: 700; }
+  .methodology p { margin-bottom: 8px; line-height: 1.6; }
+
+  /* Share Bar */
+  .share-bar { display: flex; justify-content: center; gap: 12px; padding: 30px 0; flex-wrap: wrap; }
+  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 8px;
+    text-decoration: none; font-size: 0.85rem; font-weight: 600; color: #fff; transition: transform 0.2s;
+    font-family: -apple-system, sans-serif; }
+  .share-btn:hover { transform: translateY(-2px); }
+  .share-twitter { background: #000; }
+  .share-linkedin { background: #0A66C2; }
+  .share-copy { background: #333; cursor: pointer; border: none; color: #fff; font-size: 0.85rem; font-weight: 600; }
+
+  .footer { text-align: center; padding: 20px; color: var(--muted); font-size: 0.75rem; font-style: italic;
+    font-family: -apple-system, sans-serif; }
+
+  @media (max-width: 600px) {
+    .opening h1 { font-size: 1.6rem; }
+    .inline-chart { height: 380px; }
+    .story { padding: 0 16px; }
+    .full-table { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top Navigation -->
+<nav style="background:#1a1a2e;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
+  <a href="../" style="color:#FF6B6B;text-decoration:none;font-weight:600;font-size:0.9rem;font-family:-apple-system,sans-serif;">← RankMint Home</a>
+  <span style="color:#666;font-size:0.75rem;font-family:-apple-system,sans-serif;">rankmint.io</span>
+</nav>
+
+<div class="story">
+
+  <!-- Opening — no hero banner -->
+  <div class="opening story-block">
+    <div class="index-tag">Mass Extinction Index</div>
+    <h1>Some Languages Die. Others Simply Refuse.</h1>
+    <div class="byline">RankMint · March 2026 · 30 programming languages ranked</div>
+    <div class="lede">
+      <p>In 2020, Adobe ended Flash Player support on December 31st. In the weeks that followed, 98% of ActionScript job postings vanished from the internet. The language did not decline gradually. It ceased. There was no long tail, no graceful migration, no retirement party. A runtime decision by a California software company deleted an entire programming ecosystem — the only language in history where we know the precise calendar date of its death warrant.</p>
+      <p>But ActionScript's extinction is the exception, not the rule. Most programming language deaths are geological: long, slow, almost imperceptible until they are undeniable. COBOL has been "dying" since 1992. Perl's obituary has been written at least a dozen times in this century. Fortran outlived the programmers who first wrote it. These languages persist because software is infrastructure, and infrastructure does not retire — it accumulates.</p>
+      <p>The Programming Language Mass Extinction Index scores 30 languages across six dimensions of survival risk. What emerges is a picture that confounds most intuitions about which languages are dying and which are merely dormant. The most surprising finding: the language developers call "dying" most often is not even close to the top of the list.</p>
+    </div>
+  </div>
+
+  <!-- Story Block 1: Setup + bar chart -->
+  <div class="story-block" id="block-1">
+    <div class="narrative" id="narrative-1">
+      <p>The index measures six things: TIOBE search presence (a proxy for how many developers are looking for help with a language), Stack Overflow activity (what developers are actually doing), GitHub repository creation (what people are building), job market demand (what employers will pay for), ecosystem health (whether the package registry is alive or calcifying), and community vitality (Reddit, conferences, organized activity).</p>
+      <p><strong>Higher score means higher extinction risk.</strong> A score of 100 means the language has already effectively ceased to exist as a living development environment. A score of 2 means the language is so embedded in the global infrastructure that discussing its extinction is almost absurd.</p>
+      <p>The chart below shows the fifteen most endangered languages in the dataset. Look at what's near the top. Then look at rank ten.</p>
+    </div>
+    <div class="inline-chart" id="chart-1"></div>
+    <div class="chart-caption">Extinction Risk Score (0 = thriving, 100 = already gone). Top 15 most endangered languages. Hover for details. Sources: TIOBE March 2026, Stack Overflow Developer Survey 2024, GitHub Octoverse.</div>
+    <div class="chart-link"><a href="chart.html">Open full interactive chart →</a></div>
+  </div>
+
+  <!-- Callout: COBOL surprise -->
+  <div class="story-block">
+    <div class="callout" id="callout-1">
+      <h3>The Language That Won't Die: COBOL at #10</h3>
+      <p>Every year, technology writers declare COBOL dead. Every year, banks quietly post another 1,400 open positions — paying an average of $92,000 annually, with 30% of COBOL developers earning over $100,000. COBOL runs an estimated $3 trillion in daily financial transactions. IBM has active apprenticeship programs training a new generation of COBOL engineers. The language has almost no GitHub activity and no modern community — but it has institutional oxygen tanks with infinite refill. COBOL is not dying. It is becoming rarer and therefore more valuable, like a trade skill nobody trains for anymore.</p>
+    </div>
+  </div>
+
+  <!-- Story Block 2: Taxonomy woven in -->
+  <div class="story-block" id="block-2">
+    <div class="narrative" id="narrative-2">
+      <p>The data resolves into four groups that tell four different stories about language death. They are not simply ordered by score — they represent fundamentally different modes of decline and survival.</p>
+    </div>
+
+    <div class="story-taxonomy">
+      <h3>The Fossils — Already Gone (Score 75–100)</h3>
+      <div class="tax-desc">No net-new adoption. Existing only in maintenance, legacy systems, or institutional contracts.</div>
+      <div class="items">
+        <span class="item-tag">ActionScript <span class="score">100.0</span></span>
+        <span class="item-tag">ColdFusion <span class="score">97.3</span></span>
+        <span class="item-tag">Groovy <span class="score">86.5</span></span>
+        <span class="item-tag">Haskell <span class="score">84.8</span></span>
+        <span class="item-tag">Erlang <span class="score">84.2</span></span>
+        <span class="item-tag">Objective-C <span class="score">81.3</span></span>
+        <span class="item-tag">Pascal/Delphi <span class="score">78.8</span></span>
+        <span class="item-tag">Lua <span class="score">78.1</span></span>
+        <span class="item-tag">Scala <span class="score">78.0</span></span>
+        <span class="item-tag">COBOL <span class="score">78.0</span></span>
+        <span class="item-tag">Fortran <span class="score">77.3</span></span>
+        <span class="item-tag">Perl <span class="score">77.2</span></span>
+        <span class="item-tag">MATLAB <span class="score">76.3</span></span>
+        <span class="item-tag">Visual Basic <span class="score">75.9</span></span>
+        <span class="item-tag">Assembly <span class="score">75.0</span></span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>The Fossils share one defining trait: no engineering team is starting a greenfield project in any of these languages in 2026. The work that exists is maintenance, not creation. Note that this group contains both ActionScript (genuinely extinct) and Assembly (genuinely immortal in hardware) — which illustrates how the index captures different failure modes rather than a single axis of "deadness."</p>
+      <p>The Haskell entry deserves its own paragraph. By every market metric, Haskell should be extinct. It ranks #42 on TIOBE, appears in only 2% of Stack Overflow developer surveys, and produces perhaps 7,000 new GitHub repositories annually. But its Reddit community has 73,900 subscribers. ZuriHac attracts hundreds of contributors every summer. The Haskell Foundation is funded and active. <strong>Haskell is the only language in this dataset that is simultaneously near-extinct in the market and culturally thriving.</strong> It is a language kept alive by love, not economics.</p>
+    </div>
+
+    <div class="story-taxonomy">
+      <h3>The Fading Stars — Contracting to Their Niches (Score 55–74)</h3>
+      <div class="tax-desc">Still viable careers. Still producing new work. But the ceiling is visible.</div>
+      <div class="items">
+        <span class="item-tag">Dart <span class="score">71.2</span></span>
+        <span class="item-tag">R <span class="score">69.5</span></span>
+        <span class="item-tag">Swift <span class="score">67.8</span></span>
+        <span class="item-tag">Ruby <span class="score">66.8</span></span>
+        <span class="item-tag">Kotlin <span class="score">65.1</span></span>
+        <span class="item-tag">Rust <span class="score">59.4</span></span>
+        <span class="item-tag">Go <span class="score">57.0</span></span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>These languages are not dying. They are contracting toward their permanent niches. Swift will always exist while iPhones exist. Go will always exist while Kubernetes exists. Rust is growing, not shrinking — its score reflects that it is still tiny in absolute developer numbers despite its reputation. The question for this group is not survival — it is whether the niche is large enough to sustain an active ecosystem for another generation of developers.</p>
+    </div>
+
+    <div class="story-taxonomy">
+      <h3>The Undead — Declared Dead, Still Answering Emails (Score 35–54)</h3>
+      <div class="tax-desc">The web runs on these. The kernel is written in these. They predate most of the people who use them.</div>
+      <div class="items">
+        <span class="item-tag">PHP <span class="score">48.9</span></span>
+        <span class="item-tag">C <span class="score">48.4</span></span>
+        <span class="item-tag">C++ <span class="score">44.3</span></span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>PHP has been declared dead since 2010. It runs WordPress, which runs 43% of the internet. C is sixty years old and still in the Linux kernel. These languages were written for machines, not developers, and machines do not care about developer experience.</p>
+    </div>
+
+    <div class="story-taxonomy">
+      <h3>The Immortals — Beyond Extinction Risk (Score 0–34)</h3>
+      <div class="tax-desc">Not threatened. Not even close. The infrastructure of the present era.</div>
+      <div class="items">
+        <span class="item-tag">C# <span class="score">39.9</span></span>
+        <span class="item-tag">Java <span class="score">35.1</span></span>
+        <span class="item-tag">TypeScript <span class="score">23.2</span></span>
+        <span class="item-tag">Python <span class="score">17.3</span></span>
+        <span class="item-tag">JavaScript <span class="score">2.0</span></span>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <p>JavaScript scores 2.0 — essentially zero extinction risk. It runs in every browser on the planet, every Node.js server, every React Native app. TypeScript's score of 23.2 understates its momentum: its TIOBE rank (#35) is dramatically low because most TypeScript-related searches are captured under "JavaScript" in TIOBE's methodology. On GitHub repo creation and Stack Overflow activity, TypeScript is a top-3 language. The index captures this through the non-TIOBE metrics, but the bump chart below tells the story most clearly.</p>
+    </div>
+  </div>
+
+  <!-- Mid-story interactive break -->
+  <div class="story-block">
+    <div class="story-interact" id="find-section">
+      <h2>Where Does Your Language Land?</h2>
+      <div class="interact-sub">Select a language to see its extinction risk score and tier.</div>
+      <select id="find-select">
+        <option value="">-- Select a language --</option>
+      </select>
+      <div class="result" id="result-card">
+        <div class="rank" id="result-rank"></div>
+        <div class="name" id="result-name"></div>
+        <div class="score-text" id="result-score"></div>
+        <div class="tier-text" id="result-tier"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story Block 3: Bump chart + conclusion narrative -->
+  <div class="story-block" id="block-3">
+    <div class="narrative" id="narrative-3">
+      <p>The most important chart in this dataset is not the bar chart. It is the chart that shows how languages change rank depending on which metric you use to evaluate them.</p>
+      <blockquote>"The decline was not sudden. It was geological. Perl ranked #12 on TIOBE in January, as it has for years. Nobody noticed that GitHub had quietly stopped generating new Perl repositories at any meaningful rate."</blockquote>
+      <p>The bump chart below shows each language's rank across five independent metrics: TIOBE presence, Stack Overflow activity, GitHub repository creation, job market demand, and community size. The X-axis is not time — it is measurement perspective. A line that crashes from left to right means a language looks healthy on one metric and moribund on another. <strong>The crossings are the story.</strong></p>
+      <p>Watch Perl's line. It enters from the left at a respectable rank (TIOBE has it in the top 12) and falls sharply as you move right toward jobs and community. Watch Visual Basic do the same in reverse — it has an inflated TIOBE rank driven by legacy documentation searches, but its GitHub and job presence are near-zero. Watch COBOL: it enters modestly on TIOBE but rises sharply in job demand, the only language in the Fossils tier that does this.</p>
+    </div>
+    <div class="inline-chart" id="chart-2"></div>
+    <div class="chart-caption">Rank shifts across 5 metrics for the 15 most at-risk languages. Lines that dive reveal rank illusions. Hover any point for details. Use the dropdown to highlight a single language.</div>
+    <div class="chart-link"><a href="chart_bump.html">Open full interactive bump chart →</a> · <a href="chart_tier.html">View tier list →</a></div>
+  </div>
+
+  <!-- Closing narrative -->
+  <div class="story-block" id="block-closing">
+    <div class="narrative" id="narrative-closing">
+      <p>What the extinction index teaches is that language death is almost never about age. Python is older than Lua. Java is older than Ruby. C predates most of the people who write in it. Age is not the variable. The variable is whether the next generation of developers decides to learn you.</p>
+      <p>COBOL failed that test — no new developer chooses COBOL for a side project or a startup. But COBOL passed a different test: the institutions that run on it cannot afford to replace it. That is a different kind of immortality than Python's or JavaScript's. It is reluctant immortality, the immortality of a system too expensive to decommission.</p>
+      <p>ActionScript passed neither test. When Adobe decided that Flash was over, it made the decision for everyone. There was no community resilient enough to fork it, no institution dependent enough to maintain it. The language that powered a generation of internet creativity disappeared in the span of a quarterly report.</p>
+      <p>The lesson of the extinction index is not that some languages are better. It is that some languages are load-bearing walls, and others are decorative arches. The walls survive. The arches may be more beautiful, but when the building is renovated, they are the first to go.</p>
+      <p>What the numbers don't show is the hundreds of thousands of developers who learned Flash, built careers in ActionScript, made things that mattered — and who then had to start over. The index measures survival. It cannot measure the cost of the extinction events it catalogs.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Full Table -->
+<section class="full-table">
+  <h2>Full Rankings — All 30 Languages</h2>
+  <input type="text" class="table-search" id="table-search" placeholder="Search languages...">
+  <table id="ranking-table">
+    <thead id="table-head"></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</section>
+
+<!-- Methodology -->
+<section class="methodology" id="methodology">
+  <h2>Methodology</h2>
+  <p><strong>Formula:</strong> ExtinctionRisk = (TIOBEDanger × 0.20) + (SODecline × 0.25) + (GitHubVacuum × 0.20) + (JobDesert × 0.20) + (EcosystemDecay × 0.10) + (CommunityFade × 0.05). All components normalized 0–100 where 100 = maximum extinction risk.</p>
+  <p><strong>Data sources:</strong> TIOBE Index (tiobe.com/tiobe-index, March 2026) · Stack Overflow Developer Survey 2024 (survey.stackoverflow.co/2024) · GitHub Octoverse 2024 · DevJobsScanner.com · languages.orsinium.dev (Reddit subscriber counts) · PyPI, npm, CPAN, Hackage, CRAN package registries.</p>
+  <p><strong>Known anomalies:</strong> TypeScript ranks #35 on TIOBE because most TS searches are captured under JavaScript. Visual Basic's TIOBE rank (#7) is inflated by MSDN legacy documentation. Perl's TIOBE rank (#11) is sustained by legacy web pages, not active development. ColdFusion and ActionScript are not listed in the 2024 SO survey — treated as ~0.1% usage.</p>
+  <p><strong>Collection date:</strong> March 2026. Sample: 30 programming languages.</p>
+</section>
+
+<!-- Share Bar -->
+<div class="share-bar">
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on X</a>
+  <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">LinkedIn</a>
+  <button class="share-btn share-copy" id="share-copy">Copy Link</button>
+</div>
+
+<div class="footer">Generated by RankMint · rankmint.io</div>
+
+<script>
+// ===== DATA =====
+const DATA = [
+  { rank: 1,  name: "ActionScript",  score: 100.0, tiobe_rank: 100, so_usage: 0.1,  github_pct: 1.0,  job_demand: 2,  eco_k: 0,    reddit_k: 0.2,  year: 1998, tier: "S", note: "Flash EOL Dec 2020. The language that ceased." },
+  { rank: 2,  name: "ColdFusion",    score: 97.3,  tiobe_rank: 90,  so_usage: 0.1,  github_pct: 1.0,  job_demand: 5,  eco_k: 0,    reddit_k: 1.6,  year: 1995, tier: "S", note: "Adobe life-support. 0.3% of websites." },
+  { rank: 3,  name: "Groovy",        score: 86.5,  tiobe_rank: 55,  so_usage: 3.3,  github_pct: 6.0,  job_demand: 12, eco_k: 0,    reddit_k: 3.0,  year: 2003, tier: "S", note: "Replaced by Kotlin on the JVM." },
+  { rank: 4,  name: "Haskell",       score: 84.8,  tiobe_rank: 42,  so_usage: 2.0,  github_pct: 7.0,  job_demand: 8,  eco_k: 16,   reddit_k: 73.9, year: 1990, tier: "S", note: "73.9K Reddit community. Near-zero jobs." },
+  { rank: 5,  name: "Erlang",        score: 84.2,  tiobe_rank: 34,  so_usage: 0.9,  github_pct: 5.0,  job_demand: 8,  eco_k: 0,    reddit_k: 9.3,  year: 1986, tier: "S", note: "Ericsson + WhatsApp. Nowhere else." },
+  { rank: 6,  name: "Objective-C",   score: 81.3,  tiobe_rank: 31,  so_usage: 2.1,  github_pct: 10.0, job_demand: 12, eco_k: 0,    reddit_k: 6.9,  year: 1983, tier: "S", note: "Swift replaced it in 2014." },
+  { rank: 7,  name: "Pascal/Delphi", score: 78.8,  tiobe_rank: 10,  so_usage: 1.8,  github_pct: 4.0,  job_demand: 10, eco_k: 0,    reddit_k: 3.9,  year: 1970, tier: "S", note: "TIOBE inflated by legacy doc searches." },
+  { rank: 8,  name: "Lua",           score: 78.1,  tiobe_rank: 32,  so_usage: 6.2,  github_pct: 15.0, job_demand: 15, eco_k: 0,    reddit_k: 17.4, year: 1993, tier: "S", note: "Embedded scripting niche." },
+  { rank: 9,  name: "Scala",         score: 78.0,  tiobe_rank: 38,  so_usage: 2.6,  github_pct: 18.0, job_demand: 25, eco_k: 0,    reddit_k: 49.3, year: 2003, tier: "S", note: "Kotlin absorbed its JVM future." },
+  { rank: 10, name: "COBOL",         score: 78.0,  tiobe_rank: 24,  so_usage: 0.7,  github_pct: 3.0,  job_demand: 30, eco_k: 0,    reddit_k: 3.1,  year: 1959, tier: "S", note: "1,400+ open jobs. Banks pay $100K+." },
+  { rank: 11, name: "Fortran",       score: 77.3,  tiobe_rank: 13,  so_usage: 1.1,  github_pct: 5.0,  job_demand: 20, eco_k: 0,    reddit_k: 6.9,  year: 1957, tier: "S", note: "NASA + weather modeling." },
+  { rank: 12, name: "Perl",          score: 77.2,  tiobe_rank: 11,  so_usage: 2.5,  github_pct: 8.0,  job_demand: 10, eco_k: 220,  reddit_k: 16.0, year: 1987, tier: "S", note: "TIOBE #11 is a legacy mirage." },
+  { rank: 13, name: "MATLAB",        score: 76.3,  tiobe_rank: 17,  so_usage: 4.0,  github_pct: 8.0,  job_demand: 20, eco_k: 0,    reddit_k: 49.4, year: 1984, tier: "S", note: "Proprietary pricing limiting growth." },
+  { rank: 14, name: "Visual Basic",  score: 75.9,  tiobe_rank: 7,   so_usage: 4.2,  github_pct: 5.0,  job_demand: 15, eco_k: 0,    reddit_k: 8.7,  year: 1991, tier: "S", note: "VB6 abandoned 2008." },
+  { rank: 15, name: "Assembly",      score: 75.0,  tiobe_rank: 17,  so_usage: 5.4,  github_pct: 12.0, job_demand: 20, eco_k: 0,    reddit_k: 16.5, year: 1949, tier: "S", note: "Hardware permanent. No growth path." },
+  { rank: 16, name: "Dart",          score: 71.2,  tiobe_rank: 25,  so_usage: 6.0,  github_pct: 28.0, job_demand: 28, eco_k: 33,   reddit_k: 38.1, year: 2011, tier: "A", note: "Flutter-dependent. Google-backed." },
+  { rank: 17, name: "R",             score: 69.5,  tiobe_rank: 9,   so_usage: 4.3,  github_pct: 22.0, job_demand: 30, eco_k: 21,   reddit_k: 33.7, year: 1993, tier: "A", note: "Data science stronghold." },
+  { rank: 18, name: "Swift",         score: 67.8,  tiobe_rank: 20,  so_usage: 4.7,  github_pct: 35.0, job_demand: 35, eco_k: 0,    reddit_k: 100.4, year: 2014, tier: "A", note: "Apple ecosystem lock-in." },
+  { rank: 19, name: "Ruby",          score: 66.8,  tiobe_rank: 30,  so_usage: 5.2,  github_pct: 25.0, job_demand: 55, eco_k: 190,  reddit_k: 79.1, year: 1995, tier: "A", note: "Post-Rails boom decline." },
+  { rank: 20, name: "Kotlin",        score: 65.1,  tiobe_rank: 22,  so_usage: 9.4,  github_pct: 38.0, job_demand: 38, eco_k: 0,    reddit_k: 67.6, year: 2011, tier: "A", note: "Android first-class. Growth ceiling." },
+  { rank: 21, name: "Rust",          score: 59.4,  tiobe_rank: 14,  so_usage: 12.6, github_pct: 45.0, job_demand: 40, eco_k: 210,  reddit_k: 226.0, year: 2015, tier: "A", note: "83% admiration. Growing fast." },
+  { rank: 22, name: "Go",            score: 57.0,  tiobe_rank: 16,  so_usage: 13.5, github_pct: 50.0, job_demand: 50, eco_k: 0,    reddit_k: 201.6, year: 2009, tier: "A", note: "DevOps bedrock. Post-hype stable." },
+  { rank: 23, name: "PHP",           score: 48.9,  tiobe_rank: 18,  so_usage: 18.2, github_pct: 60.0, job_demand: 65, eco_k: 445,  reddit_k: 156.3, year: 1994, tier: "B", note: "Powers 77% of server-side web." },
+  { rank: 24, name: "C",             score: 48.4,  tiobe_rank: 2,   so_usage: 20.3, github_pct: 55.0, job_demand: 60, eco_k: 0,    reddit_k: 137.1, year: 1972, tier: "B", note: "Foundation of Linux and everything." },
+  { rank: 25, name: "C++",           score: 44.3,  tiobe_rank: 3,   so_usage: 23.0, github_pct: 70.0, job_demand: 60, eco_k: 0,    reddit_k: 241.2, year: 1985, tier: "B", note: "Game engines, finance, systems." },
+  { rank: 26, name: "C#",            score: 39.9,  tiobe_rank: 5,   so_usage: 27.1, github_pct: 75.0, job_demand: 70, eco_k: 0,    reddit_k: 219.8, year: 2000, tier: "C", note: ".NET renaissance. TIOBE LoY 2025." },
+  { rank: 27, name: "Java",          score: 35.1,  tiobe_rank: 4,   so_usage: 30.3, github_pct: 80.0, job_demand: 80, eco_k: 0,    reddit_k: 287.8, year: 1995, tier: "C", note: "Enterprise backbone. Irreplaceable." },
+  { rank: 28, name: "TypeScript",    score: 23.2,  tiobe_rank: 35,  so_usage: 38.5, github_pct: 90.0, job_demand: 95, eco_k: 3100, reddit_k: 102.4, year: 2012, tier: "D", note: "Fastest-growing. AI tooling boom." },
+  { rank: 29, name: "Python",        score: 17.3,  tiobe_rank: 1,   so_usage: 51.0, github_pct: 100.0,job_demand: 85, eco_k: 614,  reddit_k: 1113.3, year: 1991, tier: "D", note: "TIOBE #1. The AI era language." },
+  { rank: 30, name: "JavaScript",    score: 2.0,   tiobe_rank: 6,   so_usage: 62.3, github_pct: 95.0, job_demand: 95, eco_k: 3100, reddit_k: 2323.4, year: 1995, tier: "D", note: "Every browser. Lowest risk in index." },
+];
+
+const CONFIG = {
+  title: "Programming Language Mass Extinction Index",
+  hook: "Which programming languages are already dead — and which will outlive us all? 30 languages ranked by forensic extinction risk.",
+  nameField: "name",
+  scoreField: "score",
+  topN: 15,
+  tableColumns: ["rank", "name", "score", "tiobe_rank", "so_usage", "job_demand", "tier"],
+  tableHeaders: ["Rank", "Language", "Risk Score", "TIOBE Rank", "SO Usage %", "Job Demand", "Tier"],
+  palette: "sunset",
+  shareUrl: "https://rankmint.io/programming-language-mass-extinction-index/",
+  shareText: "ActionScript: 100/100 extinction risk. COBOL: 78 — but still has more jobs than Haskell or Perl. JavaScript: 2.0/100. The cockroach wins. 30 languages ranked by forensic extinction risk.",
+};
+
+const TIER_LABELS = { S: "Extinct", A: "Endangered", B: "Vulnerable", C: "Stable", D: "Thriving" };
+const TIER_COLORS = { S: "#c0392b", A: "#e67e22", B: "#f39c12", C: "#27ae60", D: "#2980b9" };
+
+// ===== Scroll reveal =====
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
+}, { threshold: 0.12 });
+document.querySelectorAll(".story-block").forEach(el => observer.observe(el));
+
+// ===== Find Yourself =====
+const findSelect = document.getElementById("find-select");
+[...DATA].sort((a, b) => a.rank - b.rank).forEach(d => {
+  const opt = document.createElement("option");
+  opt.value = d.name; opt.textContent = d.name;
+  findSelect.appendChild(opt);
+});
+findSelect.addEventListener("change", () => {
+  const selected = DATA.find(d => d.name === findSelect.value);
+  if (!selected) { document.getElementById("result-card").style.display = "none"; return; }
+  document.getElementById("result-card").style.display = "block";
+  document.getElementById("result-rank").textContent = `#${selected.rank}`;
+  document.getElementById("result-name").textContent = selected.name;
+  document.getElementById("result-score").textContent = `Extinction Risk: ${selected.score.toFixed(1)} / 100`;
+  document.getElementById("result-tier").textContent = `${selected.tier} Tier — ${TIER_LABELS[selected.tier]}`;
+});
+
+// ===== Full Table =====
+const thead = document.getElementById("table-head");
+const tbody = document.getElementById("table-body");
+const headerRow = document.createElement("tr");
+CONFIG.tableHeaders.forEach((h, i) => {
+  const th = document.createElement("th");
+  th.textContent = h;
+  th.addEventListener("click", () => sortTable(i));
+  headerRow.appendChild(th);
+});
+thead.appendChild(headerRow);
+
+let tableData = [...DATA].sort((a, b) => a.rank - b.rank);
+function renderTable(data) {
+  tbody.innerHTML = "";
+  data.forEach(d => {
+    const tr = document.createElement("tr");
+    CONFIG.tableColumns.forEach(col => {
+      const td = document.createElement("td");
+      const v = d[col];
+      if (col === "tier") {
+        td.innerHTML = `<span class="tier-badge tier-${v}">${v} — ${TIER_LABELS[v]}</span>`;
+      } else {
+        td.textContent = typeof v === "number" ? (v % 1 === 0 ? v : v.toFixed(1)) : v;
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+renderTable(tableData);
+
+let sortDir = {};
+function sortTable(colIdx) {
+  const col = CONFIG.tableColumns[colIdx];
+  sortDir[col] = !(sortDir[col] || false);
+  tableData.sort((a, b) => {
+    const va = a[col], vb = b[col];
+    const cmp = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb));
+    return sortDir[col] ? cmp : -cmp;
+  });
+  renderTable(tableData);
+}
+
+document.getElementById("table-search").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  renderTable(tableData.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q))));
+});
+
+// ===== Share =====
+const url = CONFIG.shareUrl || window.location.href;
+const text = CONFIG.shareText;
+document.getElementById("share-twitter").href = `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+document.getElementById("share-linkedin").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+document.getElementById("share-copy").addEventListener("click", () => {
+  navigator.clipboard.writeText(url).then(() => {
+    document.getElementById("share-copy").textContent = "Copied!";
+    setTimeout(() => document.getElementById("share-copy").textContent = "Copy Link", 2000);
+  });
+});
+
+// ===== Color helpers =====
+function interpolateColor(c1, c2, t) {
+  const hex = s => parseInt(s, 16);
+  const r = Math.round(hex(c1.slice(1,3)) + (hex(c2.slice(1,3)) - hex(c1.slice(1,3))) * t);
+  const g = Math.round(hex(c1.slice(3,5)) + (hex(c2.slice(3,5)) - hex(c1.slice(3,5))) * t);
+  const b = Math.round(hex(c1.slice(5,7)) + (hex(c2.slice(5,7)) - hex(c1.slice(5,7))) * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+// ===== CHART 1: Bar chart — top 15 most endangered =====
+const chart1 = echarts.init(document.getElementById("chart-1"));
+const top15 = [...DATA].sort((a, b) => b.score - a.score).slice(0, 15);
+const names1 = top15.map(d => d.name).reverse();
+const scores1 = top15.map(d => d.score).reverse();
+const c1start = "#FF6B6B", c1end = "#6B2FA0";
+const colors1 = scores1.map((_, i) => interpolateColor(c1end, c1start, i / Math.max(scores1.length - 1, 1)));
+
+chart1.setOption({
+  backgroundColor: "#ffffff",
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    formatter: params => {
+      const d = top15[scores1.length - 1 - params[0].dataIndex];
+      return `<b>${d.name}</b><br/>Extinction Risk: ${d.score.toFixed(1)}/100<br/>TIOBE Rank: #${d.tiobe_rank}<br/>SO Usage: ${d.so_usage}%<br/>Jobs: ${d.job_demand}/100<br/><em style="color:#aaa">${d.note}</em>`;
+    }
+  },
+  grid: { left: "24%", right: "12%", top: 14, bottom: 24 },
+  xAxis: { type: "value", name: "Extinction Risk", max: 105, axisLabel: { fontSize: 11 } },
+  yAxis: { type: "category", data: names1, axisLabel: { fontSize: 11, fontWeight: 500 } },
+  dataZoom: [{ type: "inside", yAxisIndex: 0, filterMode: "none" }],
+  series: [{
+    type: "bar",
+    data: scores1.map((v, i) => ({ value: v, itemStyle: { color: colors1[i] } })),
+    barWidth: "62%",
+    label: { show: true, position: "right", formatter: params => params.value.toFixed(1), fontSize: 10, color: "#555" },
+    animationDuration: 1600,
+    animationEasing: "elasticOut",
+  }],
+  graphic: [{ type: "text", right: 10, bottom: 6, style: { text: "RankMint", fontSize: 11, fill: "#ddd", fontStyle: "italic" } }],
+});
+window.addEventListener("resize", () => chart1.resize());
+
+// ===== CHART 2: Bump chart — rank shifts across 5 metrics =====
+const chart2 = echarts.init(document.getElementById("chart-2"));
+const BUMP_METRICS = ["tiobe_rank_inv", "so_usage", "github_pct", "job_demand", "reddit_k"];
+const BUMP_LABELS = ["TIOBE Rank", "SO Activity", "GitHub Repos", "Job Market", "Community"];
+
+// For TIOBE rank: lower number = better, so we need to invert
+// We create synthetic metrics where higher = better (for consistent ranking)
+const bumpData = top15.map(d => ({
+  ...d,
+  tiobe_rank_inv: 1 / (d.tiobe_rank + 0.1), // invert so higher = better tiobe
+}));
+
+// Compute ranks for each metric (higher raw value = rank 1)
+const bumpRanks = {};
+BUMP_METRICS.forEach(m => {
+  const sorted = [...bumpData].sort((a, b) => b[m] - a[m]);
+  bumpRanks[m] = {};
+  sorted.forEach((d, i) => { bumpRanks[m][d.name] = i + 1; });
+});
+
+const BUMP_COLORS = ["#FF6B6B","#6B2FA0","#FF9F43","#EE5A24","#BE2EDD","#F368E0","#FF6348","#C44569","#574B90","#303952","#E66767","#CF6A87","#786FA6","#F8A5C2","#63CDDA"];
+
+const bumpSeries = bumpData.map((d, idx) => ({
+  name: d.name,
+  type: "line",
+  data: BUMP_METRICS.map(m => bumpRanks[m][d.name]),
+  lineStyle: { width: 2, opacity: 0.7, color: BUMP_COLORS[idx % BUMP_COLORS.length] },
+  itemStyle: { color: BUMP_COLORS[idx % BUMP_COLORS.length], opacity: 0.9 },
+  symbol: "circle",
+  symbolSize: 7,
+  label: {
+    show: true,
+    position: "right",
+    formatter: p => p.dataIndex === BUMP_METRICS.length - 1 ? d.name : "",
+    fontSize: 9,
+    color: BUMP_COLORS[idx % BUMP_COLORS.length],
+  },
+  emphasis: { lineStyle: { width: 4, opacity: 1 }, itemStyle: { opacity: 1 } },
+  animationDuration: 1500,
+  animationEasing: "cubicOut",
+}));
+
+chart2.setOption({
+  backgroundColor: "#ffffff",
+  tooltip: {
+    trigger: "item",
+    formatter: p => {
+      const d = bumpData.find(x => x.name === p.seriesName);
+      if (!d) return "";
+      const metric = BUMP_LABELS[p.dataIndex];
+      return `<b>${p.seriesName}</b><br/>${metric} rank: #${p.value} of ${top15.length}<br/>Overall extinction risk: ${d.score.toFixed(1)}/100`;
+    },
+  },
+  grid: { left: "6%", right: "20%", top: 30, bottom: 40 },
+  xAxis: {
+    type: "category",
+    data: BUMP_LABELS,
+    axisLabel: { fontSize: 11, fontWeight: 600, color: "#555" },
+    axisTick: { alignWithLabel: true },
+    axisLine: { lineStyle: { color: "#ddd" } },
+  },
+  yAxis: {
+    type: "value",
+    inverse: true,
+    min: 1,
+    max: top15.length,
+    name: "Rank",
+    nameLocation: "center",
+    nameGap: 35,
+    nameTextStyle: { fontSize: 11, color: "#888" },
+    axisLabel: { formatter: "#{value}", color: "#888", fontSize: 10 },
+    splitLine: { lineStyle: { color: "#f0f0f0" } },
+  },
+  series: bumpSeries,
+  graphic: [{ type: "text", right: 10, bottom: 6, style: { text: "RankMint", fontSize: 11, fill: "#ddd", fontStyle: "italic" } }],
+});
+window.addEventListener("resize", () => chart2.resize());
+</script>
+</body>
+</html>

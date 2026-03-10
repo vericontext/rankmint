@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Airport Anxiety Index — Metric Heatmap | RankMint</title>
+<meta property="og:title" content="Airport Anxiety Index — Metric Heatmap">
+<meta property="og:description" content="See exactly why each airport is stressful: a heatmap of 30 airports across 7 anxiety metrics. Red = high anxiety, Blue = calm.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Airport Anxiety Index — Metric Heatmap">
+<meta name="twitter:description" content="See exactly why each airport is stressful: a heatmap of 30 airports across 7 anxiety metrics. Red = high anxiety, Blue = calm.">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; }
+  #chart { width: 100%; height: 92vh; min-height: 800px; }
+  .header { padding: 24px 32px 8px; }
+  .header h1 { font-size: 1.4rem; color: #1a1a2e; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+  .note { padding: 0 32px 12px; font-size: 0.78rem; color: #aaa; }
+</style>
+</head>
+<body>
+<!-- Navigation -->
+<nav style="background:#1a1a2e;padding:10px 20px;display:flex;gap:16px;align-items:center;">
+  <a href="../" style="color:#FFD700;text-decoration:none;font-size:0.85rem;font-weight:600;">← RankMint Home</a>
+  <a href="index.html" style="color:#aaa;text-decoration:none;font-size:0.85rem;">← Back to Rankings</a>
+</nav>
+<div class="header">
+  <h1>Airport Anxiety Index — Metric Heatmap</h1>
+  <p>30 airports × 7 anxiety metrics | Airports sorted by overall anxiety score (highest at top) | Values shown are normalized 0–100 within dataset</p>
+</div>
+<div class="note">Red = high anxiety contribution | Blue = low anxiety contribution | Hover any cell for details</div>
+<div id="chart"></div>
+<script>
+// ===== DATA (sorted by anxiety_score descending) =====
+const DATA = [
+  { name: "DEL (Delhi)",        score: 81.4, delay: 87.0,  security: 100.0, congestion: 90.1,  wayfinding: 71.4, wifi: 82.3,  amenity: 35.0,  immigration: 75.0 },
+  { name: "GRU (Sao Paulo)",    score: 70.6, delay: 65.2,  security: 80.0,  congestion: 39.3,  wayfinding: 71.4, wifi: 85.2,  amenity: 100.0, immigration: 62.5 },
+  { name: "MIA (Miami)",        score: 69.2, delay: 91.3,  security: 66.7,  congestion: 50.8,  wayfinding: 57.1, wifi: 55.5,  amenity: 100.0, immigration: 25.0 },
+  { name: "JFK (New York)",     score: 66.5, delay: 100.0, security: 33.3,  congestion: 64.0,  wayfinding: 85.7, wifi: 13.0,  amenity: 92.0,  immigration: 37.5 },
+  { name: "PEK (Beijing)",      score: 64.1, delay: 65.2,  security: 66.7,  congestion: 0.0,   wayfinding: 85.7, wifi: 97.4,  amenity: 100.0, immigration: 37.5 },
+  { name: "BKK (Bangkok)",      score: 62.3, delay: 52.2,  security: 66.7,  congestion: 72.7,  wayfinding: 42.9, wifi: 79.3,  amenity: 57.0,  immigration: 100.0 },
+  { name: "ORD (Chicago)",      score: 62.3, delay: 95.7,  security: 13.3,  congestion: 43.4,  wayfinding: 71.4, wifi: 64.4,  amenity: 100.0, immigration: 40.0 },
+  { name: "LAX (Los Angeles)",  score: 57.2, delay: 43.5,  security: 80.0,  congestion: 26.8,  wayfinding: 85.7, wifi: 58.5,  amenity: 59.0,  immigration: 35.0 },
+  { name: "DFW (Dallas)",       score: 57.1, delay: 100.0, security: 66.7,  congestion: 26.8,  wayfinding: 28.6, wifi: 31.8,  amenity: 63.0,  immigration: 20.0 },
+  { name: "CDG (Paris)",        score: 56.3, delay: 47.8,  security: 53.3,  congestion: 86.8,  wayfinding: 100.0,wifi: 39.4,  amenity: 5.0,   immigration: 25.0 },
+  { name: "AMS (Amsterdam)",    score: 55.1, delay: 52.2,  security: 100.0, congestion: 42.5,  wayfinding: 42.9, wifi: 64.4,  amenity: 22.0,  immigration: 12.5 },
+  { name: "ATL (Atlanta)",      score: 52.4, delay: 73.9,  security: 26.7,  congestion: 81.3,  wayfinding: 14.3, wifi: 67.4,  amenity: 69.0,  immigration: 12.5 },
+  { name: "LHR (London)",       score: 51.9, delay: 56.5,  security: 53.3,  congestion: 48.5,  wayfinding: 57.1, wifi: 73.3,  amenity: 20.0,  immigration: 37.5 },
+  { name: "FRA (Frankfurt)",    score: 50.8, delay: 43.5,  security: 66.7,  congestion: 48.7,  wayfinding: 57.1, wifi: 67.4,  amenity: 33.0,  immigration: 12.5 },
+  { name: "CAN (Guangzhou)",    score: 45.2, delay: 56.5,  security: 53.3,  congestion: 18.0,  wayfinding: 42.9, wifi: 70.4,  amenity: 24.0,  immigration: 37.5 },
+  { name: "NRT (Tokyo Narita)", score: 42.8, delay: 30.4,  security: 46.7,  congestion: 57.3,  wayfinding: 57.1, wifi: 70.4,  amenity: 4.0,   immigration: 25.0 },
+  { name: "SYD (Sydney)",       score: 42.7, delay: 30.4,  security: 26.7,  congestion: 78.5,  wayfinding: 28.6, wifi: 70.4,  amenity: 54.0,  immigration: 25.0 },
+  { name: "MEX (Mexico City)",  score: 41.8, delay: 4.3,   security: 33.3,  congestion: 17.8,  wayfinding: 71.4, wifi: 100.0, amenity: 100.0, immigration: 12.5 },
+  { name: "ICN (Seoul)",        score: 40.3, delay: 73.9,  security: 33.3,  congestion: 48.3,  wayfinding: 14.3, wifi: 49.6,  amenity: 2.0,   immigration: 12.5 },
+  { name: "MAD (Madrid)",       score: 36.5, delay: 39.1,  security: 33.3,  congestion: 25.6,  wayfinding: 42.9, wifi: 73.3,  amenity: 14.0,  immigration: 20.0 },
+  { name: "HKG (Hong Kong)",    score: 35.5, delay: 43.5,  security: 26.7,  congestion: 62.4,  wayfinding: 14.3, wifi: 58.5,  amenity: 10.0,  immigration: 20.0 },
+  { name: "FCO (Rome)",         score: 31.7, delay: 21.7,  security: 26.7,  congestion: 46.0,  wayfinding: 28.6, wifi: 76.3,  amenity: 11.0,  immigration: 20.0 },
+  { name: "SFO (San Francisco)",score: 30.7, delay: 21.7,  security: 20.0,  congestion: 61.9,  wayfinding: 42.9, wifi: 0.0,   amenity: 46.0,  immigration: 20.0 },
+  { name: "DXB (Dubai)",        score: 29.2, delay: 21.7,  security: 33.3,  congestion: 40.4,  wayfinding: 28.6, wifi: 55.5,  amenity: 6.0,   immigration: 12.5 },
+  { name: "HND (Tokyo Haneda)", score: 25.6, delay: 0.0,   security: 0.0,   congestion: 100.0, wayfinding: 0.0,  wifi: 96.3,  amenity: 3.0,   immigration: 12.5 },
+  { name: "SEA (Seattle)",      score: 25.3, delay: 13.0,  security: 6.7,   congestion: 90.1,  wayfinding: 14.3, wifi: 21.5,  amenity: 23.0,  immigration: 12.5 },
+  { name: "IST (Istanbul)",     score: 24.7, delay: 30.4,  security: 26.7,  congestion: 4.4,   wayfinding: 28.6, wifi: 46.6,  amenity: 9.0,   immigration: 25.0 },
+  { name: "SIN (Singapore)",    score: 20.3, delay: 39.1,  security: 0.0,   congestion: 34.6,  wayfinding: 0.0,  wifi: 52.6,  amenity: 1.0,   immigration: 0.0 },
+  { name: "MUC (Munich)",       score: 16.2, delay: 13.0,  security: 13.3,  congestion: 6.9,   wayfinding: 14.3, wifi: 61.5,  amenity: 7.0,   immigration: 5.0 },
+  { name: "DOH (Doha)",         score: 12.3, delay: 4.3,   security: 0.0,   congestion: 43.9,  wayfinding: 0.0,  wifi: 43.7,  amenity: 0.0,   immigration: 5.0 },
+];
+
+const CONFIG = {
+  nameField: "name",
+  scoreField: "score",
+  metrics: ["delay", "security", "congestion", "wayfinding", "wifi", "amenity", "immigration"],
+  metricLabels: ["Delay Rate", "Security Wait", "Congestion", "Wayfinding", "Wi-Fi (inv)", "Amenity (inv)", "Immigration"],
+  metricWeights: ["25%", "20%", "15%", "15%", "10%", "10%", "5%"],
+  // Blue (calm) → White (neutral) → Red (anxious)
+  colorRange: ["#2166ac", "#4393c3", "#92c5de", "#d1e5f0", "#fddbc7", "#f4a582", "#d6604d", "#b2182b"],
+};
+
+// Data is already sorted by anxiety_score descending
+// Reverse for chart (highest anxiety at top = first y-axis position = last in data)
+const names = DATA.map(d => d[CONFIG.nameField]).reverse();
+const metrics = CONFIG.metrics;
+const labels = CONFIG.metricLabels;
+
+// Build heatmap data: [xIndex, yIndex, normalizedValue, rawValue, airportName, metricLabel]
+// Since data is already normalized 0-100, use directly
+const heatData = [];
+const reversedData = [...DATA].reverse(); // lowest anxiety at index 0 (bottom of chart)
+
+reversedData.forEach((d, yi) => {
+  metrics.forEach((m, xi) => {
+    const raw = d[m];
+    heatData.push([xi, yi, raw, raw, d[CONFIG.nameField], labels[xi], d[CONFIG.scoreField]]);
+  });
+});
+
+const chart = echarts.init(document.getElementById("chart"));
+chart.setOption({
+  tooltip: {
+    position: "top",
+    formatter: p => {
+      const [xi, yi, normVal, rawVal, airportName, metricLabel, totalScore] = p.value;
+      const weight = CONFIG.metricWeights[xi];
+      return `<b>${airportName}</b><br/>
+        ${metricLabel}<br/>
+        Score: <b>${rawVal.toFixed(1)}</b> / 100<br/>
+        Weight: ${weight}<br/>
+        <hr style="border:none;border-top:1px solid #555;margin:4px 0"/>
+        Overall Anxiety: ${totalScore.toFixed(1)}`;
+    },
+  },
+  grid: { left: "22%", right: "5%", top: 80, bottom: 40 },
+  xAxis: {
+    type: "category",
+    data: labels,
+    position: "top",
+    axisLabel: { fontSize: 11, rotate: 20, interval: 0 },
+    splitArea: { show: true },
+  },
+  yAxis: {
+    type: "category",
+    data: names,
+    inverse: false,
+    axisLabel: { fontSize: 10 },
+    splitArea: { show: true },
+  },
+  visualMap: {
+    min: 0,
+    max: 100,
+    calculable: true,
+    orient: "horizontal",
+    left: "center",
+    top: 8,
+    inRange: { color: CONFIG.colorRange },
+    text: ["High Anxiety", "Low Anxiety"],
+    textStyle: { fontSize: 11, color: "#555" },
+  },
+  dataZoom: [
+    { type: "inside", yAxisIndex: 0, filterMode: "none" },
+    { type: "slider", yAxisIndex: 0, right: 0, width: 16, filterMode: "none", show: DATA.length > 20 },
+  ],
+  series: [{
+    type: "heatmap",
+    data: heatData,
+    label: {
+      show: true,
+      formatter: p => {
+        const v = p.value[3];
+        return typeof v === "number" ? v.toFixed(0) : v;
+      },
+      fontSize: 9,
+    },
+    emphasis: {
+      itemStyle: { borderColor: "#333", borderWidth: 2 },
+    },
+    animationDuration: 1500,
+    animationEasing: "cubicOut",
+  }],
+  graphic: [{
+    type: "text", right: 20, bottom: 10,
+    style: { text: "RankMint", fontSize: 12, fill: "#ccc", fontStyle: "italic" },
+  }],
+});
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horror Movie Survival IQ Index | RankMint</title>
+<meta property="og:title" content="Horror Movie Survival IQ Index">
+<meta property="og:description" content="30 iconic horror characters ranked by how smart their survival decisions actually are. Micah scored lower than a 6-year-old. The data doesn't care.">
+<meta property="og:image" content="card.png">
+<meta property="og:url" content="https://rankmint.io/horror-movie-survival-iq-index/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Horror Movie Survival IQ Index">
+<meta name="twitter:description" content="30 iconic horror characters ranked by how smart their survival decisions actually are. Micah scored lower than a 6-year-old. The data doesn't care.">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<style>
+  :root {
+    --bg: #0d0d0d; --text: #e0e0e0; --muted: #888; --accent: #FF4444;
+    --card-bg: #1a1a1a; --border: #333; --gold: #FFD700; --win: #4CAF50; --lose: #666;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+  /* Hero */
+  .hero-versus { text-align: center; padding: 60px 20px 40px; background: linear-gradient(135deg, #1a0000 0%, #0d0d0d 50%, #00001a 100%); }
+  .hero-versus h1 { font-size: 2rem; margin-bottom: 8px; color: #fff; }
+  .hero-versus .hook { font-size: 1rem; color: var(--muted); max-width: 640px; margin: 0 auto 32px; }
+  .final-matchup { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
+  .final-fighter { background: var(--card-bg); border-radius: 16px; padding: 28px 36px; text-align: center; min-width: 200px;
+    border: 2px solid var(--border); transition: all 0.3s; }
+  .final-fighter.winner { border-color: var(--gold); box-shadow: 0 0 30px rgba(255,215,0,0.15); }
+  .final-fighter .fighter-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
+  .final-fighter .fighter-film { font-size: 0.75rem; color: var(--muted); margin-bottom: 8px; }
+  .final-fighter .fighter-score { font-size: 2rem; font-weight: 900; }
+  .final-fighter.winner .fighter-score { color: var(--gold); }
+  .final-fighter .fighter-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .vs-badge { font-size: 2rem; font-weight: 900; color: var(--accent); text-shadow: 0 0 20px rgba(255,68,68,0.5); }
+  .hero-tagline { margin-top: 24px; font-size: 0.85rem; color: #555; font-style: italic; }
+
+  /* Commentary */
+  .commentary { margin: 40px auto; max-width: 740px; padding: 24px; }
+  .commentary p { font-size: 1rem; line-height: 1.8; margin-bottom: 1em; color: #ccc; }
+  .commentary strong { color: var(--accent); }
+  .commentary em { color: var(--gold); font-style: normal; }
+
+  /* Bracket */
+  .bracket-section { margin: 40px auto; }
+  .bracket-section h2 { font-size: 1.3rem; margin-bottom: 8px; text-align: center; color: #fff; }
+  .bracket-subtitle { text-align: center; font-size: 0.85rem; color: var(--muted); margin-bottom: 24px; }
+  .bracket-rounds { display: flex; flex-direction: column; gap: 12px; max-width: 900px; margin: 0 auto; }
+
+  .matchup { display: flex; align-items: stretch; background: var(--card-bg); border-radius: 12px; overflow: hidden;
+    cursor: pointer; transition: all 0.2s; border: 1px solid var(--border); }
+  .matchup:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(255,68,68,0.1); }
+  .matchup-fighters { flex: 1; display: flex; flex-direction: column; }
+  .matchup-sides { display: flex; }
+  .matchup-side { flex: 1; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .matchup-side.left { border-right: 2px solid var(--accent); }
+  .matchup-side .m-name { font-size: 0.95rem; font-weight: 600; }
+  .matchup-side .m-film { font-size: 0.7rem; color: var(--muted); display: block; margin-top: 2px; }
+  .matchup-side .m-score { font-size: 1.1rem; font-weight: 700; flex-shrink: 0; margin-left: 8px; }
+  .matchup-side.winner .m-name { color: var(--gold); }
+  .matchup-side.winner .m-score { color: var(--gold); }
+  .matchup-side.loser { opacity: 0.45; }
+  .matchup-round-label { width: 56px; display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px;
+    writing-mode: vertical-rl; transform: rotate(180deg); background: rgba(255,255,255,0.03);
+    flex-shrink: 0; }
+  .matchup-commentary { font-size: 0.8rem; color: #aaa; padding: 10px 20px; border-top: 1px solid var(--border);
+    line-height: 1.6; font-style: italic; display: none; }
+  .matchup.expanded .matchup-commentary { display: block; }
+  .expand-hint { font-size: 0.7rem; color: #555; padding: 4px 20px 8px; }
+
+  /* Detail Panel */
+  .detail-panel { display: none; margin: 0 20px 16px; padding: 16px; background: #111; border-radius: 8px;
+    border: 1px solid #2a2a2a; }
+  .detail-panel.active { display: block; }
+  .detail-panel h4 { font-size: 0.8rem; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .detail-bars { display: flex; flex-direction: column; gap: 8px; }
+  .detail-metric { display: flex; align-items: center; gap: 10px; }
+  .detail-metric .metric-label { width: 110px; font-size: 0.75rem; color: var(--muted); text-align: right; flex-shrink: 0; }
+  .detail-metric .bar-container { flex: 1; display: flex; align-items: center; gap: 4px; }
+  .detail-metric .bar-left { height: 18px; border-radius: 4px 0 0 4px; transition: width 0.6s ease; min-width: 2px; }
+  .detail-metric .bar-right { height: 18px; border-radius: 0 4px 4px 0; transition: width 0.6s ease; min-width: 2px; }
+  .detail-metric .bar-val { font-size: 0.72rem; width: 24px; text-align: center; color: #bbb; flex-shrink: 0; }
+
+  /* Tier summary strip */
+  .tier-strip { margin: 40px auto; text-align: center; }
+  .tier-strip h2 { font-size: 1.3rem; margin-bottom: 20px; }
+  .tier-chips { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .tier-chip { padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: #fff; text-align: center; }
+  .tier-chip .tier-name { font-size: 0.7rem; font-weight: 400; margin-top: 2px; opacity: 0.85; }
+
+  /* Chart links */
+  .chart-links { margin: 32px auto; text-align: center; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .chart-link { display: inline-block; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;
+    font-weight: 600; transition: all 0.2s; }
+  .chart-link.tier { background: #1a0a2e; border: 1px solid #6c2fa0; color: #c084fc; }
+  .chart-link.tier:hover { background: #2a1040; }
+  .chart-link.radar { background: #0a1a2e; border: 1px solid #2f6ca0; color: #60a5fa; }
+  .chart-link.radar:hover { background: #0d2040; }
+
+  /* Find Yourself */
+  .find-yourself { margin: 40px auto; text-align: center; padding: 40px 20px; background: var(--card-bg);
+    border-radius: 12px; }
+  .find-yourself h2 { font-size: 1.3rem; margin-bottom: 8px; }
+  .find-yourself p { font-size: 0.9rem; color: var(--muted); margin-bottom: 20px; }
+  .find-yourself select { padding: 10px 20px; font-size: 1rem; border: 2px solid var(--accent); border-radius: 8px;
+    background: #111; color: var(--text); min-width: 280px; cursor: pointer; }
+  .result-card { display: none; margin: 24px auto 0; max-width: 460px; padding: 28px; background: linear-gradient(135deg, #1a0000, #0d0d0d);
+    border: 1px solid var(--gold); border-radius: 12px; text-align: center; }
+  .result-card .result-rank { font-size: 3rem; font-weight: 900; color: var(--gold); }
+  .result-card .result-name { font-size: 1.3rem; margin: 8px 0 2px; }
+  .result-card .result-film { font-size: 0.8rem; color: var(--muted); margin-bottom: 10px; }
+  .result-card .result-score { font-size: 0.95rem; color: #aaa; }
+  .result-card .result-tier { display: inline-block; margin-top: 10px; padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+  .result-card .result-roast { font-size: 0.85rem; color: #bbb; margin-top: 12px; font-style: italic; line-height: 1.5; }
+
+  /* Full Table */
+  .full-table { margin: 40px auto; }
+  .full-table h2 { font-size: 1.3rem; margin-bottom: 12px; }
+  .table-search { width: 100%; padding: 10px 16px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 0.9rem; margin-bottom: 12px; background: var(--card-bg); color: var(--text); }
+  .full-table table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: var(--card-bg);
+    border-radius: 8px; overflow: hidden; }
+  .full-table th { background: #111; color: #fff; padding: 10px 12px; text-align: left; cursor: pointer; user-select: none;
+    font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  .full-table th:hover { background: #222; }
+  .full-table td { padding: 8px 12px; border-bottom: 1px solid #222; }
+  .full-table tr:hover td { background: #1f1f1f; }
+  .tier-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
+
+  /* Methodology */
+  .methodology { margin: 40px auto; padding: 28px; background: var(--card-bg); border-radius: 12px;
+    font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+  .methodology h2 { font-size: 1.1rem; color: var(--text); margin-bottom: 16px; }
+  .methodology h3 { font-size: 0.9rem; color: #bbb; margin: 16px 0 8px; }
+  .methodology table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .methodology th, .methodology td { padding: 6px 10px; border: 1px solid #2a2a2a; font-size: 0.78rem; }
+  .methodology th { background: #111; color: #ccc; }
+
+  /* Share Bar */
+  .share-bar { display: flex; justify-content: center; gap: 12px; padding: 30px 0; flex-wrap: wrap; }
+  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 8px;
+    text-decoration: none; font-size: 0.85rem; font-weight: 600; color: #fff; transition: transform 0.2s; }
+  .share-btn:hover { transform: translateY(-2px); }
+  .share-twitter { background: #000; border: 1px solid #333; }
+  .share-linkedin { background: #0A66C2; }
+  .share-copy { background: #333; cursor: pointer; border: none; color: #fff; font-size: 0.85rem; font-weight: 600;
+    padding: 10px 20px; border-radius: 8px; }
+
+  .footer { text-align: center; padding: 20px; color: #444; font-size: 0.75rem; font-style: italic; }
+
+  @media (max-width: 600px) {
+    .hero-versus h1 { font-size: 1.4rem; }
+    .final-matchup { flex-direction: column; }
+    .matchup-sides { flex-direction: column; }
+    .matchup-side.left { border-right: none; border-bottom: 2px solid var(--accent); }
+    .matchup-round-label { writing-mode: horizontal-tb; transform: none; width: auto; padding: 4px 12px; }
+    .full-table table { font-size: 0.75rem; }
+    .full-table td, .full-table th { padding: 6px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top Navigation -->
+<nav style="background:#111;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222;">
+  <a href="../" style="color:#FFD700;text-decoration:none;font-weight:600;font-size:0.9rem;">← RankMint Home</a>
+  <span style="color:#555;font-size:0.75rem;">rankmint.io</span>
+</nav>
+
+<!-- Hero: Final Matchup -->
+<section class="hero-versus">
+  <div class="container">
+    <h1>Horror Movie Survival IQ Index</h1>
+    <p class="hook">30 iconic horror characters, ranked by how smart their survival decisions actually are. Micah scored lower than a 6-year-old. The data doesn't care.</p>
+    <div class="final-matchup" id="final-matchup"></div>
+    <p class="hero-tagline">One killed an alien queen with a forklift. The other killed three hitmen with a blender. The bracket makes difficult choices.</p>
+  </div>
+</section>
+
+<!-- Commentary -->
+<section class="commentary container" id="commentary">
+  <p>The horror genre has a dirty secret: <strong>"final girl" status is not a competency metric</strong>. The monster doesn't pick victims based on intelligence — it picks based on screenplay requirements. But if you strip away the plot armor, the jump scares, and the "she had to go back for her phone" scene, and you score these characters on actual, measurable survival behavior? The results are uncomfortable.</p>
+  <p>We scored 30 characters across 6 clinical metrics: Situational Awareness, Decision Quality, Weapon Proficiency, Group Leadership, Final Outcome, and Panic Resistance. Each 1–10. No supernatural adjustments. No genre exemptions. <strong>Ash Williams came out mid-tier. Micah from Paranormal Activity came out below a literal child.</strong> The data doesn't care about your headcanon.</p>
+  <p>Click any matchup below to see the head-to-head metric breakdown. The commentary is included for free. You're welcome.</p>
+</section>
+
+<!-- Bracket -->
+<section class="bracket-section container">
+  <h2>The Bracket</h2>
+  <p class="bracket-subtitle">15 matchups — sorted by rank. Click to expand head-to-head stats and commentary.</p>
+  <div class="bracket-rounds" id="bracket-rounds"></div>
+</section>
+
+<!-- Chart Links -->
+<div class="chart-links container">
+  <a href="chart_tier.html" class="chart-link tier">View Tier List (S/A/B/C/D)</a>
+  <a href="chart_radar.html" class="chart-link radar">Head-to-Head Radar Chart</a>
+</div>
+
+<!-- Find Yourself -->
+<section class="find-yourself container" id="find-section">
+  <h2>Find Yourself</h2>
+  <p>Which character are you? Be honest. Nobody's watching. (Except us. We're watching.)</p>
+  <select id="find-select">
+    <option value="">-- Pick your horror alter ego --</option>
+  </select>
+  <div class="result-card" id="result-card">
+    <div class="result-rank" id="result-rank"></div>
+    <div class="result-name" id="result-name"></div>
+    <div class="result-film" id="result-film"></div>
+    <div class="result-score" id="result-score"></div>
+    <div class="result-tier" id="result-tier"></div>
+    <div class="result-roast" id="result-roast"></div>
+  </div>
+</section>
+
+<!-- Full Table -->
+<section class="full-table container">
+  <h2>Full Rankings</h2>
+  <input type="text" class="table-search" id="table-search" placeholder="Search characters...">
+  <table id="ranking-table">
+    <thead id="table-head"></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</section>
+
+<!-- Methodology -->
+<section class="methodology container" id="methodology">
+  <h2>Methodology</h2>
+  <p>The Horror Movie Survival IQ Index scores 30 iconic horror characters across 6 behavioral metrics, each scored 1–10 by rubric against film canon. Final score = average of 6 metrics × 10. Maximum possible score: 100.</p>
+  <h3>Metrics</h3>
+  <table>
+    <tr><th>Metric</th><th>Abbr</th><th>Description</th></tr>
+    <tr><td>Situational Awareness</td><td>SA</td><td>How quickly and accurately they recognize danger. Do they trust their gut, or do they keep telling themselves it's probably nothing?</td></tr>
+    <tr><td>Decision Quality</td><td>DQ</td><td>Are their in-the-moment choices logical? Go upstairs or toward the exit?</td></tr>
+    <tr><td>Weapon Proficiency</td><td>WP</td><td>Do they arm themselves? Do they double-tap? Do they drop the gun?</td></tr>
+    <tr><td>Group Leadership</td><td>GL</td><td>Do they coordinate others effectively, or do they split the party and get someone killed?</td></tr>
+    <tr><td>Final Outcome</td><td>FO</td><td>Cold hard result. 10 = survived + saved others. 1 = died in a way that was entirely their own doing.</td></tr>
+    <tr><td>Panic Resistance</td><td>PR</td><td>Do they freeze and scream into the void, or convert fear into action within a reasonable amount of time?</td></tr>
+  </table>
+  <h3>Special Cases</h3>
+  <p><strong>Jack Torrance:</strong> Scored as written. Low DQ (2) and GL (1) reflect moral failure, not cognitive failure. The index does not distinguish between evil and stupid — it scores the behavior. He chased his family with an axe. That is a 1 in Group Leadership.</p>
+  <p><strong>Georgie:</strong> He is six years old. The methodology does not adjust for age. He scored a 16.7. We acknowledge this is unfair. We post the number anyway.</p>
+  <p><strong>Composite archetypes</strong> (Generic Blonde, Let's Split Up Guy, Runs Upstairs): represent recurring horror film behavior patterns, not characters from a single film.</p>
+  <h3>Data Sources</h3>
+  <p>Film canon (primary); IMDb, Fandom wikis, TV Tropes, Horror Homeroom, WhatCulture, CBR, Collider. Collection date: March 2026.</p>
+</section>
+
+<!-- Share Bar -->
+<div class="share-bar">
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on X</a>
+  <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">LinkedIn</a>
+  <button class="share-btn share-copy" id="share-copy">Copy Link</button>
+</div>
+
+<div class="footer">Generated by RankMint &middot; rankmint.io</div>
+
+<script>
+// ===== DATA =====
+const DATA = [
+  { rank: 1,  name: "Ellen Ripley",          film: "Alien/Aliens",                        sa: 9, dq: 9, wp: 10, gl: 9, fo: 10, pr: 9,  survival_iq: 93.3, tier: "S" },
+  { rank: 2,  name: "Erin",                   film: "You're Next",                          sa: 9, dq: 9, wp: 9,  gl: 8, fo: 10, pr: 9,  survival_iq: 90.0, tier: "S" },
+  { rank: 3,  name: "Grace",                  film: "Ready or Not",                         sa: 8, dq: 8, wp: 8,  gl: 7, fo: 10, pr: 9,  survival_iq: 83.3, tier: "S" },
+  { rank: 4,  name: "Laurie Strode",          film: "Halloween (2018)",                     sa: 9, dq: 8, wp: 9,  gl: 7, fo: 9,  pr: 8,  survival_iq: 83.3, tier: "S" },
+  { rank: 5,  name: "Sidney Prescott",        film: "Scream",                               sa: 8, dq: 8, wp: 7,  gl: 7, fo: 10, pr: 8,  survival_iq: 80.0, tier: "S" },
+  { rank: 6,  name: "Adelaide",               film: "Us",                                   sa: 8, dq: 7, wp: 8,  gl: 6, fo: 9,  pr: 8,  survival_iq: 76.7, tier: "A" },
+  { rank: 7,  name: "Chris Washington",       film: "Get Out",                              sa: 7, dq: 8, wp: 7,  gl: 5, fo: 9,  pr: 7,  survival_iq: 71.7, tier: "A" },
+  { rank: 8,  name: "Nancy Thompson",         film: "A Nightmare on Elm Street",            sa: 7, dq: 7, wp: 7,  gl: 6, fo: 9,  pr: 7,  survival_iq: 71.7, tier: "A" },
+  { rank: 9,  name: "Sam",                    film: "Trick 'r Treat",                       sa: 7, dq: 7, wp: 6,  gl: 6, fo: 8,  pr: 7,  survival_iq: 68.3, tier: "A" },
+  { rank: 10, name: "Dana",                   film: "The Cabin in the Woods",               sa: 6, dq: 7, wp: 6,  gl: 6, fo: 7,  pr: 7,  survival_iq: 65.0, tier: "A" },
+  { rank: 11, name: "Marty",                  film: "The Cabin in the Woods",               sa: 6, dq: 6, wp: 5,  gl: 5, fo: 7,  pr: 7,  survival_iq: 60.0, tier: "B" },
+  { rank: 12, name: "Tree Gelbman",           film: "Happy Death Day",                      sa: 5, dq: 6, wp: 5,  gl: 5, fo: 8,  pr: 6,  survival_iq: 58.3, tier: "B" },
+  { rank: 13, name: "Tommy Jarvis",           film: "Friday the 13th",                      sa: 5, dq: 5, wp: 6,  gl: 5, fo: 7,  pr: 6,  survival_iq: 56.7, tier: "B" },
+  { rank: 14, name: "Ash Williams",           film: "Evil Dead",                            sa: 4, dq: 4, wp: 7,  gl: 4, fo: 6,  pr: 8,  survival_iq: 55.0, tier: "B" },
+  { rank: 15, name: "Mia",                    film: "Evil Dead (2013)",                     sa: 5, dq: 5, wp: 5,  gl: 4, fo: 6,  pr: 5,  survival_iq: 50.0, tier: "B" },
+  { rank: 16, name: "Dennis",                 film: "Scream (1996)",                        sa: 4, dq: 4, wp: 3,  gl: 3, fo: 4,  pr: 4,  survival_iq: 36.7, tier: "C" },
+  { rank: 17, name: "Paxton",                 film: "Hostel",                               sa: 3, dq: 3, wp: 4,  gl: 3, fo: 3,  pr: 3,  survival_iq: 31.7, tier: "D" },
+  { rank: 18, name: "Rod Lane",               film: "A Nightmare on Elm Street",            sa: 4, dq: 3, wp: 3,  gl: 2, fo: 3,  pr: 3,  survival_iq: 30.0, tier: "D" },
+  { rank: 19, name: "Jack Torrance",          film: "The Shining",                          sa: 3, dq: 2, wp: 4,  gl: 1, fo: 2,  pr: 5,  survival_iq: 28.3, tier: "D" },
+  { rank: 20, name: "Tatum Riley",            film: "Scream (1996)",                        sa: 3, dq: 3, wp: 3,  gl: 2, fo: 2,  pr: 3,  survival_iq: 26.7, tier: "D" },
+  { rank: 21, name: "Carol Anne",             film: "Poltergeist",                          sa: 3, dq: 3, wp: 1,  gl: 2, fo: 4,  pr: 2,  survival_iq: 25.0, tier: "D" },
+  { rank: 22, name: "Barb",                   film: "Black Christmas",                      sa: 3, dq: 3, wp: 2,  gl: 2, fo: 2,  pr: 3,  survival_iq: 25.0, tier: "D" },
+  { rank: 23, name: "Tina",                   film: "A Nightmare on Elm Street",            sa: 3, dq: 2, wp: 2,  gl: 2, fo: 1,  pr: 2,  survival_iq: 20.0, tier: "D" },
+  { rank: 24, name: "Freddy's Early Victims", film: "Nightmare on Elm Street (archetype)", sa: 3, dq: 2, wp: 2,  gl: 2, fo: 1,  pr: 2,  survival_iq: 20.0, tier: "D" },
+  { rank: 25, name: "Heather Donahue",        film: "The Blair Witch Project",              sa: 3, dq: 2, wp: 2,  gl: 2, fo: 1,  pr: 2,  survival_iq: 20.0, tier: "D" },
+  { rank: 26, name: "Generic Blonde",         film: "1980s Slasher (archetype)",            sa: 2, dq: 2, wp: 2,  gl: 2, fo: 1,  pr: 2,  survival_iq: 18.3, tier: "D" },
+  { rank: 27, name: "Georgie",                film: "IT",                                   sa: 3, dq: 2, wp: 1,  gl: 1, fo: 1,  pr: 2,  survival_iq: 16.7, tier: "D" },
+  { rank: 28, name: "Micah",                  film: "Paranormal Activity",                  sa: 2, dq: 1, wp: 2,  gl: 1, fo: 1,  pr: 2,  survival_iq: 15.0, tier: "D" },
+  { rank: 29, name: "Let's Split Up Guy",     film: "Generic Horror (archetype)",           sa: 2, dq: 1, wp: 2,  gl: 1, fo: 1,  pr: 2,  survival_iq: 15.0, tier: "D" },
+  { rank: 30, name: "Runs Upstairs",          film: "Generic Horror (archetype)",           sa: 2, dq: 1, wp: 1,  gl: 1, fo: 1,  pr: 1,  survival_iq: 11.7, tier: "D" },
+];
+
+const TIERS = [
+  { label: "S", name: "The Professionals",              min: 80, color: "#e74c3c" },
+  { label: "A", name: "The Functional Adults",          min: 65, color: "#e67e22" },
+  { label: "B", name: "The Plot Armor Recipients",      min: 50, color: "#3498db" },
+  { label: "C", name: "The Walking Warning Labels",     min: 35, color: "#9b59b6" },
+  { label: "D", name: "Congratulations, You Played Yourself", min: 0, color: "#636e72" },
+];
+
+const ROASTS = {
+  "Ellen Ripley": "The curve-setter. She had a plan for a literal alien. She's not in S-tier because she was lucky. She earned it across four movies and a TV show.",
+  "Erin": "She went to meet her boyfriend's family. His family hired killers. She handled it like someone who had specifically trained for this. She had not trained for this.",
+  "Grace": "Wedding dress, no shoes, hostile in-laws trying to sacrifice her to a board game. Still scored 83.3. The formula respects the grind.",
+  "Laurie Strode": "Forty years of hypervigilance, a booby-trapped house, and a whole thing about confronting your trauma. Still got an 83.3. The prep work paid off.",
+  "Sidney Prescott": "Four sequels of survival training. Figured out the rules mid-movie in the first one. The genre's most reliable closer.",
+  "Adelaide": "Fighting a doppelganger of yourself with equal physical capability, and still winning. The index is impressed, even if the ending is complicated.",
+  "Chris Washington": "His instincts were right every single time. He kept talking himself out of them. A-tier survivor, A-tier protagonist, B-tier listener.",
+  "Nancy Thompson": "Built a booby-trap network in her house. Pulled the villain out of the dream realm. Named a whole slasher archetype. Respectable.",
+  "Sam": "Knows the rules of Halloween, actually follows them, has a working threat-detection system. A-tier. The index appreciates genre literacy.",
+  "Dana": "Made it through a meta-horror premise where the house was actively rigging the game against her. B+ effort on an impossible curve.",
+  "Marty": "The stoner who figured it out first. Still didn't move fast enough. B-tier because his instincts were right but his execution was a vibe.",
+  "Tree Gelbman": "Died 11 times before she extracted the information she needed. The time loop was carrying a lot of weight here. B-tier.",
+  "Tommy Jarvis": "Friday the 13th kid. Got the job done. Didn't do it cleanly. The chainsaw arm comparison is not favorable.",
+  "Ash Williams": "Reads the Necronomicon out loud. Yes, again. But his Panic Resistance is an 8 and his chainsaw arm is a 7 in Weapon Proficiency. Mid-tier. We stand by it.",
+  "Mia": "Survived demon possession. That is genuinely impressive. The formula acknowledges this at exactly 50.0.",
+  "Dennis": "A-tier awareness of what was happening, C-tier response to that information. The gap is what costs you.",
+  "Paxton": "International torture horror. Nobody ran fast enough. International tourism has consequences.",
+  "Rod Lane": "Knew something was wrong. Ran instead of helping. Got framed for it. The instinct to flee was correct; the execution was wrong.",
+  "Jack Torrance": "Not dumb. Evil. The index does not distinguish between these outcomes. He scored a 28.3 and he's wearing a tuxedo about it.",
+  "Tatum Riley": "Tried to crawl through a cat flap. A cat flap. The cat was not even there to help.",
+  "Carol Anne": "She's a child who got absorbed into a television. The index has questions about parental supervision, not about Carol Anne.",
+  "Barb": "Answered the phone. Did not take the situation seriously. The situation was very serious.",
+  "Tina": "First on-screen Elm Street death. Did not survive the audition. The index notes this without celebration.",
+  "Freddy's Early Victims": "The archetype of what happens when you don't know the rules and nobody told you. The index is sympathetic. The score is not.",
+  "Heather Donahue": "Found-footage pioneer. Narrated her own demise. The map was not the problem.",
+  "Generic Blonde": "80s slasher canon fodder. Runs toward the noise. Does not own a flashlight. The formula has a category for this.",
+  "Georgie": "He is six years old. The index acknowledges this is unfair. The index posts the number anyway. 16.7. We're sorry, Georgie.",
+  "Micah": "Was told by a professional exactly what not to do. Made a list. Did all of it. Built a Ouija board. Scored a 15.0. Congratulations, you played yourself.",
+  "Let's Split Up Guy": "Proposes splitting up. The group splits up. Things go very badly. The proposal is always the problem.",
+  "Runs Upstairs": "Ran upstairs. 11.7. The floor has been located.",
+};
+
+// ===== MATCHUP COMMENTARY =====
+const MATCHUP_COMMENTARY = {
+  "Ellen Ripley vs Erin": "One killed an alien queen with a forklift. The other killed three hitmen with a blender. The bracket makes difficult choices.",
+  "Grace vs Laurie Strode": "Wedding dress vs. 40 years of preparation. Both brought weapons. Grace wins on raw improvisation.",
+  "Sidney Prescott vs Adelaide": "Four sequels of survival training vs. fighting your own clone. Both saw it coming. Sidney wins on sequels.",
+  "Chris Washington vs Nancy Thompson": "Social horror vs. dream horror. Both figured it out before anyone believed them.",
+  "Sam vs Dana": "Trick 'r Treat rules vs. Cabin in the Woods rules. Both had genre awareness. Sam followed the rules. Dana was the rules.",
+  "Marty vs Tree Gelbman": "Stoner wisdom vs. time loop learning curve. Marty was right the first time. Tree needed 11 deaths to get there.",
+  "Tommy Jarvis vs Ash Williams": "Friday the 13th kid vs. Evil Dead legend. Chainsaw arm wins. It just does.",
+  "Mia vs Dennis": "Survived demon possession vs. didn't survive a garage door. The gap is not ambiguous.",
+  "Paxton vs Rod Lane": "International torture vs. A Nightmare on Elm Street's most forgettable character. Nobody ran fast enough.",
+  "Jack Torrance vs Tatum Riley": "Evil genius vs. tried to escape through a cat flap. One of these is more embarrassing than the other.",
+  "Carol Anne vs Barb": "Child absorbed into a television vs. adult who answered the phone. The index has more sympathy for Carol Anne.",
+  "Tina vs Freddy's Early Victims": "First on-screen Elm Street death vs. the rest of the list. Tina loses. So does everyone else on this row.",
+  "Heather Donahue vs Generic Blonde": "Found-footage pioneer vs. 80s cannon fodder. Both scored a 20 or below. This is not a bracket. It's a support group.",
+  "Georgie vs Micah": "A 6-year-old with no information vs. a grown adult with a professional's advice. The child scores higher. Let that marinate.",
+  "Let's Split Up Guy vs Runs Upstairs": "The floor of human decision-making. The bracket is doing its best with what it has.",
+};
+
+const CONFIG = {
+  nameField: "name",
+  scoreField: "survival_iq",
+  comparisonMetrics: ["sa", "dq", "wp", "gl", "fo", "pr"],
+  comparisonLabels: ["Awareness", "Decisions", "Weapons", "Leadership", "Outcome", "Panic Resist"],
+  shareUrl: "https://rankmint.io/horror-movie-survival-iq-index/",
+  shareText: "Micah from Paranormal Activity scored LOWER than a 6-year-old. He had a professional demonologist telling him what NOT to do. He did all of it. Horror Movie Survival IQ: ",
+};
+
+// Sort tiers descending for assignment
+const SORTED_TIERS = [...TIERS].sort((a, b) => b.min - a.min);
+
+function getTier(score) {
+  return SORTED_TIERS.find(t => score >= t.min) || TIERS[TIERS.length - 1];
+}
+
+const sorted = [...DATA].sort((a, b) => b[CONFIG.scoreField] - a[CONFIG.scoreField]);
+
+// ===== HERO =====
+const finalDiv = document.getElementById("final-matchup");
+const [champ, runner] = sorted;
+finalDiv.innerHTML = `
+  <div class="final-fighter winner">
+    <div class="fighter-label">Champion</div>
+    <div class="fighter-name">${champ.name}</div>
+    <div class="fighter-film">${champ.film}</div>
+    <div class="fighter-score">${champ.survival_iq.toFixed(1)}</div>
+  </div>
+  <div class="vs-badge">VS</div>
+  <div class="final-fighter">
+    <div class="fighter-label">Runner-Up</div>
+    <div class="fighter-name">${runner.name}</div>
+    <div class="fighter-film">${runner.film}</div>
+    <div class="fighter-score">${runner.survival_iq.toFixed(1)}</div>
+  </div>
+`;
+
+// ===== BRACKET =====
+const bracketDiv = document.getElementById("bracket-rounds");
+
+for (let i = 0; i < sorted.length - 1; i += 2) {
+  const a = sorted[i];
+  const b = sorted[i + 1];
+  if (!b) break;
+  const aWins = a[CONFIG.scoreField] >= b[CONFIG.scoreField];
+  const matchNum = Math.floor(i / 2) + 1;
+  const matchKey1 = `${a.name} vs ${b.name}`;
+  const matchKey2 = `${b.name} vs ${a.name}`;
+  const commentary = MATCHUP_COMMENTARY[matchKey1] || MATCHUP_COMMENTARY[matchKey2] || "";
+
+  const matchup = document.createElement("div");
+  matchup.className = "matchup";
+  matchup.dataset.matchNum = matchNum;
+  matchup.innerHTML = `
+    <div class="matchup-round-label">#${a.rank} vs #${b.rank}</div>
+    <div style="flex:1;">
+      <div class="matchup-sides">
+        <div class="matchup-side left ${aWins ? 'winner' : 'loser'}">
+          <div>
+            <span class="m-name">${a.name}</span>
+            <span class="m-film">${a.film}</span>
+          </div>
+          <span class="m-score">${a.survival_iq.toFixed(1)}</span>
+        </div>
+        <div class="matchup-side ${!aWins ? 'winner' : 'loser'}">
+          <div>
+            <span class="m-name">${b.name}</span>
+            <span class="m-film">${b.film}</span>
+          </div>
+          <span class="m-score">${b.survival_iq.toFixed(1)}</span>
+        </div>
+      </div>
+      ${commentary ? `<div class="matchup-commentary">"${commentary}"</div>` : ''}
+      <div class="expand-hint">Click to see metric breakdown</div>
+      <div class="detail-panel" id="detail-${matchNum}">
+        <h4>${a.name} vs ${b.name}</h4>
+        <div class="detail-bars" id="bars-${matchNum}"></div>
+      </div>
+    </div>
+  `;
+
+  matchup.addEventListener("click", () => {
+    matchup.classList.toggle("expanded");
+    const panel = document.getElementById(`detail-${matchNum}`);
+    panel.classList.toggle("active");
+    if (panel.classList.contains("active")) {
+      renderDetailBars(document.getElementById(`bars-${matchNum}`), a, b);
+    }
+  });
+
+  bracketDiv.appendChild(matchup);
+}
+
+function renderDetailBars(container, a, b) {
+  if (container.children.length > 0) return;
+  CONFIG.comparisonMetrics.forEach((m, idx) => {
+    const aVal = a[m] || 0;
+    const bVal = b[m] || 0;
+    const total = aVal + bVal || 1;
+    const label = CONFIG.comparisonLabels[idx] || m;
+    const row = document.createElement("div");
+    row.className = "detail-metric";
+    const aColor = aVal >= bVal ? '#FFD700' : '#555';
+    const bColor = bVal > aVal ? '#FF4444' : '#555';
+    row.innerHTML = `
+      <div class="metric-label">${label}</div>
+      <div class="bar-container">
+        <div class="bar-val">${aVal}</div>
+        <div class="bar-left" style="width:${(aVal / 10) * 45}%;background:${aColor}"></div>
+        <div class="bar-right" style="width:${(bVal / 10) * 45}%;background:${bColor}"></div>
+        <div class="bar-val">${bVal}</div>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+// ===== FIND YOURSELF =====
+const findSelect = document.getElementById("find-select");
+DATA.forEach(d => {
+  const opt = document.createElement("option");
+  opt.value = d.name;
+  opt.textContent = `#${d.rank} ${d.name}`;
+  findSelect.appendChild(opt);
+});
+
+findSelect.addEventListener("change", () => {
+  const selected = DATA.find(d => d.name === findSelect.value);
+  const card = document.getElementById("result-card");
+  if (!selected) { card.style.display = "none"; return; }
+  const tier = getTier(selected.survival_iq);
+  card.style.display = "block";
+  document.getElementById("result-rank").textContent = `#${selected.rank}`;
+  document.getElementById("result-name").textContent = selected.name;
+  document.getElementById("result-film").textContent = selected.film;
+  document.getElementById("result-score").textContent = `Survival IQ: ${selected.survival_iq.toFixed(1)} / 100`;
+  const tierEl = document.getElementById("result-tier");
+  tierEl.textContent = `${tier.label}-Tier: ${tier.name}`;
+  tierEl.style.background = tier.color;
+  tierEl.style.color = "#fff";
+  document.getElementById("result-roast").textContent = ROASTS[selected.name] || "";
+});
+
+// ===== FULL TABLE =====
+const thead = document.getElementById("table-head");
+const tbody = document.getElementById("table-body");
+const columns = ["rank", "name", "film", "survival_iq", "sa", "dq", "wp", "gl", "fo", "pr", "tier"];
+const headers = ["#", "Character", "Film", "IQ", "SA", "DQ", "WP", "GL", "FO", "PR", "Tier"];
+
+const headerRow = document.createElement("tr");
+headers.forEach((h, i) => {
+  const th = document.createElement("th");
+  th.textContent = h;
+  th.title = ["Rank","Character","Film","Survival IQ","Situational Awareness","Decision Quality","Weapon Proficiency","Group Leadership","Final Outcome","Panic Resistance","Tier"][i];
+  th.addEventListener("click", () => sortTable(i));
+  headerRow.appendChild(th);
+});
+thead.appendChild(headerRow);
+
+let tableData = [...DATA].sort((a, b) => a.rank - b.rank);
+
+function tierColor(t) {
+  const tier = TIERS.find(x => x.label === t);
+  return tier ? tier.color : '#555';
+}
+
+function renderTable(data) {
+  tbody.innerHTML = "";
+  data.forEach(d => {
+    const tr = document.createElement("tr");
+    columns.forEach(col => {
+      const td = document.createElement("td");
+      const v = d[col];
+      if (col === "tier") {
+        const tier = TIERS.find(t => t.label === v);
+        td.innerHTML = `<span class="tier-badge" style="background:${tierColor(v)};color:#fff">${v}</span>`;
+      } else {
+        td.textContent = typeof v === "number" ? (col === "survival_iq" ? v.toFixed(1) : v) : (v || "");
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+renderTable(tableData);
+
+let sortDir = {};
+function sortTable(colIdx) {
+  const col = columns[colIdx];
+  sortDir[col] = !(sortDir[col] || false);
+  tableData = [...DATA].sort((a, b) => {
+    const va = a[col], vb = b[col];
+    const cmp = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb));
+    return sortDir[col] ? cmp : -cmp;
+  });
+  renderTable(tableData);
+}
+
+document.getElementById("table-search").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  const filtered = DATA.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q)));
+  renderTable(filtered);
+});
+
+// ===== SHARE =====
+const shareUrl = CONFIG.shareUrl || window.location.href;
+const shareText = CONFIG.shareText + shareUrl;
+document.getElementById("share-twitter").href = `https://x.com/intent/post?text=${encodeURIComponent(shareText)}`;
+document.getElementById("share-linkedin").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+document.getElementById("share-copy").addEventListener("click", () => {
+  navigator.clipboard.writeText(shareUrl).then(() => {
+    document.getElementById("share-copy").textContent = "Copied!";
+    setTimeout(() => document.getElementById("share-copy").textContent = "Copy Link", 2000);
+  });
+});
+
+// ===== ENTRANCE ANIMATION =====
+document.querySelectorAll(".matchup").forEach((el, i) => {
+  el.style.opacity = "0";
+  el.style.transform = "translateX(-20px)";
+  setTimeout(() => {
+    el.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+    el.style.opacity = "1";
+    el.style.transform = "translateX(0)";
+  }, 80 + i * 60);
+});
+</script>
+</body>
+</html>

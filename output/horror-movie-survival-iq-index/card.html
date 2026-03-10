@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 630px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .card {
+    width: 1200px; height: 630px;
+    background: linear-gradient(135deg, #1a0000 0%, #0d0d0d 45%, #0a000f 100%);
+    color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 60px 80px;
+    position: relative; overflow: hidden;
+  }
+  /* Atmospheric background elements */
+  .bg-circle {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,68,68,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .bg-circle-1 { width: 600px; height: 600px; top: -200px; right: -100px; }
+  .bg-circle-2 { width: 400px; height: 400px; bottom: -150px; left: -80px; background: radial-gradient(circle, rgba(150,0,200,0.07) 0%, transparent 70%); }
+
+  .accent-line {
+    position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+    background: linear-gradient(90deg, #FF4444, #c0392b, #8e44ad, #FF4444);
+  }
+
+  .label { font-size: 13px; color: #FF4444; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; }
+  .title { font-size: 46px; font-weight: 900; margin-bottom: 16px; line-height: 1.1; max-width: 780px; color: #fff; }
+  .hook { font-size: 20px; color: #bbb; margin-bottom: 44px; max-width: 720px; line-height: 1.4; }
+  .hook strong { color: #FFD700; }
+
+  .top3 { display: flex; gap: 20px; }
+  .top-item {
+    background: rgba(255,255,255,0.06); border-radius: 12px; padding: 18px 26px; min-width: 190px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .top-item.gold { border-color: rgba(255,215,0,0.3); background: rgba(255,215,0,0.07); }
+  .top-item .medal { font-size: 26px; font-weight: 900; margin-bottom: 6px; }
+  .top-item .medal.gold { color: #FFD700; }
+  .top-item .medal.silver { color: #C0C0C0; }
+  .top-item .medal.bronze { color: #CD7F32; }
+  .top-item .item-name { font-size: 17px; font-weight: 700; }
+  .top-item .item-film { font-size: 11px; color: #666; margin-top: 2px; }
+  .top-item .item-score { font-size: 13px; color: #888; margin-top: 6px; }
+
+  .bottom-note {
+    position: absolute; bottom: 30px; left: 80px;
+    font-size: 13px; color: #555; font-style: italic;
+  }
+  .watermark {
+    position: absolute; bottom: 30px; right: 40px;
+    font-size: 15px; color: rgba(255,255,255,0.2); font-weight: 800; letter-spacing: 3px; text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="accent-line"></div>
+  <div class="bg-circle bg-circle-1"></div>
+  <div class="bg-circle bg-circle-2"></div>
+
+  <div class="label">RankMint &middot; Horror Analysis</div>
+  <div class="title">Horror Movie Survival IQ Index</div>
+  <div class="hook">30 characters. 6 metrics. No mercy. <strong>Micah scored lower than a 6-year-old.</strong> The data doesn't care.</div>
+
+  <div class="top3">
+    <div class="top-item gold">
+      <div class="medal gold">#1</div>
+      <div class="item-name">Ellen Ripley</div>
+      <div class="item-film">Alien / Aliens</div>
+      <div class="item-score">93.3 / 100</div>
+    </div>
+    <div class="top-item">
+      <div class="medal silver">#2</div>
+      <div class="item-name">Erin</div>
+      <div class="item-film">You're Next</div>
+      <div class="item-score">90.0 / 100</div>
+    </div>
+    <div class="top-item">
+      <div class="medal bronze">#3</div>
+      <div class="item-name">Grace</div>
+      <div class="item-film">Ready or Not</div>
+      <div class="item-score">83.3 / 100</div>
+    </div>
+  </div>
+
+  <div class="bottom-note">rankmint.io/horror-movie-survival-iq-index</div>
+  <div class="watermark">RANKMINT</div>
+</div>
+</body>
+</html>

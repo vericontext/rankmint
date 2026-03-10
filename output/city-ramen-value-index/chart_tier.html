@@ -19,14 +19,14 @@
   .header h1 { font-size: 1.6rem; color: #fff; font-weight: 800; }
   .header p { font-size: 0.85rem; color: #6b7280; margin-top: 6px; }
   .tier-container { max-width: 1050px; margin: 24px auto; padding: 0 20px 40px; }
-  .tier-row { display: flex; margin-bottom: 6px; min-height: 72px; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .tier-row { display: flex; margin-bottom: 6px; min-height: 72px; border-radius: 10px; overflow: visible; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
   .tier-label {
     width: 88px; min-width: 88px; display: flex; flex-direction: column; align-items: center;
     justify-content: center; font-size: 2rem; font-weight: 900; color: #fff;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.4); letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4); letter-spacing: 2px; border-radius: 10px 0 0 10px;
   }
   .tier-label .tier-range { font-size: 0.6rem; font-weight: 400; opacity: 0.75; margin-top: 2px; letter-spacing: 0; }
-  .tier-items { flex: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 16px; background: rgba(255,255,255,0.04); border-left: 2px solid rgba(255,255,255,0.08); }
+  .tier-items { flex: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 16px; background: rgba(255,255,255,0.04); border-left: 2px solid rgba(255,255,255,0.08); border-radius: 0 10px 10px 0; }
   .tier-item {
     background: rgba(255,255,255,0.09); border-radius: 8px; padding: 9px 16px;
     font-size: 0.88rem; cursor: default; transition: all 0.22s; position: relative; border: 1px solid rgba(255,255,255,0.06);

@@ -1,0 +1,31 @@
+rank,airport_code,airport_name,city,region,delay_norm,security_norm,congestion_norm,wayfinding_norm,wifi_norm,amenity_norm,immigration_norm,anxiety_score,tier
+1,DEL,Indira Gandhi International,Delhi,Asia,87.0,100.0,90.1,71.4,82.3,35.0,75.0,81.4,S
+2,GRU,Guarulhos International,Sao Paulo,Latin America,65.2,80.0,39.3,71.4,85.2,100.0,62.5,70.6,S
+3,MIA,Miami International,Miami,North America,91.3,66.7,50.8,57.1,55.5,100.0,25.0,69.2,A
+4,JFK,John F. Kennedy International,New York,North America,100.0,33.3,64.0,85.7,13.0,92.0,37.5,66.5,A
+5,PEK,Beijing Capital International,Beijing,Asia,65.2,66.7,0.0,85.7,97.4,100.0,37.5,64.1,A
+6,BKK,Suvarnabhumi,Bangkok,Asia,52.2,66.7,72.7,42.9,79.3,57.0,100.0,62.3,A
+7,ORD,O'Hare International,Chicago,North America,95.7,13.3,43.4,71.4,64.4,100.0,40.0,62.3,A
+8,LAX,Los Angeles International,Los Angeles,North America,43.5,80.0,26.8,85.7,58.5,59.0,35.0,57.2,A
+9,DFW,Dallas/Fort Worth International,Dallas,North America,100.0,66.7,26.8,28.6,31.8,63.0,20.0,57.1,A
+10,CDG,Charles de Gaulle,Paris,Europe,47.8,53.3,86.8,100.0,39.4,5.0,25.0,56.3,A
+11,AMS,Amsterdam Schiphol,Amsterdam,Europe,52.2,100.0,42.5,42.9,64.4,22.0,12.5,55.1,A
+12,ATL,Hartsfield-Jackson Atlanta International,Atlanta,North America,73.9,26.7,81.3,14.3,67.4,69.0,12.5,52.4,B
+13,LHR,Heathrow,London,Europe,56.5,53.3,48.5,57.1,73.3,20.0,37.5,51.9,B
+14,FRA,Frankfurt Airport,Frankfurt,Europe,43.5,66.7,48.7,57.1,67.4,33.0,12.5,50.8,B
+15,CAN,Guangzhou Baiyun International,Guangzhou,Asia,56.5,53.3,18.0,42.9,70.4,24.0,37.5,45.2,B
+16,NRT,Narita International,Tokyo,Asia,30.4,46.7,57.3,57.1,70.4,4.0,25.0,42.8,B
+17,SYD,Kingsford Smith,Sydney,Oceania,30.4,26.7,78.5,28.6,70.4,54.0,25.0,42.7,B
+18,MEX,Benito Juarez International,Mexico City,Latin America,4.3,33.3,17.8,71.4,100.0,100.0,12.5,41.8,B
+19,ICN,Incheon International,Seoul,Asia,73.9,33.3,48.3,14.3,49.6,2.0,12.5,40.3,B
+20,MAD,Adolfo Suarez Madrid-Barajas,Madrid,Europe,39.1,33.3,25.6,42.9,73.3,14.0,20.0,36.5,C
+21,HKG,Hong Kong International,Hong Kong,Asia,43.5,26.7,62.4,14.3,58.5,10.0,20.0,35.5,C
+22,FCO,Leonardo da Vinci,Rome,Europe,21.7,26.7,46.0,28.6,76.3,11.0,20.0,31.7,C
+23,SFO,San Francisco International,San Francisco,North America,21.7,20.0,61.9,42.9,0.0,46.0,20.0,30.7,C
+24,DXB,Dubai International,Dubai,Middle East,21.7,33.3,40.4,28.6,55.5,6.0,12.5,29.2,C
+25,HND,Haneda International,Tokyo,Asia,0.0,0.0,100.0,0.0,96.3,3.0,12.5,25.6,C
+26,SEA,Seattle-Tacoma International,Seattle,North America,13.0,6.7,90.1,14.3,21.5,23.0,12.5,25.3,C
+27,IST,Istanbul Airport,Istanbul,Europe/Middle East,30.4,26.7,4.4,28.6,46.6,9.0,25.0,24.7,D
+28,SIN,Changi Airport,Singapore,Asia,39.1,0.0,34.6,0.0,52.6,1.0,0.0,20.3,D
+29,MUC,Munich Airport,Munich,Europe,13.0,13.3,6.9,14.3,61.5,7.0,5.0,16.2,D
+30,DOH,Hamad International,Doha,Middle East,4.3,0.0,43.9,0.0,43.7,0.0,5.0,12.3,D

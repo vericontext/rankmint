@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extinction Risk Tier List | Programming Language Mass Extinction Index</title>
+<meta property="og:title" content="Programming Language Extinction Risk — Tier List">
+<meta property="og:description" content="S tier = already extinct. D tier = thriving. Where does your language land?">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Programming Language Extinction Risk — Tier List">
+<meta name="twitter:description" content="S tier = already extinct. D tier = thriving. Where does your language land?">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; }
+  .header { padding: 24px 32px 8px; }
+  .header h1 { font-size: 1.6rem; color: #fff; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+  .tier-note { padding: 8px 32px 4px; font-size: 0.8rem; color: #c44; font-style: italic; }
+  .tier-container { max-width: 1000px; margin: 20px auto; padding: 0 16px; }
+  .tier-row { display: flex; margin-bottom: 4px; min-height: 64px; border-radius: 8px; overflow: visible; }
+  .tier-label { width: 80px; min-width: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 1.8rem; font-weight: 900; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); border-radius: 8px 0 0 8px; line-height: 1.1; }
+  .tier-sublabel { font-size: 0.5rem; font-weight: 400; letter-spacing: 0.5px; opacity: 0.85; text-transform: uppercase; margin-top: 3px; }
+  .tier-items { flex: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    padding: 10px 16px; background: rgba(255,255,255,0.05); border-radius: 0 8px 8px 0; }
+  .tier-item { background: rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 14px;
+    font-size: 0.85rem; cursor: default; transition: all 0.2s; position: relative; }
+  .tier-item:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+  .tier-item .score { font-size: 0.7rem; color: #aaa; margin-top: 2px; }
+  .tooltip { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+    background: #333; color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 0.75rem;
+    white-space: nowrap; z-index: 10; margin-bottom: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .tier-item:hover .tooltip { display: block; }
+  .watermark { text-align: right; padding: 12px 32px; color: #555; font-size: 0.75rem; font-style: italic; }
+  @media (max-width: 600px) {
+    .tier-label { width: 56px; min-width: 56px; font-size: 1.3rem; }
+    .tier-container { padding: 0 8px; }
+  }
+</style>
+</head>
+<body>
+<nav style="padding:10px 20px;display:flex;gap:16px;align-items:center;">
+  <a href="../" style="color:#FF6B6B;text-decoration:none;font-size:0.85rem;">← RankMint Home</a>
+  <a href="index.html" style="color:#FF6B6B;text-decoration:none;font-size:0.85rem;">← Back to Rankings</a>
+</nav>
+<div class="header">
+  <h1>Extinction Risk Tier List — 30 Programming Languages</h1>
+  <p>S = Already Extinct (highest risk) · A = Endangered · B = Vulnerable · C = Stable · D = Thriving (lowest risk)</p>
+</div>
+<div class="tier-note">Note: S tier here means MOST at risk — the inverse of the usual tier list convention.</div>
+<div class="tier-container" id="tiers"></div>
+<div class="watermark">RankMint · rankmint.io</div>
+<script>
+const DATA = [
+  { name: "ActionScript",  score: 100.0, tiobe_rank: 100, so_usage: 0.1,  job_demand: 2,  year: 1998, note: "Flash EOL Dec 2020. The language that ceased." },
+  { name: "ColdFusion",    score: 97.3,  tiobe_rank: 90,  so_usage: 0.1,  job_demand: 5,  year: 1995, note: "Adobe life-support. 0.3% of websites." },
+  { name: "Groovy",        score: 86.5,  tiobe_rank: 55,  so_usage: 3.3,  job_demand: 12, year: 2003, note: "Replaced by Kotlin on the JVM." },
+  { name: "Haskell",       score: 84.8,  tiobe_rank: 42,  so_usage: 2.0,  job_demand: 8,  year: 1990, note: "73.9K Reddit community. Near-zero jobs." },
+  { name: "Erlang",        score: 84.2,  tiobe_rank: 34,  so_usage: 0.9,  job_demand: 8,  year: 1986, note: "Ericsson + WhatsApp only." },
+  { name: "Objective-C",   score: 81.3,  tiobe_rank: 31,  so_usage: 2.1,  job_demand: 12, year: 1983, note: "Swift replaced it in 2014." },
+  { name: "Pascal/Delphi", score: 78.8,  tiobe_rank: 10,  so_usage: 1.8,  job_demand: 10, year: 1970, note: "TIOBE inflated by legacy docs." },
+  { name: "Lua",           score: 78.1,  tiobe_rank: 32,  so_usage: 6.2,  job_demand: 15, year: 1993, note: "Embedded scripting niche." },
+  { name: "Scala",         score: 78.0,  tiobe_rank: 38,  so_usage: 2.6,  job_demand: 25, year: 2003, note: "Kotlin absorbed its JVM future." },
+  { name: "COBOL",         score: 78.0,  tiobe_rank: 24,  so_usage: 0.7,  job_demand: 30, year: 1959, note: "1,400+ open jobs. More than Haskell or Erlang." },
+  { name: "Fortran",       score: 77.3,  tiobe_rank: 13,  so_usage: 1.1,  job_demand: 20, year: 1957, note: "NASA + weather modeling. Scientific niche." },
+  { name: "Perl",          score: 77.2,  tiobe_rank: 11,  so_usage: 2.5,  job_demand: 10, year: 1987, note: "TIOBE #11 is a legacy mirage." },
+  { name: "MATLAB",        score: 76.3,  tiobe_rank: 17,  so_usage: 4.0,  job_demand: 20, year: 1984, note: "Proprietary pricing limiting growth." },
+  { name: "Visual Basic",  score: 75.9,  tiobe_rank: 7,   so_usage: 4.2,  job_demand: 15, year: 1991, note: "VB6 abandoned 2008. VB.NET barely touched." },
+  { name: "Assembly",      score: 75.0,  tiobe_rank: 17,  so_usage: 5.4,  job_demand: 20, year: 1949, note: "Hardware permanent. No growth path." },
+  { name: "Dart",          score: 71.2,  tiobe_rank: 25,  so_usage: 6.0,  job_demand: 28, year: 2011, note: "Flutter-dependent. Google-backed." },
+  { name: "R",             score: 69.5,  tiobe_rank: 9,   so_usage: 4.3,  job_demand: 30, year: 1993, note: "Data science stronghold. Python competing." },
+  { name: "Swift",         score: 67.8,  tiobe_rank: 20,  so_usage: 4.7,  job_demand: 35, year: 2014, note: "Apple ecosystem lock-in." },
+  { name: "Ruby",          score: 66.8,  tiobe_rank: 30,  so_usage: 5.2,  job_demand: 55, year: 1995, note: "Post-Rails boom decline." },
+  { name: "Kotlin",        score: 65.1,  tiobe_rank: 22,  so_usage: 9.4,  job_demand: 38, year: 2011, note: "Android first-class. Growth ceiling." },
+  { name: "Rust",          score: 59.4,  tiobe_rank: 14,  so_usage: 12.6, job_demand: 40, year: 2015, note: "83% admiration. Growing fast." },
+  { name: "Go",            score: 57.0,  tiobe_rank: 16,  so_usage: 13.5, job_demand: 50, year: 2009, note: "DevOps bedrock. Post-hype stable." },
+  { name: "PHP",           score: 48.9,  tiobe_rank: 18,  so_usage: 18.2, job_demand: 65, year: 1994, note: "Powers 77% of server-side web." },
+  { name: "C",             score: 48.4,  tiobe_rank: 2,   so_usage: 20.3, job_demand: 60, year: 1972, note: "Foundation of Linux and everything." },
+  { name: "C++",           score: 44.3,  tiobe_rank: 3,   so_usage: 23.0, job_demand: 60, year: 1985, note: "Game engines, finance, systems." },
+  { name: "C#",            score: 39.9,  tiobe_rank: 5,   so_usage: 27.1, job_demand: 70, year: 2000, note: ".NET renaissance. TIOBE LoY 2025." },
+  { name: "Java",          score: 35.1,  tiobe_rank: 4,   so_usage: 30.3, job_demand: 80, year: 1995, note: "Enterprise backbone. Irreplaceable." },
+  { name: "TypeScript",    score: 23.2,  tiobe_rank: 35,  so_usage: 38.5, job_demand: 95, year: 2012, note: "Fastest-growing. AI tooling boom." },
+  { name: "Python",        score: 17.3,  tiobe_rank: 1,   so_usage: 51.0, job_demand: 85, year: 1991, note: "TIOBE #1. The language of the AI era." },
+  { name: "JavaScript",    score: 2.0,   tiobe_rank: 6,   so_usage: 62.3, job_demand: 95, year: 1995, note: "Every browser. Lowest risk in index." },
+];
+
+const CONFIG = {
+  nameField: "name",
+  scoreField: "score",
+  // Sorted descending so .find() returns highest matching tier
+  tiers: [
+    { label: "S", sublabel: "Extinct",    min: 75, color: "#c0392b" },
+    { label: "A", sublabel: "Endangered", min: 55, color: "#e67e22" },
+    { label: "B", sublabel: "Vulnerable", min: 40, color: "#f39c12" },
+    { label: "C", sublabel: "Stable",     min: 25, color: "#27ae60" },
+    { label: "D", sublabel: "Thriving",   min: 0,  color: "#2980b9" },
+  ],
+  tooltipFields: ["tiobe_rank", "so_usage", "job_demand", "note"],
+};
+
+const sorted = [...DATA].sort((a, b) => b[CONFIG.scoreField] - a[CONFIG.scoreField]);
+const container = document.getElementById("tiers");
+
+// Sort tiers by min DESCENDING so .find() returns the highest matching tier
+const sortedTiers = [...CONFIG.tiers].sort((a, b) => b.min - a.min);
+
+CONFIG.tiers.forEach(tier => {
+  const tierItems = sorted.filter(d => {
+    const s = d[CONFIG.scoreField];
+    const assigned = sortedTiers.find(t => s >= t.min);
+    return assigned && assigned.label === tier.label;
+  });
+
+  const row = document.createElement("div");
+  row.className = "tier-row";
+  row.innerHTML = `<div class="tier-label" style="background:${tier.color}">${tier.label}<span class="tier-sublabel">${tier.sublabel}</span></div>`;
+  const itemsDiv = document.createElement("div");
+  itemsDiv.className = "tier-items";
+
+  tierItems.forEach(d => {
+    const el = document.createElement("div");
+    el.className = "tier-item";
+    let tooltipHtml = `<b>${d[CONFIG.nameField]}</b><br/>Extinction Risk: ${d[CONFIG.scoreField].toFixed(1)}/100`;
+    tooltipHtml += `<br/>TIOBE Rank: #${d.tiobe_rank}`;
+    tooltipHtml += `<br/>SO Usage: ${d.so_usage}%`;
+    tooltipHtml += `<br/>Job Demand: ${d.job_demand}/100`;
+    tooltipHtml += `<br/><em>${d.note}</em>`;
+    el.innerHTML = `
+      ${d[CONFIG.nameField]}
+      <div class="score">${d[CONFIG.scoreField].toFixed(1)}</div>
+      <div class="tooltip">${tooltipHtml}</div>
+    `;
+    itemsDiv.appendChild(el);
+  });
+
+  row.appendChild(itemsDiv);
+  container.appendChild(row);
+});
+
+// Entrance animation
+document.querySelectorAll(".tier-item").forEach((el, i) => {
+  el.style.opacity = "0";
+  el.style.transform = "translateY(10px)";
+  setTimeout(() => {
+    el.style.transition = "opacity 0.4s, transform 0.4s";
+    el.style.opacity = "1";
+    el.style.transform = "translateY(0)";
+  }, 50 + i * 30);
+});
+</script>
+</body>
+</html>

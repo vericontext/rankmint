@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rank Shifts Across Metrics | Programming Language Mass Extinction Index</title>
+<meta property="og:title" content="How Programming Language Rankings Shift by Metric">
+<meta property="og:description" content="Perl is #11 on TIOBE but collapses to #26 in job demand. See how every language's rank shifts when you change the measurement.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How Programming Language Rankings Shift by Metric">
+<meta name="twitter:description" content="Perl is #11 on TIOBE but collapses to #26 in job demand. See how every language's rank shifts when you change the measurement.">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; }
+  #chart { width: 100%; height: 85vh; min-height: 650px; }
+  .header { padding: 24px 32px 8px; }
+  .header h1 { font-size: 1.4rem; color: #1a1a2e; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+  .controls { padding: 8px 32px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .controls label { font-size: 0.85rem; color: #666; font-weight: 600; }
+  .controls select { padding: 6px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85rem; }
+  .legend-note { padding: 4px 32px 12px; font-size: 0.8rem; color: #888; font-style: italic; }
+</style>
+</head>
+<body>
+<nav style="padding:10px 20px;display:flex;gap:16px;align-items:center;">
+  <a href="../" style="color:#FF6B6B;text-decoration:none;font-size:0.85rem;">← RankMint Home</a>
+  <a href="index.html" style="color:#FF6B6B;text-decoration:none;font-size:0.85rem;">← Back to Rankings</a>
+</nav>
+<div class="header">
+  <h1>The Rank Illusion: How Languages Shift When You Change the Metric</h1>
+  <p>Each line is a language. Each column is a different ranking metric. Crossing lines reveal where the data contradicts itself.</p>
+</div>
+<div class="controls">
+  <label>Highlight language:</label>
+  <select id="highlight">
+    <option value="">All languages (top 15)</option>
+  </select>
+</div>
+<div class="legend-note">X-axis = metric (not time). Rank #1 = best performer in that metric. Lines that dive sharply = languages with misleading primary rankings.</div>
+<div id="chart"></div>
+<script>
+// Top 15 by extinction score — the most interesting narratively
+const DATA = [
+  { name: "ActionScript",  score: 100.0, tiobe_pct: 0.02,  so_usage: 0.1,  github_pct: 1.0,  job_demand: 2,  reddit_k: 0.2  },
+  { name: "ColdFusion",    score: 97.3,  tiobe_pct: 0.08,  so_usage: 0.1,  github_pct: 1.0,  job_demand: 5,  reddit_k: 1.6  },
+  { name: "Groovy",        score: 86.5,  tiobe_pct: 0.15,  so_usage: 3.3,  github_pct: 6.0,  job_demand: 12, reddit_k: 3.0  },
+  { name: "Haskell",       score: 84.8,  tiobe_pct: 0.26,  so_usage: 2.0,  github_pct: 7.0,  job_demand: 8,  reddit_k: 73.9 },
+  { name: "Erlang",        score: 84.2,  tiobe_pct: 0.35,  so_usage: 0.9,  github_pct: 5.0,  job_demand: 8,  reddit_k: 9.3  },
+  { name: "Objective-C",   score: 81.3,  tiobe_pct: 0.50,  so_usage: 2.1,  github_pct: 10.0, job_demand: 12, reddit_k: 6.9  },
+  { name: "Pascal/Delphi", score: 78.8,  tiobe_pct: 1.80,  so_usage: 1.8,  github_pct: 4.0,  job_demand: 10, reddit_k: 3.9  },
+  { name: "Lua",           score: 78.1,  tiobe_pct: 0.42,  so_usage: 6.2,  github_pct: 15.0, job_demand: 15, reddit_k: 17.4 },
+  { name: "Scala",         score: 78.0,  tiobe_pct: 0.30,  so_usage: 2.6,  github_pct: 18.0, job_demand: 25, reddit_k: 49.3 },
+  { name: "COBOL",         score: 78.0,  tiobe_pct: 0.72,  so_usage: 0.7,  github_pct: 3.0,  job_demand: 30, reddit_k: 3.1  },
+  { name: "Fortran",       score: 77.3,  tiobe_pct: 1.45,  so_usage: 1.1,  github_pct: 5.0,  job_demand: 20, reddit_k: 6.9  },
+  { name: "Perl",          score: 77.2,  tiobe_pct: 1.75,  so_usage: 2.5,  github_pct: 8.0,  job_demand: 10, reddit_k: 16.0 },
+  { name: "MATLAB",        score: 76.3,  tiobe_pct: 1.29,  so_usage: 4.0,  github_pct: 8.0,  job_demand: 20, reddit_k: 49.4 },
+  { name: "Visual Basic",  score: 75.9,  tiobe_pct: 2.50,  so_usage: 4.2,  github_pct: 5.0,  job_demand: 15, reddit_k: 8.7  },
+  { name: "Assembly",      score: 75.0,  tiobe_pct: 1.29,  so_usage: 5.4,  github_pct: 12.0, job_demand: 20, reddit_k: 16.5 },
+];
+
+const CONFIG = {
+  nameField: "name",
+  scoreField: "score",
+  metrics: ["tiobe_pct", "so_usage", "github_pct", "job_demand", "reddit_k"],
+  metricLabels: ["TIOBE Rank", "SO Activity", "GitHub Repos", "Job Market", "Community"],
+  topN: 15,
+  palette: "sunset",
+};
+
+const PALETTES = {
+  "sunset": ["#FF6B6B","#6B2FA0","#FF9F43","#EE5A24","#BE2EDD","#F368E0","#FF6348","#C44569","#574B90","#303952","#E66767","#CF6A87","#786FA6","#F8A5C2","#63CDDA"],
+};
+
+const sorted = [...DATA].sort((a, b) => b[CONFIG.scoreField] - a[CONFIG.scoreField]).slice(0, CONFIG.topN);
+const colors = PALETTES[CONFIG.palette];
+
+// Compute ranks for each metric (higher raw value = better = lower rank number)
+const ranks = {};
+CONFIG.metrics.forEach(m => {
+  const byMetric = [...sorted].sort((a, b) => b[m] - a[m]);
+  ranks[m] = {};
+  byMetric.forEach((d, i) => { ranks[m][d[CONFIG.nameField]] = i + 1; });
+});
+
+// Populate dropdown
+const highlightSel = document.getElementById("highlight");
+sorted.forEach(d => {
+  const opt = document.createElement("option");
+  opt.value = d[CONFIG.nameField];
+  opt.textContent = `${d[CONFIG.nameField]} (risk: ${d[CONFIG.scoreField].toFixed(1)})`;
+  highlightSel.appendChild(opt);
+});
+
+const chart = echarts.init(document.getElementById("chart"));
+
+function render(highlightName) {
+  const series = sorted.map((d, idx) => {
+    const name = d[CONFIG.nameField];
+    const isHighlighted = !highlightName || highlightName === name;
+    return {
+      name: name,
+      type: "line",
+      data: CONFIG.metrics.map(m => ranks[m][name]),
+      lineStyle: {
+        width: isHighlighted ? 3 : 1,
+        opacity: isHighlighted ? 1 : 0.12,
+        color: colors[idx % colors.length],
+      },
+      itemStyle: {
+        color: colors[idx % colors.length],
+        opacity: isHighlighted ? 1 : 0.12,
+      },
+      symbol: "circle",
+      symbolSize: isHighlighted ? 10 : 5,
+      label: {
+        show: isHighlighted,
+        position: idx % 2 === 0 ? "right" : "right",
+        formatter: p => p.dataIndex === CONFIG.metrics.length - 1 ? name : "",
+        fontSize: 10,
+        color: colors[idx % colors.length],
+      },
+      emphasis: {
+        lineStyle: { width: 4, opacity: 1 },
+        itemStyle: { opacity: 1 },
+      },
+      z: isHighlighted ? 10 : 1,
+      animationDuration: 1500,
+      animationEasing: "cubicOut",
+    };
+  });
+
+  chart.setOption({
+    backgroundColor: "#fafafa",
+    tooltip: {
+      trigger: "item",
+      formatter: p => {
+        const d = sorted.find(x => x[CONFIG.nameField] === p.seriesName);
+        if (!d) return "";
+        const metricIdx = p.dataIndex;
+        const metric = CONFIG.metricLabels[metricIdx];
+        const rawMetric = CONFIG.metrics[metricIdx];
+        return `<b>${p.seriesName}</b><br/>${metric} rank: #${p.value} of ${sorted.length}<br/>Raw value: ${d[rawMetric]}<br/>Overall extinction risk: ${d[CONFIG.scoreField].toFixed(1)}/100`;
+      },
+    },
+    grid: { left: "6%", right: "18%", top: 40, bottom: 50 },
+    xAxis: {
+      type: "category",
+      data: CONFIG.metricLabels,
+      axisLabel: { fontSize: 12, fontWeight: 600, color: "#444" },
+      axisTick: { alignWithLabel: true },
+      axisLine: { lineStyle: { color: "#ccc" } },
+    },
+    yAxis: {
+      type: "value",
+      inverse: true,
+      min: 1,
+      max: sorted.length,
+      name: "Rank",
+      nameLocation: "center",
+      nameGap: 40,
+      nameTextStyle: { fontSize: 12, color: "#666" },
+      axisLabel: { formatter: "#{value}", color: "#666" },
+      splitLine: { lineStyle: { color: "#eee" } },
+    },
+    series: series,
+    graphic: [{
+      type: "text", right: 20, bottom: 10,
+      style: { text: "RankMint", fontSize: 12, fill: "#ccc", fontStyle: "italic" },
+    }],
+  }, true);
+}
+
+highlightSel.addEventListener("change", () => render(highlightSel.value));
+render("");
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

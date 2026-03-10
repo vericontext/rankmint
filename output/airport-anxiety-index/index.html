@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Airport Anxiety Index — Which Airport Stresses You Most? | RankMint</title>
+<!-- OG Meta Tags -->
+<meta property="og:title" content="Airport Anxiety Index — Which Airport Stresses You Most?">
+<meta property="og:description" content="30 major airports scored on delays, security, congestion, wayfinding, Wi-Fi, amenities, and immigration. Delhi tops at 81.4. Doha is calmest at 12.3. CDG is #6 Skytrax but #10 anxiety.">
+<meta property="og:image" content="card.png">
+<meta property="og:url" content="https://rankmint.io/airport-anxiety-index/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Airport Anxiety Index — Which Airport Stresses You Most?">
+<meta name="twitter:description" content="30 major airports scored on delays, security, congestion, wayfinding, Wi-Fi, amenities, and immigration. Delhi tops at 81.4. Doha is calmest at 12.3.">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #fafafa; --text: #1a1a2e; --muted: #888; --accent: #E67E22;
+    --card-bg: #fff; --border: #eee;
+    --stress-red: #C0392B; --stress-orange: #E67E22; --calm-green: #27AE60; --calm-blue: #2980B9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+  /* Hero */
+  .hero { text-align: center; padding: 64px 20px 48px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%); color: #fff; }
+  .hero .eyebrow { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; color: #FF9800; text-transform: uppercase; margin-bottom: 16px; }
+  .hero h1 { font-size: 2.3rem; margin-bottom: 14px; line-height: 1.2; }
+  .hero .hook { font-size: 1.1rem; color: #ccc; max-width: 600px; margin: 0 auto 28px; }
+  .hero .counter { font-size: 3.8rem; font-weight: 900; color: #FF9800; }
+  .hero .counter-label { font-size: 0.9rem; color: #aaa; margin-top: 6px; }
+  .hero .chart-links { margin-top: 24px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .hero .chart-link { display: inline-block; padding: 8px 18px; border-radius: 6px; background: rgba(255,255,255,0.1);
+    color: #ddd; text-decoration: none; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.2);
+    transition: background 0.2s; }
+  .hero .chart-link:hover { background: rgba(255,255,255,0.2); color: #fff; }
+
+  /* Surprise Callout */
+  .surprise { background: linear-gradient(135deg, #FF9800 0%, #C0392B 100%); color: #fff; padding: 32px;
+    border-radius: 12px; margin: -30px auto 40px; max-width: 760px; position: relative; z-index: 1;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+  .surprise h2 { font-size: 1.15rem; margin-bottom: 8px; font-weight: 700; }
+  .surprise p { font-size: 0.92rem; line-height: 1.6; opacity: 0.95; }
+  .surprise .surprise-label { display: inline-block; background: rgba(255,255,255,0.2);
+    border-radius: 4px; padding: 2px 8px; font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+
+  /* Findings strip */
+  .findings { margin: 0 auto 40px; }
+  .findings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .finding-card { background: var(--card-bg); border-radius: 10px; padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06); border-left: 4px solid var(--accent); }
+  .finding-card .label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .finding-card .value { font-size: 1.5rem; font-weight: 800; color: var(--text); }
+  .finding-card .sub { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+  .finding-card.stress { border-left-color: var(--stress-red); }
+  .finding-card.stress .value { color: var(--stress-red); }
+  .finding-card.calm { border-left-color: var(--calm-blue); }
+  .finding-card.calm .value { color: var(--calm-blue); }
+  .finding-card.surprise { border-left-color: var(--stress-orange); }
+  .finding-card.surprise .value { color: var(--stress-orange); }
+
+  /* Chart Section */
+  .chart-section { margin: 40px auto; }
+  .chart-section h2 { font-size: 1.3rem; margin-bottom: 6px; }
+  .chart-section .chart-note { font-size: 0.82rem; color: var(--muted); margin-bottom: 16px; }
+  #main-chart { width: 100%; height: 560px; background: var(--card-bg); border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .chart-cta { text-align: center; margin-top: 16px; }
+  .chart-cta a { display: inline-block; padding: 10px 22px; background: var(--text); color: #fff;
+    border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; margin: 4px;
+    transition: opacity 0.2s; }
+  .chart-cta a:hover { opacity: 0.8; }
+  .chart-cta a.secondary { background: #eee; color: var(--text); }
+
+  /* Taxonomy */
+  .taxonomy { margin: 40px auto; }
+  .taxonomy h2 { font-size: 1.3rem; margin-bottom: 6px; }
+  .taxonomy .tax-intro { font-size: 0.88rem; color: var(--muted); margin-bottom: 20px; }
+  .tax-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; }
+  .tax-card { background: var(--card-bg); border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .tax-card .tax-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem;
+    font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; color: #fff; }
+  .tax-card h3 { font-size: 1.05rem; margin-bottom: 6px; color: var(--text); }
+  .tax-card p { font-size: 0.82rem; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+  .tax-card table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  .tax-card th, .tax-card td { padding: 6px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+  .tax-card th { color: var(--muted); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; }
+  .tax-card td.score-col { font-weight: 700; }
+
+  /* Story Section */
+  .story { margin: 40px auto; background: var(--card-bg); border-radius: 12px;
+    padding: 32px 36px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .story h2 { font-size: 1.2rem; margin-bottom: 16px; }
+  .story p { font-size: 0.9rem; color: #333; margin-bottom: 14px; line-height: 1.7; }
+  .story .story-highlight { background: #fff8f0; border-left: 3px solid var(--accent);
+    padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 0.88rem; }
+  .story .story-highlight strong { color: var(--accent); }
+
+  /* Find Yourself */
+  .find-yourself { margin: 40px auto; text-align: center; padding: 40px 20px; background: var(--card-bg);
+    border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .find-yourself h2 { font-size: 1.3rem; margin-bottom: 8px; }
+  .find-yourself .sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; }
+  .find-yourself select { padding: 10px 20px; font-size: 1rem; border: 2px solid var(--accent);
+    border-radius: 8px; background: #fff; min-width: 280px; color: var(--text); }
+  .result-card { display: none; margin: 24px auto 0; max-width: 440px; padding: 28px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff;
+    border-radius: 12px; text-align: center; }
+  .result-card .rank { font-size: 3.2rem; font-weight: 900; color: #FF9800; }
+  .result-card .name { font-size: 1.25rem; margin: 8px 0 4px; font-weight: 700; }
+  .result-card .score { font-size: 0.9rem; color: #aaa; }
+  .result-card .tier-badge { display: inline-block; padding: 4px 14px; border-radius: 20px;
+    font-size: 0.8rem; font-weight: 700; margin-top: 10px; }
+
+  /* Full Table */
+  .full-table { margin: 40px auto; }
+  .full-table h2 { font-size: 1.3rem; margin-bottom: 12px; }
+  .table-search { width: 100%; padding: 10px 16px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 0.9rem; margin-bottom: 12px; }
+  .full-table table { width: 100%; border-collapse: collapse; font-size: 0.83rem; background: var(--card-bg);
+    border-radius: 8px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .full-table th { background: #1a1a2e; color: #fff; padding: 10px 12px; text-align: left;
+    cursor: pointer; user-select: none; font-size: 0.78rem; }
+  .full-table th:hover { background: #2d2d5e; }
+  .full-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  .full-table tr:hover td { background: #fff5eb; }
+  .tier-s { background: #C0392B; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+  .tier-a { background: #E67E22; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+  .tier-b { background: #D4AC0D; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+  .tier-c { background: #27AE60; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+  .tier-d { background: #2980B9; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.75rem; }
+
+  /* Methodology */
+  .methodology { margin: 40px auto; padding: 28px 32px; background: var(--card-bg);
+    border-radius: 12px; font-size: 0.84rem; color: var(--muted); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .methodology h2 { font-size: 1.1rem; color: var(--text); margin-bottom: 14px; }
+  .methodology p { margin-bottom: 10px; line-height: 1.6; }
+  .methodology .formula { background: #f5f5f5; border-radius: 8px; padding: 14px 18px; font-family: monospace;
+    font-size: 0.8rem; margin: 12px 0; line-height: 1.8; color: #333; }
+  .methodology ul { padding-left: 20px; margin-top: 6px; }
+  .methodology li { margin-bottom: 6px; line-height: 1.5; }
+  .methodology a { color: var(--accent); text-decoration: none; }
+  .methodology a:hover { text-decoration: underline; }
+
+  /* Share Bar */
+  .share-bar { display: flex; justify-content: center; gap: 12px; padding: 32px 0; flex-wrap: wrap; }
+  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 11px 22px; border-radius: 8px;
+    text-decoration: none; font-size: 0.85rem; font-weight: 600; color: #fff; transition: transform 0.2s; }
+  .share-btn:hover { transform: translateY(-2px); }
+  .share-twitter { background: #000; }
+  .share-linkedin { background: #0A66C2; }
+  .share-copy { background: #444; cursor: pointer; border: none; color: #fff;
+    font-size: 0.85rem; font-weight: 600; font-family: inherit; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 24px; color: var(--muted); font-size: 0.75rem; font-style: italic; }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 1.6rem; }
+    .hero .counter { font-size: 2.8rem; }
+    .tax-grid { grid-template-columns: 1fr; }
+    .story { padding: 24px 20px; }
+    .findings-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top Navigation -->
+<nav style="background:#1a1a2e;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
+  <a href="../" style="color:#FFD700;text-decoration:none;font-weight:600;font-size:0.9rem;">← RankMint Home</a>
+  <span style="color:#666;font-size:0.75rem;">rankmint.io</span>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">Airport Anxiety Index 2024</div>
+    <h1>Which Airport Stresses You Most?</h1>
+    <p class="hook">30 major global hubs ranked by composite passenger anxiety — delays, security, congestion, wayfinding, Wi-Fi, amenities, and immigration.</p>
+    <div class="counter" id="hero-counter">0</div>
+    <div class="counter-label">#1: Delhi (DEL) — 81.4 anxiety points</div>
+    <div class="chart-links">
+      <a href="chart.html" class="chart-link">Bar Chart (Top 15)</a>
+      <a href="chart_tier.html" class="chart-link">Tier List (S–D)</a>
+      <a href="chart_heatmap.html" class="chart-link">Metric Heatmap</a>
+    </div>
+  </div>
+</section>
+
+<!-- Surprise Callout -->
+<section class="container">
+  <div class="surprise">
+    <div class="surprise-label">Counter to expectations</div>
+    <h2>Paris CDG is ranked #6 by Skytrax. It ranks #10 in anxiety — and its wayfinding score is the worst in the dataset.</h2>
+    <p>Terminal 2 at Charles de Gaulle is not one terminal. It is nine sub-terminals — 2A through 2M — each requiring separate security re-entry, separated by bus transfers, demanding an average walk of one kilometer just to reach a gate. Skytrax rewards lounge quality and passenger services. The data reveals what happens before travelers reach those lounges. Meanwhile, Atlanta — the world's busiest airport at 108 million passengers — ranks 12th, kept in check by its underground Plane Train and standardized concourse design.</p>
+  </div>
+</section>
+
+<!-- Key Findings Strip -->
+<section class="findings container">
+  <div class="findings-grid">
+    <div class="finding-card stress">
+      <div class="label">Most Anxious Airport</div>
+      <div class="value">Delhi (DEL)</div>
+      <div class="sub">81.4 pts — 600K pax/gate, 25-min security, poor Wi-Fi</div>
+    </div>
+    <div class="finding-card calm">
+      <div class="label">Calmest Airport</div>
+      <div class="value">Doha (DOH)</div>
+      <div class="sub">12.3 pts — Skytrax #1, 2-min wayfinding, QR hub precision</div>
+    </div>
+    <div class="finding-card surprise">
+      <div class="label">Biggest Skytrax Gap</div>
+      <div class="value">CDG: #6 vs #10</div>
+      <div class="sub">Skytrax rank 6 — Anxiety rank 10. Worst wayfinding in dataset.</div>
+    </div>
+    <div class="finding-card">
+      <div class="label">The Atlanta Paradox</div>
+      <div class="value">#12 of 30</div>
+      <div class="sub">World's busiest (108M pax) — not its most anxious</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chart -->
+<section class="chart-section container">
+  <h2>The Rankings — Top 15 Most Anxious Airports</h2>
+  <div class="chart-note">Anxiety score 0–100 (higher = more stressful) | Hover bars for metric breakdown | Scroll to explore</div>
+  <div id="main-chart"></div>
+  <div class="chart-cta">
+    <a href="chart_heatmap.html">Explore Full Metric Heatmap (All 30 Airports)</a>
+    <a href="chart_tier.html" class="secondary">View Tier Classification</a>
+  </div>
+</section>
+
+<!-- Taxonomy -->
+<section class="taxonomy container">
+  <h2>The Taxonomy</h2>
+  <p class="tax-intro">Four stress archetypes, identified by what fundamentally drives each airport's anxiety score.</p>
+  <div class="tax-grid" id="tax-grid">
+
+    <div class="tax-card">
+      <div class="tax-badge" style="background:#C0392B;">S-Tier</div>
+      <h3>The Pressure Cookers</h3>
+      <p>Every metric compounds the others. High delays, extreme congestion, poor connectivity, and structural fragmentation combine into an inescapable stress environment.</p>
+      <table>
+        <tr><th>Rank</th><th>Airport</th><th>Score</th><th>Tier</th></tr>
+        <tr><td>1</td><td>Delhi (DEL)</td><td class="score-col">81.4</td><td><span class="tier-s">S</span></td></tr>
+        <tr><td>2</td><td>Sao Paulo (GRU)</td><td class="score-col">70.6</td><td><span class="tier-s">S</span></td></tr>
+        <tr><td>3</td><td>Miami (MIA)</td><td class="score-col">69.2</td><td><span class="tier-a">A</span></td></tr>
+        <tr><td>4</td><td>New York JFK</td><td class="score-col">66.5</td><td><span class="tier-a">A</span></td></tr>
+        <tr><td>5</td><td>Beijing (PEK)</td><td class="score-col">64.1</td><td><span class="tier-a">A</span></td></tr>
+      </table>
+    </div>
+
+    <div class="tax-card">
+      <div class="tax-badge" style="background:#E67E22;">A-Tier</div>
+      <h3>The Structural Failures</h3>
+      <p>Infrastructure design — terminal fragmentation, poor wayfinding, or confusing layouts — creates anxiety that operational performance alone cannot fix. CDG is the defining case.</p>
+      <table>
+        <tr><th>Rank</th><th>Airport</th><th>Score</th><th>Wayfinding</th></tr>
+        <tr><td>7</td><td>Chicago (ORD)</td><td class="score-col">62.3</td><td>71.4</td></tr>
+        <tr><td>8</td><td>Los Angeles (LAX)</td><td class="score-col">57.2</td><td>85.7</td></tr>
+        <tr><td>9</td><td>Dallas (DFW)</td><td class="score-col">57.1</td><td>28.6</td></tr>
+        <tr><td>10</td><td>Paris (CDG)</td><td class="score-col">56.3</td><td>100.0</td></tr>
+        <tr><td>11</td><td>Amsterdam (AMS)</td><td class="score-col">55.1</td><td>42.9</td></tr>
+      </table>
+    </div>
+
+    <div class="tax-card">
+      <div class="tax-badge" style="background:#D4AC0D;">B-Tier</div>
+      <h3>The Managed Chaos</h3>
+      <p>High-traffic airports where operational discipline, design investment, or geographic luck keeps things from fully collapsing. Stressful but survivable.</p>
+      <table>
+        <tr><th>Rank</th><th>Airport</th><th>Score</th><th>Key Strength</th></tr>
+        <tr><td>12</td><td>Atlanta (ATL)</td><td class="score-col">52.4</td><td>Plane Train</td></tr>
+        <tr><td>13</td><td>London (LHR)</td><td class="score-col">51.9</td><td>Slot discipline</td></tr>
+        <tr><td>14</td><td>Frankfurt (FRA)</td><td class="score-col">50.8</td><td>German ops</td></tr>
+        <tr><td>18</td><td>Mexico City (MEX)</td><td class="score-col">41.8</td><td>84% OTP (Cirium #3)</td></tr>
+        <tr><td>19</td><td>Seoul (ICN)</td><td class="score-col">40.3</td><td>Wayfinding clarity</td></tr>
+      </table>
+    </div>
+
+    <div class="tax-card">
+      <div class="tax-badge" style="background:#2980B9;">D-Tier</div>
+      <h3>The Zen Masters</h3>
+      <p>Design intent and operational excellence combine to produce measurably low stress. These airports earn their reputations in the data, not just the brochures.</p>
+      <table>
+        <tr><th>Rank</th><th>Airport</th><th>Score</th><th>Skytrax</th></tr>
+        <tr><td>27</td><td>Istanbul (IST)</td><td class="score-col">24.7</td><td>#10</td></tr>
+        <tr><td>28</td><td>Singapore (SIN)</td><td class="score-col">20.3</td><td>#2</td></tr>
+        <tr><td>29</td><td>Munich (MUC)</td><td class="score-col">16.2</td><td>#8</td></tr>
+        <tr><td>30</td><td>Doha (DOH)</td><td class="score-col">12.3</td><td>#1</td></tr>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- Story Section -->
+<section class="story container">
+  <h2>What the Numbers Show</h2>
+  <p>Airport anxiety is not simply a function of size, volume, or global reputation. The data decouples each of these assumptions with measurable precision.</p>
+
+  <div class="story-highlight">
+    <strong>The Tokyo Split:</strong> Narita (NRT) and Haneda (HND) serve the same city but score 42.8 and 25.6 respectively. Haneda records the lowest delay rate in the dataset (15%, normalized 0.0) and the easiest wayfinding (score 0.0) — yet its congestion score is 100.0, the highest in the dataset. 643,000 passengers per gate sounds catastrophic. The domestic pipeline efficiency at Haneda means that raw ratio does not translate to lived overcrowding.
+  </div>
+
+  <p>The prestige trap is clearest at CDG. Four of the top-10 Skytrax airports — CDG (#6), NRT (#5), IST (#10), and HKG (#11) — score in the A or B tier for anxiety. Luxury lounges and award-winning food courts do not cancel 37-minute security queues or 1-kilometer gate walks.</p>
+
+  <div class="story-highlight">
+    <strong>Mexico City's secret:</strong> MEX is routinely avoided by nervous travelers. Cirium ranked it 3rd globally in 2024 for on-time performance — 84.04% OTP. Its delay normalization score is 4.3/100, among the lowest measured. The wayfinding complexity is genuine (71.4/100), driven by the ongoing NAICM-to-AIFA airport transition. But the delay advantage is powerful enough to push MEX to 18th overall — ahead of Frankfurt, Sydney, and Seoul Incheon.
+  </div>
+
+  <p>The gap between the most anxious (Delhi, 81.4) and the calmest (Doha, 12.3) is 69.1 points on a 100-point scale. That is the entire range of what good and poor airport design and operations can produce. Both airports serve similar annual passenger volumes (~52–72 million). The difference is deliberate investment, planning, and operational culture.</p>
+</section>
+
+<!-- Find Yourself -->
+<section class="find-yourself container" id="find-section">
+  <h2>Find Your Airport</h2>
+  <p class="sub">Select an airport to see where it ranks and what drives its score.</p>
+  <select id="find-select">
+    <option value="">-- Select an airport --</option>
+  </select>
+  <div class="result-card" id="result-card">
+    <div class="rank" id="result-rank"></div>
+    <div class="name" id="result-name"></div>
+    <div class="score" id="result-score"></div>
+    <div id="result-tier"></div>
+  </div>
+</section>
+
+<!-- Full Table -->
+<section class="full-table container">
+  <h2>Full Rankings — All 30 Airports</h2>
+  <input type="text" class="table-search" id="table-search" placeholder="Search by airport name, code, or city...">
+  <table id="ranking-table">
+    <thead id="table-head"></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</section>
+
+<!-- Methodology -->
+<section class="methodology container" id="methodology">
+  <h2>Methodology</h2>
+  <p>The Airport Anxiety Index is a composite 0–100 score where higher values indicate greater passenger stress. Thirty major global hub airports were evaluated across seven operational dimensions using 2024 data.</p>
+  <div class="formula">
+AnxietyScore =
+  (delay_norm    × 0.25)   // % flights delayed 15+ min
++ (security_norm  × 0.20)   // average security wait in minutes
++ (congestion_norm × 0.15)  // annual passengers ÷ total gates
++ (wayfinding_norm × 0.15)  // 1–10 rubric score
++ (wifi_inv       × 0.10)   // inverted: slow Wi-Fi = higher score
++ (amenity_inv    × 0.10)   // inverted: lower Skytrax rank = higher score
++ (immigration_norm × 0.05) // average immigration queue in minutes
+  </div>
+  <p>All component scores are normalized 0–100 within dataset range using min-max normalization. Inverted metrics (Wi-Fi speed, Skytrax rank) apply 10 − normalized, so better quality produces lower anxiety contribution.</p>
+  <p><strong>Data sources:</strong></p>
+  <ul>
+    <li>Delay Rate (US): <a href="https://www.squaremouth.com/travel-advice/airport-travel-delays-in-2024" target="_blank">Squaremouth / US BTS 2024</a></li>
+    <li>Delay Rate (international): <a href="https://www.cirium.com/thoughtcloud/most-on-time-airlines-airports-2024-revealed-cirium/" target="_blank">Cirium OTP 2024</a> + <a href="https://www.eurocontrol.int/publication/all-causes-delays-air-transport-europe-annual-2024" target="_blank">Eurocontrol Annual 2024</a></li>
+    <li>Security Waits: <a href="https://bounce.com/blog/airport-wait-times-2024" target="_blank">Upgraded Points spring 2024 study</a></li>
+    <li>Immigration (US): <a href="https://awt.cbp.gov/" target="_blank">US CBP Airport Wait Times</a></li>
+    <li>Immigration (Bangkok): <a href="https://flightqueue.com/airport/BKK" target="_blank">FlightQueue traveler reports</a></li>
+    <li>Wi-Fi Speed: <a href="https://insidetowers.com/ranking-airport-wifi-and-mobile-performance-at-over-50-global-airports/" target="_blank">Ookla Q1 2024 Airport Rankings</a></li>
+    <li>Amenity Quality: <a href="https://www.worldairportawards.com/worlds-top-100-airports-2024/" target="_blank">Skytrax World Airport Awards 2024</a></li>
+  </ul>
+  <p style="margin-top:12px;"><strong>Limitations:</strong> International delay rates for non-US airports use Eurocontrol averages and Cirium OTP summaries rather than individual airport disclosures. Wi-Fi speeds for airports outside the Ookla top-50 list use regional median estimates. Gate counts for several non-US airports are estimated from airport official sites and aviation databases. All estimate sources are noted in raw_data.csv.</p>
+  <p style="margin-top:10px;"><strong>Collection date:</strong> March 2026, reflecting 2024 operational data. <strong>Sample:</strong> 30 airports across 6 regions.</p>
+</section>
+
+<!-- Share Bar -->
+<div class="share-bar">
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on X</a>
+  <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">LinkedIn</a>
+  <button class="share-btn share-copy" id="share-copy">Copy Link</button>
+</div>
+
+<div class="footer">Generated by RankMint &middot; Data: BTS, Cirium, Skytrax, Ookla, US CBP, Eurocontrol &middot; 2024 operational year</div>
+
+<script>
+// ===== DATA =====
+const DATA = [
+  { rank: 1,  code: "DEL", name: "Indira Gandhi Intl", city: "Delhi",       region: "Asia",             score: 81.4, delay: 87.0,  security: 100.0, congestion: 90.1,  wayfinding: 71.4, wifi: 82.3,  amenity: 35.0,  immigration: 75.0,  tier: "S" },
+  { rank: 2,  code: "GRU", name: "Guarulhos Intl",     city: "Sao Paulo",   region: "Latin America",    score: 70.6, delay: 65.2,  security: 80.0,  congestion: 39.3,  wayfinding: 71.4, wifi: 85.2,  amenity: 100.0, immigration: 62.5,  tier: "S" },
+  { rank: 3,  code: "MIA", name: "Miami Intl",          city: "Miami",       region: "North America",    score: 69.2, delay: 91.3,  security: 66.7,  congestion: 50.8,  wayfinding: 57.1, wifi: 55.5,  amenity: 100.0, immigration: 25.0,  tier: "A" },
+  { rank: 4,  code: "JFK", name: "John F. Kennedy Intl",city: "New York",   region: "North America",    score: 66.5, delay: 100.0, security: 33.3,  congestion: 64.0,  wayfinding: 85.7, wifi: 13.0,  amenity: 92.0,  immigration: 37.5,  tier: "A" },
+  { rank: 5,  code: "PEK", name: "Beijing Capital Intl",city: "Beijing",    region: "Asia",             score: 64.1, delay: 65.2,  security: 66.7,  congestion: 0.0,   wayfinding: 85.7, wifi: 97.4,  amenity: 100.0, immigration: 37.5,  tier: "A" },
+  { rank: 6,  code: "BKK", name: "Suvarnabhumi",        city: "Bangkok",    region: "Asia",             score: 62.3, delay: 52.2,  security: 66.7,  congestion: 72.7,  wayfinding: 42.9, wifi: 79.3,  amenity: 57.0,  immigration: 100.0, tier: "A" },
+  { rank: 7,  code: "ORD", name: "O'Hare Intl",         city: "Chicago",    region: "North America",    score: 62.3, delay: 95.7,  security: 13.3,  congestion: 43.4,  wayfinding: 71.4, wifi: 64.4,  amenity: 100.0, immigration: 40.0,  tier: "A" },
+  { rank: 8,  code: "LAX", name: "Los Angeles Intl",    city: "Los Angeles",region: "North America",    score: 57.2, delay: 43.5,  security: 80.0,  congestion: 26.8,  wayfinding: 85.7, wifi: 58.5,  amenity: 59.0,  immigration: 35.0,  tier: "A" },
+  { rank: 9,  code: "DFW", name: "Dallas/Fort Worth Intl",city: "Dallas",   region: "North America",    score: 57.1, delay: 100.0, security: 66.7,  congestion: 26.8,  wayfinding: 28.6, wifi: 31.8,  amenity: 63.0,  immigration: 20.0,  tier: "A" },
+  { rank: 10, code: "CDG", name: "Charles de Gaulle",   city: "Paris",      region: "Europe",           score: 56.3, delay: 47.8,  security: 53.3,  congestion: 86.8,  wayfinding: 100.0,wifi: 39.4,  amenity: 5.0,   immigration: 25.0,  tier: "A" },
+  { rank: 11, code: "AMS", name: "Amsterdam Schiphol",  city: "Amsterdam",  region: "Europe",           score: 55.1, delay: 52.2,  security: 100.0, congestion: 42.5,  wayfinding: 42.9, wifi: 64.4,  amenity: 22.0,  immigration: 12.5,  tier: "A" },
+  { rank: 12, code: "ATL", name: "Hartsfield-Jackson Intl",city: "Atlanta", region: "North America",    score: 52.4, delay: 73.9,  security: 26.7,  congestion: 81.3,  wayfinding: 14.3, wifi: 67.4,  amenity: 69.0,  immigration: 12.5,  tier: "B" },
+  { rank: 13, code: "LHR", name: "Heathrow",            city: "London",     region: "Europe",           score: 51.9, delay: 56.5,  security: 53.3,  congestion: 48.5,  wayfinding: 57.1, wifi: 73.3,  amenity: 20.0,  immigration: 37.5,  tier: "B" },
+  { rank: 14, code: "FRA", name: "Frankfurt Airport",   city: "Frankfurt",  region: "Europe",           score: 50.8, delay: 43.5,  security: 66.7,  congestion: 48.7,  wayfinding: 57.1, wifi: 67.4,  amenity: 33.0,  immigration: 12.5,  tier: "B" },
+  { rank: 15, code: "CAN", name: "Guangzhou Baiyun Intl",city: "Guangzhou", region: "Asia",             score: 45.2, delay: 56.5,  security: 53.3,  congestion: 18.0,  wayfinding: 42.9, wifi: 70.4,  amenity: 24.0,  immigration: 37.5,  tier: "B" },
+  { rank: 16, code: "NRT", name: "Narita Intl",         city: "Tokyo",      region: "Asia",             score: 42.8, delay: 30.4,  security: 46.7,  congestion: 57.3,  wayfinding: 57.1, wifi: 70.4,  amenity: 4.0,   immigration: 25.0,  tier: "B" },
+  { rank: 17, code: "SYD", name: "Kingsford Smith",     city: "Sydney",     region: "Oceania",          score: 42.7, delay: 30.4,  security: 26.7,  congestion: 78.5,  wayfinding: 28.6, wifi: 70.4,  amenity: 54.0,  immigration: 25.0,  tier: "B" },
+  { rank: 18, code: "MEX", name: "Benito Juarez Intl",  city: "Mexico City",region: "Latin America",    score: 41.8, delay: 4.3,   security: 33.3,  congestion: 17.8,  wayfinding: 71.4, wifi: 100.0, amenity: 100.0, immigration: 12.5,  tier: "B" },
+  { rank: 19, code: "ICN", name: "Incheon Intl",        city: "Seoul",      region: "Asia",             score: 40.3, delay: 73.9,  security: 33.3,  congestion: 48.3,  wayfinding: 14.3, wifi: 49.6,  amenity: 2.0,   immigration: 12.5,  tier: "B" },
+  { rank: 20, code: "MAD", name: "Madrid-Barajas",      city: "Madrid",     region: "Europe",           score: 36.5, delay: 39.1,  security: 33.3,  congestion: 25.6,  wayfinding: 42.9, wifi: 73.3,  amenity: 14.0,  immigration: 20.0,  tier: "C" },
+  { rank: 21, code: "HKG", name: "Hong Kong Intl",      city: "Hong Kong",  region: "Asia",             score: 35.5, delay: 43.5,  security: 26.7,  congestion: 62.4,  wayfinding: 14.3, wifi: 58.5,  amenity: 10.0,  immigration: 20.0,  tier: "C" },
+  { rank: 22, code: "FCO", name: "Leonardo da Vinci",   city: "Rome",       region: "Europe",           score: 31.7, delay: 21.7,  security: 26.7,  congestion: 46.0,  wayfinding: 28.6, wifi: 76.3,  amenity: 11.0,  immigration: 20.0,  tier: "C" },
+  { rank: 23, code: "SFO", name: "San Francisco Intl",  city: "San Francisco",region: "North America",  score: 30.7, delay: 21.7,  security: 20.0,  congestion: 61.9,  wayfinding: 42.9, wifi: 0.0,   amenity: 46.0,  immigration: 20.0,  tier: "C" },
+  { rank: 24, code: "DXB", name: "Dubai Intl",          city: "Dubai",      region: "Middle East",      score: 29.2, delay: 21.7,  security: 33.3,  congestion: 40.4,  wayfinding: 28.6, wifi: 55.5,  amenity: 6.0,   immigration: 12.5,  tier: "C" },
+  { rank: 25, code: "HND", name: "Haneda Intl",         city: "Tokyo",      region: "Asia",             score: 25.6, delay: 0.0,   security: 0.0,   congestion: 100.0, wayfinding: 0.0,  wifi: 96.3,  amenity: 3.0,   immigration: 12.5,  tier: "C" },
+  { rank: 26, code: "SEA", name: "Seattle-Tacoma Intl", city: "Seattle",    region: "North America",    score: 25.3, delay: 13.0,  security: 6.7,   congestion: 90.1,  wayfinding: 14.3, wifi: 21.5,  amenity: 23.0,  immigration: 12.5,  tier: "C" },
+  { rank: 27, code: "IST", name: "Istanbul Airport",    city: "Istanbul",   region: "Europe/Mid East",  score: 24.7, delay: 30.4,  security: 26.7,  congestion: 4.4,   wayfinding: 28.6, wifi: 46.6,  amenity: 9.0,   immigration: 25.0,  tier: "D" },
+  { rank: 28, code: "SIN", name: "Changi Airport",      city: "Singapore",  region: "Asia",             score: 20.3, delay: 39.1,  security: 0.0,   congestion: 34.6,  wayfinding: 0.0,  wifi: 52.6,  amenity: 1.0,   immigration: 0.0,   tier: "D" },
+  { rank: 29, code: "MUC", name: "Munich Airport",      city: "Munich",     region: "Europe",           score: 16.2, delay: 13.0,  security: 13.3,  congestion: 6.9,   wayfinding: 14.3, wifi: 61.5,  amenity: 7.0,   immigration: 5.0,   tier: "D" },
+  { rank: 30, code: "DOH", name: "Hamad Intl",          city: "Doha",       region: "Middle East",      score: 12.3, delay: 4.3,   security: 0.0,   congestion: 43.9,  wayfinding: 0.0,  wifi: 43.7,  amenity: 0.0,   immigration: 5.0,   tier: "D" },
+];
+
+const CONFIG = {
+  title: "Airport Anxiety Index",
+  hook: "30 major airports scored on 7 stress metrics. Delhi leads at 81.4. Doha is calmest at 12.3.",
+  nameField: "name",
+  scoreField: "score",
+  topN: 15,
+  tableColumns: ["rank", "code", "name", "city", "region", "score", "tier"],
+  tableHeaders: ["Rank", "Code", "Airport", "City", "Region", "Score", "Tier"],
+  palette: "ember",
+  counterTarget: 81.4,
+  counterLabel: "#1: Delhi (DEL) — 81.4 anxiety points",
+  shareUrl: "https://rankmint.io/airport-anxiety-index/",
+  shareText: "Delhi tops the Airport Anxiety Index at 81.4. Paris CDG is #6 Skytrax but #10 in anxiety (worst wayfinding in the dataset). Atlanta — world's busiest at 108M pax — ranks #12. Full ranking:",
+};
+
+const PALETTES = {
+  "ember": ["#FF9800", "#BF360C"],
+};
+
+function interpolateColor(c1, c2, t) {
+  const hex = s => parseInt(s, 16);
+  const r = Math.round(hex(c1.slice(1,3)) + (hex(c2.slice(1,3)) - hex(c1.slice(1,3))) * t);
+  const g = Math.round(hex(c1.slice(3,5)) + (hex(c2.slice(3,5)) - hex(c1.slice(3,5))) * t);
+  const b = Math.round(hex(c1.slice(5,7)) + (hex(c2.slice(5,7)) - hex(c1.slice(5,7))) * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+// ===== Counter Animation =====
+const counterEl = document.getElementById("hero-counter");
+let count = 0;
+const target = CONFIG.counterTarget;
+const step = target / 80;
+function animateCounter() {
+  count += step;
+  if (count >= target) { counterEl.textContent = target.toFixed(1); return; }
+  counterEl.textContent = count.toFixed(1);
+  requestAnimationFrame(animateCounter);
+}
+animateCounter();
+
+// ===== Bar Chart (Top 15) =====
+const sorted15 = [...DATA].sort((a, b) => b[CONFIG.scoreField] - a[CONFIG.scoreField]).slice(0, CONFIG.topN);
+const chartNames = sorted15.map(d => `${d.code} — ${d.city}`).reverse();
+const chartScores = sorted15.map(d => d[CONFIG.scoreField]).reverse();
+const [c1, c2] = PALETTES[CONFIG.palette];
+const colors = chartScores.map((_, i) => interpolateColor(c1, c2, i / Math.max(chartScores.length - 1, 1)));
+
+const chart = echarts.init(document.getElementById("main-chart"));
+chart.setOption({
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    formatter: params => {
+      const idx = chartScores.length - 1 - params[0].dataIndex;
+      const d = sorted15[idx];
+      return `<b>${d.name}</b><br/>
+        ${d.city} &middot; ${d.region}<br/>
+        Anxiety Score: <b>${d.score.toFixed(1)}</b> &middot; Tier: <b>${d.tier}</b><br/>
+        <hr style="border:none;border-top:1px solid #555;margin:4px 0"/>
+        Delay: ${d.delay.toFixed(1)} &nbsp; Security: ${d.security.toFixed(1)}<br/>
+        Congestion: ${d.congestion.toFixed(1)} &nbsp; Wayfinding: ${d.wayfinding.toFixed(1)}<br/>
+        Wi-Fi (inv): ${d.wifi.toFixed(1)} &nbsp; Amenity (inv): ${d.amenity.toFixed(1)}<br/>
+        Immigration: ${d.immigration.toFixed(1)}`;
+    }
+  },
+  grid: { left: "22%", right: "12%", top: 20, bottom: 40 },
+  xAxis: {
+    type: "value",
+    name: "Anxiety Score (0–100)",
+    nameLocation: "middle",
+    nameGap: 28,
+    max: 90,
+    axisLabel: { fontSize: 11 }
+  },
+  yAxis: {
+    type: "category",
+    data: chartNames,
+    axisLabel: { fontSize: 11 }
+  },
+  dataZoom: [{ type: "inside", yAxisIndex: 0, filterMode: "none" }],
+  series: [{
+    type: "bar",
+    data: chartScores.map((v, i) => ({ value: v, itemStyle: { color: colors[i] } })),
+    barWidth: "62%",
+    label: { show: true, position: "right", formatter: p => p.value.toFixed(1), fontSize: 11, color: "#333" },
+    animationDuration: 1500,
+    animationEasing: "elasticOut",
+  }],
+  graphic: [{
+    type: "text", right: 20, bottom: 10,
+    style: { text: "RankMint", fontSize: 12, fill: "#ccc", fontStyle: "italic" },
+  }],
+});
+window.addEventListener("resize", () => chart.resize());
+
+// ===== Find Yourself =====
+const findSelect = document.getElementById("find-select");
+DATA.forEach(d => {
+  const opt = document.createElement("option");
+  opt.value = d.code;
+  opt.textContent = `${d.code} — ${d.name} (${d.city})`;
+  findSelect.appendChild(opt);
+});
+
+const tierColors = { S: "#C0392B", A: "#E67E22", B: "#D4AC0D", C: "#27AE60", D: "#2980B9" };
+const tierLabels = { S: "Hellscape", A: "Consistently Stressful", B: "Rough But Survivable", C: "Manageable", D: "Zen Master" };
+
+findSelect.addEventListener("change", () => {
+  const selected = DATA.find(d => d.code === findSelect.value);
+  const card = document.getElementById("result-card");
+  if (!selected) { card.style.display = "none"; return; }
+  card.style.display = "block";
+  document.getElementById("result-rank").textContent = `#${selected.rank}`;
+  document.getElementById("result-name").textContent = `${selected.name} (${selected.code})`;
+  document.getElementById("result-score").textContent = `Anxiety Score: ${selected.score.toFixed(1)} / 100 — ${selected.city}, ${selected.region}`;
+  const tierEl = document.getElementById("result-tier");
+  tierEl.innerHTML = `<span class="tier-badge" style="background:${tierColors[selected.tier]};color:#fff">${selected.tier}: ${tierLabels[selected.tier]}</span>`;
+});
+
+// ===== Full Table =====
+const thead = document.getElementById("table-head");
+const tbody = document.getElementById("table-body");
+const headerRow = document.createElement("tr");
+CONFIG.tableHeaders.forEach((h, i) => {
+  const th = document.createElement("th");
+  th.textContent = h;
+  th.addEventListener("click", () => sortTable(i));
+  headerRow.appendChild(th);
+});
+thead.appendChild(headerRow);
+
+let tableData = [...DATA].sort((a, b) => a.rank - b.rank);
+function renderTable(data) {
+  tbody.innerHTML = "";
+  data.forEach(d => {
+    const tr = document.createElement("tr");
+    CONFIG.tableColumns.forEach(col => {
+      const td = document.createElement("td");
+      if (col === "tier") {
+        td.innerHTML = `<span class="tier-${d.tier.toLowerCase()}">${d.tier}</span>`;
+      } else {
+        const v = d[col];
+        td.textContent = typeof v === "number" ? (Number.isInteger(v) ? v : v.toFixed(1)) : v;
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+renderTable(tableData);
+
+let sortDir = {};
+function sortTable(colIdx) {
+  const col = CONFIG.tableColumns[colIdx];
+  sortDir[col] = !(sortDir[col] || false);
+  tableData.sort((a, b) => {
+    const va = a[col], vb = b[col];
+    const cmp = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb));
+    return sortDir[col] ? cmp : -cmp;
+  });
+  renderTable(tableData);
+}
+
+document.getElementById("table-search").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  renderTable(tableData.filter(d =>
+    Object.values(d).some(v => String(v).toLowerCase().includes(q))
+  ));
+});
+
+// ===== Share =====
+const url = CONFIG.shareUrl || window.location.href;
+const text = CONFIG.shareText;
+document.getElementById("share-twitter").href = `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+document.getElementById("share-linkedin").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+document.getElementById("share-copy").addEventListener("click", () => {
+  navigator.clipboard.writeText(url).then(() => {
+    document.getElementById("share-copy").textContent = "Copied!";
+    setTimeout(() => document.getElementById("share-copy").textContent = "Copy Link", 2000);
+  });
+});
+</script>
+</body>
+</html>

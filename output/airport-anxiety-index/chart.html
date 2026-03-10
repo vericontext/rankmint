@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Airport Anxiety Index — Bar Chart | RankMint</title>
+<meta property="og:title" content="Airport Anxiety Index — Top 15 Most Stressful Airports">
+<meta property="og:description" content="Which major airports stress travelers the most? Ranked by delay rates, security waits, congestion, wayfinding, Wi-Fi, amenities, and immigration queues.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Airport Anxiety Index — Top 15 Most Stressful Airports">
+<meta name="twitter:description" content="Which major airports stress travelers the most? Ranked by delay rates, security waits, congestion, wayfinding, Wi-Fi, amenities, and immigration queues.">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fafafa; }
+  #chart { width: 100%; height: 90vh; min-height: 600px; }
+  .header { padding: 24px 32px 8px; }
+  .header h1 { font-size: 1.4rem; color: #1a1a2e; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+</style>
+</head>
+<body>
+<!-- Navigation -->
+<nav style="background:#1a1a2e;padding:10px 20px;display:flex;gap:16px;align-items:center;">
+  <a href="../" style="color:#FFD700;text-decoration:none;font-size:0.85rem;font-weight:600;">← RankMint Home</a>
+  <a href="index.html" style="color:#aaa;text-decoration:none;font-size:0.85rem;">← Back to Rankings</a>
+</nav>
+<div class="header">
+  <h1>Airport Anxiety Index — Top 15 Most Stressful Airports</h1>
+  <p>Composite score (0–100, higher = more anxious) | 7 metrics: delay rate, security wait, congestion, wayfinding, Wi-Fi, amenity quality, immigration | Data: BTS, Cirium, Skytrax, Ookla, CBP — 2024</p>
+</div>
+<div id="chart"></div>
+<script>
+// ===== DATA =====
+const DATA = [
+  { name: "DEL — Delhi", code: "DEL", city: "Delhi", score: 81.4, delay: 87.0, security: 100.0, congestion: 90.1, wayfinding: 71.4, wifi: 82.3, amenity: 35.0, immigration: 75.0, tier: "S" },
+  { name: "GRU — Sao Paulo", code: "GRU", city: "Sao Paulo", score: 70.6, delay: 65.2, security: 80.0, congestion: 39.3, wayfinding: 71.4, wifi: 85.2, amenity: 100.0, immigration: 62.5, tier: "S" },
+  { name: "MIA — Miami", code: "MIA", city: "Miami", score: 69.2, delay: 91.3, security: 66.7, congestion: 50.8, wayfinding: 57.1, wifi: 55.5, amenity: 100.0, immigration: 25.0, tier: "A" },
+  { name: "JFK — New York", code: "JFK", city: "New York", score: 66.5, delay: 100.0, security: 33.3, congestion: 64.0, wayfinding: 85.7, wifi: 13.0, amenity: 92.0, immigration: 37.5, tier: "A" },
+  { name: "PEK — Beijing", code: "PEK", city: "Beijing", score: 64.1, delay: 65.2, security: 66.7, congestion: 0.0, wayfinding: 85.7, wifi: 97.4, amenity: 100.0, immigration: 37.5, tier: "A" },
+  { name: "BKK — Bangkok", code: "BKK", city: "Bangkok", score: 62.3, delay: 52.2, security: 66.7, congestion: 72.7, wayfinding: 42.9, wifi: 79.3, amenity: 57.0, immigration: 100.0, tier: "A" },
+  { name: "ORD — Chicago", code: "ORD", city: "Chicago", score: 62.3, delay: 95.7, security: 13.3, congestion: 43.4, wayfinding: 71.4, wifi: 64.4, amenity: 100.0, immigration: 40.0, tier: "A" },
+  { name: "LAX — Los Angeles", code: "LAX", city: "Los Angeles", score: 57.2, delay: 43.5, security: 80.0, congestion: 26.8, wayfinding: 85.7, wifi: 58.5, amenity: 59.0, immigration: 35.0, tier: "A" },
+  { name: "DFW — Dallas", code: "DFW", city: "Dallas", score: 57.1, delay: 100.0, security: 66.7, congestion: 26.8, wayfinding: 28.6, wifi: 31.8, amenity: 63.0, immigration: 20.0, tier: "A" },
+  { name: "CDG — Paris", code: "CDG", city: "Paris", score: 56.3, delay: 47.8, security: 53.3, congestion: 86.8, wayfinding: 100.0, wifi: 39.4, amenity: 5.0, immigration: 25.0, tier: "A" },
+  { name: "AMS — Amsterdam", code: "AMS", city: "Amsterdam", score: 55.1, delay: 52.2, security: 100.0, congestion: 42.5, wayfinding: 42.9, wifi: 64.4, amenity: 22.0, immigration: 12.5, tier: "A" },
+  { name: "ATL — Atlanta", code: "ATL", city: "Atlanta", score: 52.4, delay: 73.9, security: 26.7, congestion: 81.3, wayfinding: 14.3, wifi: 67.4, amenity: 69.0, immigration: 12.5, tier: "B" },
+  { name: "LHR — London", code: "LHR", city: "London", score: 51.9, delay: 56.5, security: 53.3, congestion: 48.5, wayfinding: 57.1, wifi: 73.3, amenity: 20.0, immigration: 37.5, tier: "B" },
+  { name: "FRA — Frankfurt", code: "FRA", city: "Frankfurt", score: 50.8, delay: 43.5, security: 66.7, congestion: 48.7, wayfinding: 57.1, wifi: 67.4, amenity: 33.0, immigration: 12.5, tier: "B" },
+  { name: "CAN — Guangzhou", code: "CAN", city: "Guangzhou", score: 45.2, delay: 56.5, security: 53.3, congestion: 18.0, wayfinding: 42.9, wifi: 70.4, amenity: 24.0, immigration: 37.5, tier: "B" },
+];
+
+const CONFIG = {
+  scoreField: "score",
+  nameField: "name",
+  topN: 15,
+  palette: "ember",
+};
+
+const PALETTES = {
+  "ember": ["#FF9800", "#BF360C"],
+};
+
+function interpolateColor(c1, c2, t) {
+  const hex = s => parseInt(s, 16);
+  const r = Math.round(hex(c1.slice(1,3)) + (hex(c2.slice(1,3)) - hex(c1.slice(1,3))) * t);
+  const g = Math.round(hex(c1.slice(3,5)) + (hex(c2.slice(3,5)) - hex(c1.slice(3,5))) * t);
+  const b = Math.round(hex(c1.slice(5,7)) + (hex(c2.slice(5,7)) - hex(c1.slice(5,7))) * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+const sorted = [...DATA].sort((a, b) => b[CONFIG.scoreField] - a[CONFIG.scoreField]).slice(0, CONFIG.topN);
+const names = sorted.map(d => d[CONFIG.nameField]).reverse();
+const scores = sorted.map(d => d[CONFIG.scoreField]).reverse();
+const [c1, c2] = PALETTES[CONFIG.palette];
+// Reversed: lowest bar gets orange (less anxiety), highest bar gets dark red (most anxiety)
+const colors = scores.map((_, i) => interpolateColor(c1, c2, i / Math.max(scores.length - 1, 1)));
+
+const chart = echarts.init(document.getElementById("chart"));
+chart.setOption({
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    formatter: params => {
+      const idx = scores.length - 1 - params[0].dataIndex;
+      const d = sorted[idx];
+      return `<b>${d.city} (${d.code})</b><br/>
+        Anxiety Score: <b>${d.score.toFixed(1)}</b><br/>
+        Tier: ${d.tier}<br/>
+        <hr style="border:none;border-top:1px solid #555;margin:4px 0"/>
+        Delay Rate: ${d.delay.toFixed(1)}<br/>
+        Security Wait: ${d.security.toFixed(1)}<br/>
+        Congestion: ${d.congestion.toFixed(1)}<br/>
+        Wayfinding: ${d.wayfinding.toFixed(1)}<br/>
+        Wi-Fi (inv): ${d.wifi.toFixed(1)}<br/>
+        Amenity (inv): ${d.amenity.toFixed(1)}<br/>
+        Immigration: ${d.immigration.toFixed(1)}`;
+    }
+  },
+  grid: { left: "22%", right: "12%", top: 20, bottom: 40 },
+  xAxis: {
+    type: "value",
+    name: "Anxiety Score (0–100)",
+    nameLocation: "middle",
+    nameGap: 25,
+    max: 90,
+    axisLabel: { fontSize: 11 }
+  },
+  yAxis: {
+    type: "category",
+    data: names,
+    axisLabel: { fontSize: 12 }
+  },
+  dataZoom: [{ type: "inside", yAxisIndex: 0, filterMode: "none" }],
+  series: [{
+    type: "bar",
+    data: scores.map((v, i) => ({ value: v, itemStyle: { color: colors[i] } })),
+    barWidth: "62%",
+    label: { show: true, position: "right", formatter: p => p.value.toFixed(1), fontSize: 11, color: "#333" },
+    animationDuration: 1500,
+    animationEasing: "elasticOut",
+  }],
+  graphic: [{
+    type: "text", right: 20, bottom: 10,
+    style: { text: "RankMint", fontSize: 12, fill: "#ccc", fontStyle: "italic" },
+  }],
+});
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dating App Dark Pattern Index | RankMint</title>
+<meta property="og:title" content="Dating App Dark Pattern Index">
+<meta property="og:description" content="Your dating app doesn't want you to find love. It wants you to find a subscription. 23 apps ranked by how manipulative they are.">
+<meta property="og:image" content="card.png">
+<meta property="og:url" content="https://rankmint.io/dating-app-dark-pattern-index/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dating App Dark Pattern Index">
+<meta name="twitter:description" content="Your dating app doesn't want you to find love. It wants you to find a subscription. 23 apps ranked.">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #fafafa; --text: #1a1a2e; --muted: #888; --accent: #E91E63;
+    --accent2: #4A148C; --card-bg: #fff; --border: #eee;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); line-height: 1.8; }
+
+  .story { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+  .story-block { padding: 48px 0; opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .story-block.visible { opacity: 1; transform: translateY(0); }
+
+  .opening { padding: 80px 0 40px; border-bottom: 1px solid var(--border); }
+  .opening h1 { font-size: 2rem; font-weight: 700; line-height: 1.3; margin-bottom: 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .opening .byline { font-size: 0.85rem; color: var(--muted); margin-bottom: 24px; font-family: -apple-system, sans-serif; }
+  .opening .lede { font-size: 1.15rem; line-height: 1.9; }
+
+  .narrative { font-size: 1.05rem; line-height: 1.9; }
+  .narrative p { margin-bottom: 1.5em; }
+  .narrative strong { color: var(--accent); }
+  .narrative blockquote { border-left: 3px solid var(--accent); padding-left: 20px; margin: 1.5em 0; font-style: italic; color: #555; }
+
+  .inline-chart { width: 100%; background: var(--card-bg); border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin: 24px 0; }
+  .chart-1-wrap { height: 620px; }
+  .chart-2-wrap { height: 680px; }
+  .chart-caption { font-size: 0.8rem; color: var(--muted); text-align: center; margin-top: 8px;
+    font-family: -apple-system, sans-serif; }
+  .chart-links { text-align: center; margin-top: 10px; font-size: 0.8rem; font-family: -apple-system, sans-serif; }
+  .chart-links a { color: var(--accent); margin: 0 8px; }
+
+  .story-taxonomy { background: var(--card-bg); border-radius: 12px; padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin: 24px 0; }
+  .story-taxonomy h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--accent);
+    font-family: -apple-system, sans-serif; font-weight: 700; }
+  .story-taxonomy .tier-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; font-family: -apple-system, sans-serif; margin-bottom: 10px; color: #fff; }
+  .story-taxonomy p { font-size: 0.9rem; color: #555; margin-bottom: 12px; line-height: 1.6; }
+  .story-taxonomy .items { display: flex; flex-wrap: wrap; gap: 8px; }
+  .story-taxonomy .item-tag { background: #f8f0ff; border-radius: 20px; padding: 6px 14px;
+    font-size: 0.8rem; font-family: -apple-system, sans-serif; color: var(--text); }
+  .story-taxonomy .item-tag .score { color: var(--muted); margin-left: 4px; }
+
+  .story-interact { background: linear-gradient(135deg, #1a1a2e 0%, #2d0a4e 100%); color: #fff;
+    border-radius: 12px; padding: 36px 28px; text-align: center; margin: 24px 0; }
+  .story-interact h2 { font-size: 1.3rem; margin-bottom: 8px; font-family: -apple-system, sans-serif; }
+  .story-interact .subtitle { font-size: 0.85rem; color: #aaa; margin-bottom: 16px; font-family: -apple-system, sans-serif; }
+  .story-interact select { padding: 10px 20px; font-size: 1rem; border: 2px solid #E91E63; border-radius: 8px;
+    background: rgba(255,255,255,0.1); color: #fff; min-width: 250px; }
+  .story-interact select option { color: #1a1a2e; background: #fff; }
+  .story-interact .result { display: none; margin: 20px auto 0; }
+  .story-interact .result .rank-num { font-size: 2.5rem; font-weight: 900; color: #E91E63; }
+  .story-interact .result .res-name { font-size: 1rem; margin: 4px auto; font-family: -apple-system, sans-serif; }
+  .story-interact .result .res-score { font-size: 0.85rem; color: #aaa; font-family: -apple-system, sans-serif; }
+  .story-interact .result .res-tier { font-size: 0.85rem; color: #FFD700; font-family: -apple-system, sans-serif; font-weight: 600; }
+
+  .callout { background: linear-gradient(135deg, #E91E63 0%, #4A148C 100%); color: #fff;
+    padding: 24px 28px; border-radius: 12px; margin: 24px 0; font-family: -apple-system, sans-serif; }
+  .callout h3 { font-size: 1.1rem; margin-bottom: 8px; font-weight: 700; }
+  .callout p { font-size: 0.9rem; line-height: 1.6; opacity: 0.9; }
+
+  .full-table { margin: 40px auto; max-width: 720px; }
+  .full-table h2 { font-size: 1.3rem; margin-bottom: 12px; font-family: -apple-system, sans-serif; }
+  .table-search { width: 100%; padding: 10px 16px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 0.9rem; margin-bottom: 12px; font-family: -apple-system, sans-serif; }
+  .full-table table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: var(--card-bg);
+    border-radius: 8px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    font-family: -apple-system, sans-serif; }
+  .full-table th { background: #1a1a2e; color: #fff; padding: 10px 10px; text-align: left; cursor: pointer; user-select: none; white-space: nowrap; }
+  .full-table th:hover { background: #4A148C; }
+  .full-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .full-table tr:hover td { background: #fce4ec; }
+  .tier-s { color: #C62828; font-weight: 700; }
+  .tier-a { color: #E91E63; font-weight: 700; }
+  .tier-b { color: #7B1FA2; font-weight: 700; }
+  .tier-c { color: #455A64; font-weight: 600; }
+  .tier-d { color: #90A4AE; }
+
+  .methodology { max-width: 720px; margin: 40px auto; padding: 24px; background: var(--card-bg);
+    border-radius: 12px; font-size: 0.85rem; color: var(--muted); font-family: -apple-system, sans-serif; }
+  .methodology h2 { font-size: 1.1rem; color: var(--text); margin-bottom: 12px; }
+  .methodology ul { padding-left: 20px; }
+  .methodology li { margin-bottom: 6px; line-height: 1.6; }
+
+  .share-bar { display: flex; justify-content: center; gap: 12px; padding: 30px 0; flex-wrap: wrap; }
+  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 8px;
+    text-decoration: none; font-size: 0.85rem; font-weight: 600; color: #fff; transition: transform 0.2s;
+    font-family: -apple-system, sans-serif; }
+  .share-btn:hover { transform: translateY(-2px); }
+  .share-twitter { background: #000; }
+  .share-linkedin { background: #0A66C2; }
+  .share-copy { background: #333; cursor: pointer; border: none; color: #fff; font-size: 0.85rem; font-weight: 600; }
+
+  .footer { text-align: center; padding: 20px; color: var(--muted); font-size: 0.75rem; font-style: italic;
+    font-family: -apple-system, sans-serif; }
+
+  @media (max-width: 600px) {
+    .opening h1 { font-size: 1.5rem; }
+    .chart-1-wrap { height: 480px; }
+    .chart-2-wrap { height: 520px; }
+    .story { padding: 0 16px; }
+    .full-table { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav style="background:#1a1a2e;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
+  <a href="../" style="color:#E91E63;text-decoration:none;font-weight:600;font-size:0.9rem;font-family:-apple-system,sans-serif;">← RankMint Home</a>
+  <span style="color:#666;font-size:0.75rem;font-family:-apple-system,sans-serif;">rankmint.io</span>
+</nav>
+
+<div class="story">
+
+  <div class="opening story-block">
+    <h1>Your Dating App Doesn't Want You to Find Love</h1>
+    <div class="byline">RankMint · March 2026 · 23 apps ranked</div>
+    <div class="lede">
+      <p>In 2024, Match Group was sued for deploying "recognized dopamine-manipulating product features" to trap users in a "perpetual pay-to-play loop." They settled for $14 million. They kept every single feature.</p>
+      <p>Every dating app claims to want you to find love. Every dating app is also a publicly-traded company that loses revenue the moment you do. This is not a coincidence. This is a business model. The Dating App Dark Pattern Index scores 23 apps across 8 manipulation dimensions — swipe addiction, paywall engineering, notification spam, visibility throttling, subscription traps, data harvesting, FOMO mechanics, and fake scarcity — to show you exactly what's being done to you, by whom, and how aggressively.</p>
+      <p>The results are not surprising. The scale of them is.</p>
+    </div>
+  </div>
+
+  <div class="story-block" id="block-1">
+    <div class="narrative">
+      <p>The index ranks 23 apps from 0 to 100. Higher scores mean more manipulation. Tinder scores 92.5. That's not a measurement error. Tinder achieves near-maximum scores on swipe addiction design, paywall manipulation, visibility throttling, and fake scarcity simultaneously. <strong>Tinder co-founder Jonathan Badeen told a journalist he got the swipe idea from B.F. Skinner's pigeon experiments</strong> — where pigeons became compulsive lever-pressers for random food rewards. He said this in a published interview. While running a company worth billions. If you've ever wondered why you can't stop swiping even when it makes you feel bad, now you know: it's working exactly as designed.</p>
+      <p>Below the full ranking. Each bar is an app. Each app is a decision made by a product team that knew exactly what they were doing.</p>
+    </div>
+    <div class="inline-chart chart-1-wrap" id="chart-1"></div>
+    <div class="chart-caption">Dark Pattern Score (0–100). Higher = more manipulative. Hover any bar for full breakdown by metric. <a href="chart.html" style="color:var(--accent)">Open full chart</a></div>
+  </div>
+
+  <div class="story-block">
+    <div class="callout">
+      <h3>Match Group owns 7 of the top 12 most manipulative apps</h3>
+      <p>Tinder, Hinge, Match.com, OkCupid, Plenty of Fish, The League, and Pairs all share the same corporate parent. Match Group is not a dating company. It's a dark pattern infrastructure company deployed across different demographics. The house always wins. In this case, the house is publicly traded on NASDAQ.</p>
+    </div>
+  </div>
+
+  <div class="story-block" id="block-2">
+    <div class="narrative">
+      <p>Not all manipulation looks the same. The index reveals four distinct manipulation archetypes — each with a different playbook for extracting attention and money from people who just want to meet someone.</p>
+    </div>
+
+    <div class="story-taxonomy">
+      <h3>The Dopamine Cartel</h3>
+      <span class="tier-badge" style="background:#C62828;">S-TIER</span>
+      <p>One app. One tier. Tinder has engineered a near-perfect slot machine. The swipe interface provides variable-ratio rewards — the most addictive reinforcement schedule in behavioral psychology. Your profile's visibility is algorithmically suppressed unless you pay. "Only 1 Super Like left!" is manufactured anxiety. None of it is accidental.</p>
+      <div class="items">
+        <span class="item-tag">Tinder <span class="score">92.5</span></span>
+      </div>
+    </div>
+
+    <div class="story-taxonomy">
+      <h3>The Sophisticated Manipulators</h3>
+      <span class="tier-badge" style="background:#E91E63;">A-TIER</span>
+      <p>These apps have read the behavioral psychology papers. Hinge locks "Most Compatible" matches in what users call "rose jail" — a paywall activated at maximum emotional investment. The "Designed to be deleted" brand is the most cynical marketing in tech: Hinge is designed to be deleted by your credit card. Bumble's 24-hour timer is textbook FOMO design — it sold a hostage situation with a countdown clock as feminist empowerment, then charged $29.99/month to sell you back the time it took from you.</p>
+      <div class="items">
+        <span class="item-tag">Hinge <span class="score">77.5</span></span>
+        <span class="item-tag">Match.com <span class="score">76.2</span></span>
+        <span class="item-tag">Bumble <span class="score">75.0</span></span>
+        <span class="item-tag">Badoo <span class="score">73.8</span></span>
+      </div>
+    </div>
+
+    <div class="story-taxonomy">
+      <h3>The Paywall Industrial Complex</h3>
+      <span class="tier-badge" style="background:#7B1FA2;">B-TIER</span>
+      <p>Free to download. Expensive to actually use. This tier spans Zoosk's fake-scarcity messaging to Grindr's category-defying data harvesting (10/10) — the only app in the index that sold users' HIV status to advertisers and GPS coordinates precise enough for a religious organization to track and out gay clergy. The app paid a €6.12M GDPR fine and called it industry practice. eHarmony is terrible at psychology and great at contracts: it scores the second-highest subscription trap score in the entire index.</p>
+      <div class="items">
+        <span class="item-tag">Zoosk <span class="score">68.8</span></span>
+        <span class="item-tag">Happn <span class="score">68.8</span></span>
+        <span class="item-tag">Tantan <span class="score">68.8</span></span>
+        <span class="item-tag">Plenty of Fish <span class="score">65.0</span></span>
+        <span class="item-tag">OkCupid <span class="score">62.5</span></span>
+        <span class="item-tag">The League <span class="score">62.5</span></span>
+        <span class="item-tag">Pairs <span class="score">61.3</span></span>
+        <span class="item-tag">Grindr <span class="score">58.8</span></span>
+        <span class="item-tag">Coffee Meets Bagel <span class="score">56.2</span></span>
+        <span class="item-tag">eHarmony <span class="score">56.2</span></span>
+      </div>
+    </div>
+
+    <div class="story-taxonomy">
+      <h3>Diet Manipulation + The Honest Ones</h3>
+      <span class="tier-badge" style="background:#4A148C;">C &amp; D TIER</span>
+      <p>These apps try. Some of them are trying quite hard — Lumen and Her both have paywall mechanics. But they lack the engineering investment that makes S and A-tier apps truly predatory. Thursday — the app that only worked on Thursdays — scored 8/10 on FOMO because its core mechanic IS an expiration timer. But transparent artificial scarcity is less dishonest than manufactured "Only 1 Super Like left!" anxiety. Thursday shut down anyway. Raya, the exclusive celebrity app, is the least manipulative app in the index: exclusivity means it doesn't need to manufacture urgency. It has three apps below it on the manipulation scale — itself, Archer, and nothing else.</p>
+      <div class="items">
+        <span class="item-tag">Lumen <span class="score">53.8</span></span>
+        <span class="item-tag">Her <span class="score">46.2</span></span>
+        <span class="item-tag">Snack <span class="score">42.5</span></span>
+        <span class="item-tag">Feeld <span class="score">41.2</span></span>
+        <span class="item-tag">Ship <span class="score">41.2</span></span>
+        <span class="item-tag">Thursday <span class="score">37.5</span></span>
+        <span class="item-tag">Archer <span class="score">32.5</span></span>
+        <span class="item-tag">Raya <span class="score">31.2</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="story-block">
+    <div class="story-interact" id="find-section">
+      <h2>Which App Are You On?</h2>
+      <div class="subtitle">Select your app to see where it ranks on the manipulation index</div>
+      <select id="find-select">
+        <option value="">-- Select your dating app --</option>
+      </select>
+      <div class="result" id="result-card">
+        <div class="rank-num" id="result-rank"></div>
+        <div class="res-name" id="result-name"></div>
+        <div class="res-score" id="result-score"></div>
+        <div class="res-tier" id="result-tier"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="story-block" id="block-3">
+    <div class="narrative">
+      <p>The ranking shows WHAT each app scores. The heatmap below shows WHY. Each column is a dark pattern type. Each row is an app. <strong>Red means maximum manipulation (10/10). Green means minimal.</strong> Look at Tinder: a sea of red across all eight columns. Look at Grindr: mostly cooler colors, then one blazing red column — Data Harvesting. Look at Bumble: that hot red column isn't paywall or swipe addiction. It's FOMO Mechanics.</p>
+      <p>The heatmap is the receipts. Every app's manipulation fingerprint in one view.</p>
+    </div>
+    <div class="inline-chart chart-2-wrap" id="chart-2"></div>
+    <div class="chart-caption">Apps × 8 dark pattern metrics. Red = 10/10 (maximum manipulation). Green = 1/10 (minimal). Sorted by overall score. <a href="chart_heatmap.html" style="color:var(--accent)">Open full heatmap</a></div>
+  </div>
+
+  <div class="story-block" id="block-closing">
+    <div class="narrative">
+      <p>Here is what you can actually do about it. The honest answer is: not much, if you want to use dating apps at all. But knowing the architecture of the manipulation gives you some power over it. <strong>Turn off notifications entirely</strong> — "someone liked you" pings that require payment to read the identity are designed to exploit your curiosity reflex. <strong>Set a time limit on the app.</strong> Infinite scroll + variable-ratio reward is a slot machine; the house wins if you play indefinitely. <strong>Ignore "X Super Likes left!" messages.</strong> They are fake. The scarcity is manufactured. <strong>If you're on Grindr, understand</strong> that your location data at a granularity of meters is potentially for sale. This is not a hypothetical.</p>
+      <p>Or you could use Raya. They need six-figure Instagram followers and a celebrity referral. But at least they're not engineering your heartbreak for recurring revenue.</p>
+      <p>The 2024 FTC study found that 76% of apps use dark patterns. The dating app industry is not an outlier in this — it's where the techniques are most effective, because the emotional stakes are highest. When you're lonely and hoping someone finds you attractive, your vulnerability to manipulation is at its peak. Every app in the S and A tier knows this. Several of them have internal product documents that say it explicitly.</p>
+      <p>You deserve to know what's being done to you. That's what this index is for.</p>
+    </div>
+    <div class="chart-links">
+      <a href="chart.html">Full Bar Chart</a> ·
+      <a href="chart_tier.html">Tier List (S/A/B/C/D)</a> ·
+      <a href="chart_heatmap.html">Dark Pattern Heatmap</a>
+    </div>
+  </div>
+
+</div>
+
+<section class="full-table" style="padding:0 24px;">
+  <h2>Full Rankings</h2>
+  <input type="text" class="table-search" id="table-search" placeholder="Search apps...">
+  <table id="ranking-table">
+    <thead id="table-head"></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</section>
+
+<section class="methodology" style="margin-left:auto;margin-right:auto;">
+  <h2>Methodology</h2>
+  <ul>
+    <li><strong>Index:</strong> Dating App Dark Pattern Index — 23 apps, 8 metrics, scored 1–10 per metric using anchored rubrics</li>
+    <li><strong>Formula:</strong> DarkPatternScore = average(8 metrics) × 12.5 · Range: 0–100 · Higher = more manipulative</li>
+    <li><strong>Metrics:</strong> Swipe Addiction, Paywall Manipulation, Notification Spam, Visibility Throttling, Subscription Trap, Data Harvesting, FOMO Mechanics, Fake Scarcity</li>
+    <li><strong>Data sources:</strong> FTC v. Match Group settlement (FTC.gov); Norwegian Consumer Council reports; Mozilla Foundation "Privacy Not Included" (Grindr, Hinge, Tantan); NPR/CBS/SF Standard — 2024 Match Group addiction lawsuit; StartupSpells UX teardown; Bumble support docs; Fortbridge security research (Feeld, 2024); FTC dark patterns study (2024); Badoo biometric settlement ($40M class action); BusinessCloud / DatingScout (Thursday closure)</li>
+    <li><strong>Collection date:</strong> March 2026</li>
+    <li><strong>Tier thresholds:</strong> S ≥ 85, A ≥ 70, B ≥ 55, C ≥ 40, D &lt; 40</li>
+    <li><strong>Note:</strong> Thursday has shut down its app and pivoted to events. Score included as historical baseline.</li>
+  </ul>
+</section>
+
+<div class="share-bar">
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on X</a>
+  <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">LinkedIn</a>
+  <button class="share-btn share-copy" id="share-copy">Copy Link</button>
+</div>
+
+<div class="footer">Generated by RankMint</div>
+
+<script>
+const DATA = [
+  { rank: 1,  name: "Tinder",             score: 92.5, swipe: 10, paywall: 10, notifications: 9, visibility: 10, subtrap: 8, data: 9, fomo: 8,  scarcity: 10, tier: "S", owner: "Match Group" },
+  { rank: 2,  name: "Hinge",              score: 77.5, swipe: 8,  paywall: 9,  notifications: 6, visibility: 8,  subtrap: 7, data: 8, fomo: 7,  scarcity: 9,  tier: "A", owner: "Match Group" },
+  { rank: 3,  name: "Match.com",          score: 76.2, swipe: 5,  paywall: 9,  notifications: 10,visibility: 7,  subtrap: 10,data: 7, fomo: 6,  scarcity: 7,  tier: "A", owner: "Match Group" },
+  { rank: 4,  name: "Bumble",             score: 75.0, swipe: 7,  paywall: 8,  notifications: 7, visibility: 7,  subtrap: 7, data: 6, fomo: 10, scarcity: 8,  tier: "A", owner: "Bumble Inc." },
+  { rank: 5,  name: "Badoo",              score: 73.8, swipe: 9,  paywall: 7,  notifications: 8, visibility: 8,  subtrap: 6, data: 8, fomo: 6,  scarcity: 7,  tier: "A", owner: "Bumble Inc." },
+  { rank: 6,  name: "Zoosk",              score: 68.8, swipe: 6,  paywall: 8,  notifications: 8, visibility: 7,  subtrap: 7, data: 6, fomo: 5,  scarcity: 8,  tier: "B", owner: "Spark Networks" },
+  { rank: 7,  name: "Happn",              score: 68.8, swipe: 7,  paywall: 8,  notifications: 9, visibility: 8,  subtrap: 5, data: 6, fomo: 5,  scarcity: 7,  tier: "B", owner: "Happn SAS" },
+  { rank: 8,  name: "Tantan",             score: 68.8, swipe: 8,  paywall: 7,  notifications: 7, visibility: 7,  subtrap: 6, data: 9, fomo: 5,  scarcity: 6,  tier: "B", owner: "Momo Inc." },
+  { rank: 9,  name: "Plenty of Fish",     score: 65.0, swipe: 6,  paywall: 7,  notifications: 8, visibility: 7,  subtrap: 8, data: 6, fomo: 4,  scarcity: 6,  tier: "B", owner: "Match Group" },
+  { rank: 10, name: "OkCupid",            score: 62.5, swipe: 6,  paywall: 6,  notifications: 7, visibility: 6,  subtrap: 6, data: 8, fomo: 5,  scarcity: 6,  tier: "B", owner: "Match Group" },
+  { rank: 11, name: "The League",         score: 62.5, swipe: 4,  paywall: 9,  notifications: 5, visibility: 7,  subtrap: 7, data: 5, fomo: 6,  scarcity: 7,  tier: "B", owner: "Match Group" },
+  { rank: 12, name: "Pairs",              score: 61.3, swipe: 6,  paywall: 7,  notifications: 6, visibility: 7,  subtrap: 6, data: 7, fomo: 5,  scarcity: 5,  tier: "B", owner: "Match Group" },
+  { rank: 13, name: "Grindr",             score: 58.8, swipe: 7,  paywall: 5,  notifications: 6, visibility: 5,  subtrap: 5, data: 10,fomo: 4,  scarcity: 5,  tier: "B", owner: "Grindr LLC" },
+  { rank: 14, name: "Coffee Meets Bagel", score: 56.2, swipe: 3,  paywall: 8,  notifications: 5, visibility: 5,  subtrap: 6, data: 5, fomo: 6,  scarcity: 7,  tier: "B", owner: "CMB Inc." },
+  { rank: 15, name: "eHarmony",           score: 56.2, swipe: 3,  paywall: 8,  notifications: 6, visibility: 5,  subtrap: 10,data: 5, fomo: 3,  scarcity: 5,  tier: "B", owner: "IAC" },
+  { rank: 16, name: "Lumen",              score: 53.8, swipe: 4,  paywall: 7,  notifications: 6, visibility: 6,  subtrap: 6, data: 5, fomo: 4,  scarcity: 5,  tier: "C", owner: "Lumen Dating" },
+  { rank: 17, name: "Her",                score: 46.2, swipe: 5,  paywall: 5,  notifications: 5, visibility: 4,  subtrap: 5, data: 5, fomo: 4,  scarcity: 4,  tier: "C", owner: "Bloomer Inc." },
+  { rank: 18, name: "Snack",              score: 42.5, swipe: 5,  paywall: 4,  notifications: 4, visibility: 4,  subtrap: 4, data: 5, fomo: 4,  scarcity: 4,  tier: "C", owner: "Snack Media" },
+  { rank: 19, name: "Feeld",              score: 41.2, swipe: 4,  paywall: 5,  notifications: 3, visibility: 4,  subtrap: 4, data: 7, fomo: 3,  scarcity: 3,  tier: "C", owner: "Feeld Ltd." },
+  { rank: 20, name: "Ship",               score: 41.2, swipe: 4,  paywall: 4,  notifications: 5, visibility: 4,  subtrap: 4, data: 4, fomo: 4,  scarcity: 4,  tier: "C", owner: "Match Group" },
+  { rank: 21, name: "Thursday",           score: 37.5, swipe: 2,  paywall: 4,  notifications: 3, visibility: 2,  subtrap: 4, data: 3, fomo: 8,  scarcity: 4,  tier: "D", owner: "Thursday Ltd." },
+  { rank: 22, name: "Archer",             score: 32.5, swipe: 3,  paywall: 4,  notifications: 3, visibility: 3,  subtrap: 3, data: 4, fomo: 3,  scarcity: 3,  tier: "D", owner: "Archer Dating" },
+  { rank: 23, name: "Raya",               score: 31.2, swipe: 3,  paywall: 5,  notifications: 2, visibility: 3,  subtrap: 3, data: 3, fomo: 3,  scarcity: 3,  tier: "D", owner: "Raya Inc." },
+];
+
+const CONFIG = {
+  title: "Dating App Dark Pattern Index",
+  hook: "Your dating app doesn't want you to find love. It wants you to find a subscription.",
+  nameField: "name",
+  scoreField: "score",
+  tableColumns: ["rank", "name", "score", "swipe", "paywall", "notifications", "visibility", "subtrap", "data", "fomo", "scarcity", "tier", "owner"],
+  tableHeaders: ["Rank", "App", "Score", "Swipe", "Paywall", "Notif.", "Visibility", "SubTrap", "Data", "FOMO", "Scarcity", "Tier", "Owner"],
+  palette: "berry",
+  shareUrl: "https://rankmint.io/dating-app-dark-pattern-index/",
+  shareText: "Your dating app doesn't want you to find love. It wants you to find a subscription. Tinder scores 92.5/100 on the Dark Pattern Index. Hinge (#2) was 'designed to be deleted' — by your credit card. @RankMint",
+};
+
+const PALETTES = {
+  "berry": ["#E91E63", "#4A148C"],
+};
+
+function interpolateColor(c1, c2, t) {
+  const hex = s => parseInt(s, 16);
+  const r = Math.round(hex(c1.slice(1,3)) + (hex(c2.slice(1,3)) - hex(c1.slice(1,3))) * t);
+  const g = Math.round(hex(c1.slice(3,5)) + (hex(c2.slice(3,5)) - hex(c1.slice(3,5))) * t);
+  const b = Math.round(hex(c1.slice(5,7)) + (hex(c2.slice(5,7)) - hex(c1.slice(5,7))) * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+// ===== Scroll reveal =====
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
+}, { threshold: 0.1 });
+document.querySelectorAll(".story-block").forEach(el => observer.observe(el));
+
+// ===== Find Yourself =====
+const findSelect = document.getElementById("find-select");
+DATA.forEach(d => {
+  const opt = document.createElement("option");
+  opt.value = d.name; opt.textContent = d.name;
+  findSelect.appendChild(opt);
+});
+const TIER_MESSAGES = {
+  S: "Digital Predator tier. Congratulations, you're using the most engineered manipulation machine in consumer software.",
+  A: "Manipulation Machine tier. They've read the behavioral psychology papers and implemented all of them.",
+  B: "Paywall Industrial Complex tier. Free to download, expensive to actually use.",
+  C: "Diet Manipulation tier. They try. They're just not very good at it.",
+  D: "The Honest Ones tier. You found one of the three least manipulative apps. This is an achievement."
+};
+findSelect.addEventListener("change", () => {
+  const selected = DATA.find(d => d.name === findSelect.value);
+  if (!selected) { document.getElementById("result-card").style.display = "none"; return; }
+  document.getElementById("result-card").style.display = "block";
+  document.getElementById("result-rank").textContent = `#${selected.rank}`;
+  document.getElementById("result-name").textContent = selected.name;
+  document.getElementById("result-score").textContent = `Score: ${selected.score.toFixed(1)} / 100`;
+  document.getElementById("result-tier").textContent = TIER_MESSAGES[selected.tier] || `Tier ${selected.tier}`;
+});
+
+// ===== Full Table =====
+const thead = document.getElementById("table-head");
+const tbody = document.getElementById("table-body");
+const headerRow = document.createElement("tr");
+CONFIG.tableHeaders.forEach((h, i) => {
+  const th = document.createElement("th");
+  th.textContent = h;
+  th.addEventListener("click", () => sortTable(i));
+  headerRow.appendChild(th);
+});
+thead.appendChild(headerRow);
+
+let tableData = [...DATA].sort((a, b) => (a.rank || 0) - (b.rank || 0));
+const TIER_CLASSES = { S: "tier-s", A: "tier-a", B: "tier-b", C: "tier-c", D: "tier-d" };
+
+function renderTable(data) {
+  tbody.innerHTML = "";
+  data.forEach(d => {
+    const tr = document.createElement("tr");
+    CONFIG.tableColumns.forEach(col => {
+      const td = document.createElement("td");
+      const v = d[col];
+      if (col === "tier") {
+        td.textContent = v;
+        td.className = TIER_CLASSES[v] || "";
+      } else {
+        td.textContent = typeof v === "number" ? (v % 1 === 0 ? v : v.toFixed(1)) : v;
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+renderTable(tableData);
+
+let sortDir = {};
+function sortTable(colIdx) {
+  const col = CONFIG.tableColumns[colIdx];
+  sortDir[col] = !(sortDir[col] || false);
+  tableData.sort((a, b) => {
+    const va = a[col], vb = b[col];
+    const cmp = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb));
+    return sortDir[col] ? cmp : -cmp;
+  });
+  renderTable(tableData);
+}
+
+document.getElementById("table-search").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  renderTable(DATA.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q))));
+});
+
+// ===== Share =====
+const url = CONFIG.shareUrl || window.location.href;
+const text = CONFIG.shareText;
+document.getElementById("share-twitter").href = `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+document.getElementById("share-linkedin").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+document.getElementById("share-copy").addEventListener("click", () => {
+  navigator.clipboard.writeText(url).then(() => {
+    document.getElementById("share-copy").textContent = "Copied!";
+    setTimeout(() => document.getElementById("share-copy").textContent = "Copy Link", 2000);
+  });
+});
+
+// ===== Chart 1: Horizontal Bar — Overall Rankings =====
+(function initChart1() {
+  const sortedData = [...DATA].sort((a, b) => b.score - a.score);
+  const names = sortedData.map(d => d.name).reverse();
+  const scores = sortedData.map(d => d.score).reverse();
+  const [c1, c2] = ["#E91E63", "#4A148C"];
+  const colors = scores.map((_, i) => interpolateColor(c2, c1, i / Math.max(scores.length - 1, 1)));
+  const sortedReversed = [...sortedData].reverse();
+
+  const chart1 = echarts.init(document.getElementById("chart-1"));
+  chart1.setOption({
+    tooltip: {
+      trigger: "axis",
+      axisPointer: { type: "shadow" },
+      formatter: params => {
+        const d = sortedReversed[params[0].dataIndex];
+        return `<b>${d.name}</b> (${d.owner})<br/>
+          Score: <b>${d.score.toFixed(1)}</b> — Tier ${d.tier}<br/>
+          Swipe: ${d.swipe} | Paywall: ${d.paywall}<br/>
+          Notif: ${d.notifications} | Visibility: ${d.visibility}<br/>
+          SubTrap: ${d.subtrap} | Data: ${d.data}<br/>
+          FOMO: ${d.fomo} | Scarcity: ${d.scarcity}`;
+      }
+    },
+    grid: { left: "28%", right: "12%", top: 10, bottom: 20 },
+    xAxis: {
+      type: "value",
+      name: "Dark Pattern Score",
+      max: 100,
+      axisLabel: { fontSize: 10 },
+      nameTextStyle: { fontSize: 10 }
+    },
+    yAxis: {
+      type: "category",
+      data: names,
+      axisLabel: { fontSize: 10, color: "#333" }
+    },
+    dataZoom: [{ type: "inside", yAxisIndex: 0, filterMode: "none" }],
+    series: [{
+      type: "bar",
+      data: scores.map((v, i) => ({
+        value: v,
+        itemStyle: { color: colors[i], borderRadius: [0, 4, 4, 0] }
+      })),
+      barWidth: "55%",
+      label: {
+        show: true,
+        position: "right",
+        formatter: p => p.value.toFixed(1),
+        fontSize: 10,
+        color: "#333"
+      },
+      animationDuration: 1800,
+      animationEasing: "elasticOut",
+    }],
+    graphic: [{
+      type: "text", right: 10, bottom: 5,
+      style: { text: "RankMint", fontSize: 11, fill: "#ddd", fontStyle: "italic" },
+    }],
+  });
+  window.addEventListener("resize", () => chart1.resize());
+})();
+
+// ===== Chart 2: Heatmap — Apps × Dark Pattern Metrics =====
+(function initChart2() {
+  const metrics = ["swipe", "paywall", "notifications", "visibility", "subtrap", "data", "fomo", "scarcity"];
+  const labels = ["Swipe Addict.", "Paywall", "Notif. Spam", "Visibility", "Sub Trap", "Data Harv.", "FOMO", "Fake Scarcity"];
+  const sortedData = [...DATA].sort((a, b) => b.score - a.score);
+  const displayOrder = [...sortedData].reverse();
+  const names = displayOrder.map(d => d.name);
+
+  const heatData = [];
+  displayOrder.forEach((d, yi) => {
+    metrics.forEach((m, xi) => {
+      const raw = d[m];
+      const norm = ((raw - 1) / 9) * 100;
+      heatData.push([xi, yi, norm, raw]);
+    });
+  });
+
+  const chart2 = echarts.init(document.getElementById("chart-2"));
+  chart2.setOption({
+    tooltip: {
+      position: "top",
+      formatter: p => {
+        const d = displayOrder[p.value[1]];
+        const metric = labels[p.value[0]];
+        return `<b>${d.name}</b><br/>${metric}: <b>${p.value[3]}/10</b><br/>Overall: ${d.score.toFixed(1)}`;
+      },
+    },
+    grid: { left: "28%", right: "5%", top: 70, bottom: 20 },
+    xAxis: {
+      type: "category",
+      data: labels,
+      position: "top",
+      axisLabel: { fontSize: 9, rotate: 30, color: "#333" },
+      splitArea: { show: true },
+    },
+    yAxis: {
+      type: "category",
+      data: names,
+      inverse: false,
+      axisLabel: { fontSize: 9, color: "#333" },
+      splitArea: { show: true },
+    },
+    visualMap: {
+      min: 0,
+      max: 100,
+      calculable: true,
+      orient: "horizontal",
+      left: "center",
+      top: 5,
+      inRange: { color: ["#1B5E20", "#388E3C", "#81C784", "#FFF9C4", "#FFB74D", "#EF5350", "#B71C1C"] },
+      text: ["10 (Max)", "1 (Min)"],
+      textStyle: { fontSize: 9, color: "#333" },
+    },
+    dataZoom: [{ type: "inside", yAxisIndex: 0, filterMode: "none" }],
+    series: [{
+      type: "heatmap",
+      data: heatData,
+      label: {
+        show: true,
+        formatter: p => p.value[3],
+        fontSize: 9,
+        color: "#333",
+        fontWeight: "bold",
+      },
+      emphasis: {
+        itemStyle: { borderColor: "#1a1a2e", borderWidth: 2 },
+      },
+      animationDuration: 1800,
+      animationEasing: "cubicOut",
+    }],
+    graphic: [{
+      type: "text", right: 8, bottom: 5,
+      style: { text: "RankMint", fontSize: 10, fill: "#ddd", fontStyle: "italic" },
+    }],
+  });
+  window.addEventListener("resize", () => chart2.resize());
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dating App Dark Pattern Index — Tier List | RankMint</title>
+<meta property="og:title" content="Dating App Dark Pattern Index — Tier List">
+<meta property="og:description" content="S-tier to D-tier: which dating apps are manipulating you the hardest? Tinder is alone in S-tier for a reason.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dating App Dark Pattern Tier List">
+<meta name="twitter:description" content="S-tier to D-tier: which dating apps are manipulating you the hardest? Tinder is alone in S-tier for a reason.">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; }
+  .header { padding: 24px 32px 8px; }
+  .header h1 { font-size: 1.6rem; color: #fff; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+  .tier-container { max-width: 1000px; margin: 20px auto; padding: 0 16px; }
+  .tier-desc { font-size: 0.78rem; color: #aaa; margin-bottom: 14px; font-style: italic; text-align: center; padding: 0 8px; }
+  .tier-row { display: flex; margin-bottom: 4px; min-height: 64px; border-radius: 8px; overflow: visible; }
+  .tier-label { width: 80px; min-width: 80px; display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; font-weight: 900; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); border-radius: 8px 0 0 8px; }
+  .tier-items { flex: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    padding: 10px 16px; background: rgba(255,255,255,0.05); border-radius: 0 8px 8px 0; }
+  .tier-item { background: rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 14px;
+    font-size: 0.85rem; cursor: default; transition: all 0.2s; position: relative; }
+  .tier-item:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+  .tier-item .score { font-size: 0.7rem; color: #aaa; margin-top: 2px; }
+  .tooltip { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+    background: #333; color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 0.75rem;
+    white-space: nowrap; z-index: 10; margin-bottom: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .tier-item:hover .tooltip { display: block; }
+  .tier-name { font-size: 0.7rem; color: #ccc; margin-top: 2px; font-style: italic; }
+  .watermark { text-align: right; padding: 12px 32px; color: #555; font-size: 0.75rem; font-style: italic; }
+
+  @media (max-width: 600px) {
+    .tier-label { width: 52px; min-width: 52px; font-size: 1.3rem; }
+    .tier-container { padding: 0 8px; }
+  }
+</style>
+</head>
+<body>
+<nav style="padding:10px 20px;display:flex;gap:16px;align-items:center;background:#111;">
+  <a href="../" style="color:#E91E63;text-decoration:none;font-size:0.85rem;">← RankMint Home</a>
+  <a href="index.html" style="color:#E91E63;text-decoration:none;font-size:0.85rem;">← Back to Rankings</a>
+</nav>
+<div class="header">
+  <h1>Dating App Dark Pattern Tier List</h1>
+  <p>23 apps ranked by psychological manipulation score. Higher tier = more predatory. RankMint · March 2026</p>
+</div>
+<div class="tier-container" id="tiers"></div>
+<div class="watermark">RankMint</div>
+<script>
+const DATA = [
+  { rank: 1,  name: "Tinder",             score: 92.5, swipe: 10, paywall: 10, notifications: 9, visibility: 10, subtrap: 8, data: 9, fomo: 8,  scarcity: 10, owner: "Match Group" },
+  { rank: 2,  name: "Hinge",              score: 77.5, swipe: 8,  paywall: 9,  notifications: 6, visibility: 8,  subtrap: 7, data: 8, fomo: 7,  scarcity: 9,  owner: "Match Group" },
+  { rank: 3,  name: "Match.com",          score: 76.2, swipe: 5,  paywall: 9,  notifications: 10,visibility: 7,  subtrap: 10,data: 7, fomo: 6,  scarcity: 7,  owner: "Match Group" },
+  { rank: 4,  name: "Bumble",             score: 75.0, swipe: 7,  paywall: 8,  notifications: 7, visibility: 7,  subtrap: 7, data: 6, fomo: 10, scarcity: 8,  owner: "Bumble Inc." },
+  { rank: 5,  name: "Badoo",              score: 73.8, swipe: 9,  paywall: 7,  notifications: 8, visibility: 8,  subtrap: 6, data: 8, fomo: 6,  scarcity: 7,  owner: "Bumble Inc." },
+  { rank: 6,  name: "Zoosk",              score: 68.8, swipe: 6,  paywall: 8,  notifications: 8, visibility: 7,  subtrap: 7, data: 6, fomo: 5,  scarcity: 8,  owner: "Spark Networks" },
+  { rank: 7,  name: "Happn",              score: 68.8, swipe: 7,  paywall: 8,  notifications: 9, visibility: 8,  subtrap: 5, data: 6, fomo: 5,  scarcity: 7,  owner: "Happn SAS" },
+  { rank: 8,  name: "Tantan",             score: 68.8, swipe: 8,  paywall: 7,  notifications: 7, visibility: 7,  subtrap: 6, data: 9, fomo: 5,  scarcity: 6,  owner: "Momo Inc." },
+  { rank: 9,  name: "Plenty of Fish",     score: 65.0, swipe: 6,  paywall: 7,  notifications: 8, visibility: 7,  subtrap: 8, data: 6, fomo: 4,  scarcity: 6,  owner: "Match Group" },
+  { rank: 10, name: "OkCupid",            score: 62.5, swipe: 6,  paywall: 6,  notifications: 7, visibility: 6,  subtrap: 6, data: 8, fomo: 5,  scarcity: 6,  owner: "Match Group" },
+  { rank: 11, name: "The League",         score: 62.5, swipe: 4,  paywall: 9,  notifications: 5, visibility: 7,  subtrap: 7, data: 5, fomo: 6,  scarcity: 7,  owner: "Match Group" },
+  { rank: 12, name: "Pairs",              score: 61.3, swipe: 6,  paywall: 7,  notifications: 6, visibility: 7,  subtrap: 6, data: 7, fomo: 5,  scarcity: 5,  owner: "Match Group" },
+  { rank: 13, name: "Grindr",             score: 58.8, swipe: 7,  paywall: 5,  notifications: 6, visibility: 5,  subtrap: 5, data: 10,fomo: 4,  scarcity: 5,  owner: "Grindr LLC" },
+  { rank: 14, name: "Coffee Meets Bagel", score: 56.2, swipe: 3,  paywall: 8,  notifications: 5, visibility: 5,  subtrap: 6, data: 5, fomo: 6,  scarcity: 7,  owner: "CMB Inc." },
+  { rank: 15, name: "eHarmony",           score: 56.2, swipe: 3,  paywall: 8,  notifications: 6, visibility: 5,  subtrap: 10,data: 5, fomo: 3,  scarcity: 5,  owner: "IAC" },
+  { rank: 16, name: "Lumen",              score: 53.8, swipe: 4,  paywall: 7,  notifications: 6, visibility: 6,  subtrap: 6, data: 5, fomo: 4,  scarcity: 5,  owner: "Lumen Dating" },
+  { rank: 17, name: "Her",                score: 46.2, swipe: 5,  paywall: 5,  notifications: 5, visibility: 4,  subtrap: 5, data: 5, fomo: 4,  scarcity: 4,  owner: "Bloomer Inc." },
+  { rank: 18, name: "Snack",              score: 42.5, swipe: 5,  paywall: 4,  notifications: 4, visibility: 4,  subtrap: 4, data: 5, fomo: 4,  scarcity: 4,  owner: "Snack Media" },
+  { rank: 19, name: "Feeld",              score: 41.2, swipe: 4,  paywall: 5,  notifications: 3, visibility: 4,  subtrap: 4, data: 7, fomo: 3,  scarcity: 3,  owner: "Feeld Ltd." },
+  { rank: 20, name: "Ship",               score: 41.2, swipe: 4,  paywall: 4,  notifications: 5, visibility: 4,  subtrap: 4, data: 4, fomo: 4,  scarcity: 4,  owner: "Match Group" },
+  { rank: 21, name: "Thursday",           score: 37.5, swipe: 2,  paywall: 4,  notifications: 3, visibility: 2,  subtrap: 4, data: 3, fomo: 8,  scarcity: 4,  owner: "Thursday Ltd." },
+  { rank: 22, name: "Archer",             score: 32.5, swipe: 3,  paywall: 4,  notifications: 3, visibility: 3,  subtrap: 3, data: 4, fomo: 3,  scarcity: 3,  owner: "Archer Dating" },
+  { rank: 23, name: "Raya",               score: 31.2, swipe: 3,  paywall: 5,  notifications: 2, visibility: 3,  subtrap: 3, data: 3, fomo: 3,  scarcity: 3,  owner: "Raya Inc." },
+];
+
+const CONFIG = {
+  nameField: "name",
+  scoreField: "score",
+  tiers: [
+    { label: "S", min: 85, color: "#C62828", desc: "Digital Predators — These apps would monetize your loneliness if they could. Oh wait, they already do." },
+    { label: "A", min: 70, color: "#E91E63", desc: "Manipulation Machines — They've read the behavioral psychology papers and implemented ALL of them." },
+    { label: "B", min: 55, color: "#7B1FA2", desc: "The Paywall Industrial Complex — Free to download, expensive to actually use." },
+    { label: "C", min: 40, color: "#4A148C", desc: "Diet Manipulation — They try, but they're not very good at it." },
+    { label: "D", min: 0,  color: "#37474F", desc: "The Honest Ones — They exist. There are three of them." },
+  ],
+  tooltipFields: ["swipe", "paywall", "notifications", "visibility", "subtrap", "data", "fomo", "scarcity"],
+};
+
+const sorted = [...DATA].sort((a, b) => b[CONFIG.scoreField] - a[CONFIG.scoreField]);
+const container = document.getElementById("tiers");
+
+// Sort tiers by min DESCENDING so .find() returns the highest matching tier
+const sortedTiers = [...CONFIG.tiers].sort((a, b) => b.min - a.min);
+
+CONFIG.tiers.forEach(tier => {
+  const tierItems = sorted.filter(d => {
+    const s = d[CONFIG.scoreField];
+    const assigned = sortedTiers.find(t => s >= t.min);
+    return assigned && assigned.label === tier.label;
+  });
+
+  const descEl = document.createElement("div");
+  descEl.className = "tier-desc";
+  descEl.textContent = `${tier.label}-TIER: ${tier.desc}`;
+  container.appendChild(descEl);
+
+  const row = document.createElement("div");
+  row.className = "tier-row";
+  row.innerHTML = `<div class="tier-label" style="background:${tier.color}">${tier.label}</div>`;
+  const itemsDiv = document.createElement("div");
+  itemsDiv.className = "tier-items";
+
+  tierItems.forEach(d => {
+    const el = document.createElement("div");
+    el.className = "tier-item";
+    let tooltipHtml = `<b>${d[CONFIG.nameField]}</b><br/>Score: ${d[CONFIG.scoreField].toFixed(1)}<br/>${d.owner}<br/>`;
+    tooltipHtml += `Swipe: ${d.swipe} | Paywall: ${d.paywall}<br/>Notif: ${d.notifications} | Visibility: ${d.visibility}<br/>SubTrap: ${d.subtrap} | Data: ${d.data}<br/>FOMO: ${d.fomo} | Scarcity: ${d.scarcity}`;
+    el.innerHTML = `
+      ${d[CONFIG.nameField]}
+      <div class="score">${d[CONFIG.scoreField].toFixed(1)}</div>
+      <div class="tooltip">${tooltipHtml}</div>
+    `;
+    itemsDiv.appendChild(el);
+  });
+
+  row.appendChild(itemsDiv);
+  container.appendChild(row);
+});
+
+// Entrance animation
+document.querySelectorAll(".tier-item").forEach((el, i) => {
+  el.style.opacity = "0";
+  el.style.transform = "translateY(10px)";
+  setTimeout(() => {
+    el.style.transition = "opacity 0.4s, transform 0.4s";
+    el.style.opacity = "1";
+    el.style.transform = "translateY(0)";
+  }, 50 + i * 30);
+});
+</script>
+</body>
+</html>

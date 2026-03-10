@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horror Survival IQ — Head-to-Head Radar | RankMint</title>
+<meta property="og:title" content="Horror Movie Survival IQ — Head-to-Head Radar">
+<meta property="og:description" content="Pick any two horror characters and compare their survival skills across 6 dimensions. Default: Ripley vs Micah — for maximum comedy.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Horror Movie Survival IQ — Head-to-Head Radar">
+<meta name="twitter:description" content="Pick any two horror characters and compare their survival skills across 6 dimensions. Default: Ripley vs Micah — for maximum comedy.">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d0d0d; color: #e0e0e0; }
+
+  nav { background: #111; padding: 10px 20px; display: flex; gap: 16px; align-items: center; border-bottom: 1px solid #222; }
+  nav a { color: #FFD700; text-decoration: none; font-size: 0.85rem; }
+  nav a:hover { color: #fff; }
+
+  .header { padding: 28px 20px 8px; max-width: 900px; margin: 0 auto; }
+  .header h1 { font-size: 1.5rem; color: #fff; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 6px; line-height: 1.5; }
+
+  .controls { padding: 16px 20px; max-width: 900px; margin: 0 auto; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .controls label { font-size: 0.8rem; color: #888; }
+  .controls select {
+    padding: 8px 14px; border: 1px solid #333; border-radius: 8px; font-size: 0.9rem;
+    background: #1a1a1a; color: #e0e0e0; cursor: pointer; min-width: 200px;
+  }
+  .controls select:focus { outline: none; border-color: #FF4444; }
+  .vs-label { font-size: 1rem; font-weight: 700; color: #FF4444; }
+
+  #chart { width: 100%; height: 70vh; min-height: 500px; max-width: 900px; margin: 0 auto; display: block; }
+
+  .score-comparison { max-width: 700px; margin: 0 auto 32px; padding: 0 20px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+  .score-card { background: #1a1a1a; border-radius: 10px; padding: 16px 24px; text-align: center; min-width: 160px;
+    border: 1px solid #2a2a2a; }
+  .score-card .sc-name { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
+  .score-card .sc-film { font-size: 0.7rem; color: #666; margin-bottom: 8px; }
+  .score-card .sc-iq { font-size: 1.8rem; font-weight: 900; }
+  .score-card .sc-tier { font-size: 0.7rem; padding: 2px 10px; border-radius: 12px; display: inline-block; margin-top: 6px; }
+
+  .combo-suggestions { max-width: 900px; margin: 0 auto 24px; padding: 0 20px; }
+  .combo-suggestions h3 { font-size: 0.85rem; color: #666; margin-bottom: 10px; }
+  .combo-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .combo-btn { padding: 6px 14px; border-radius: 6px; font-size: 0.78rem; background: #1a1a1a;
+    border: 1px solid #333; color: #aaa; cursor: pointer; transition: all 0.2s; }
+  .combo-btn:hover { background: #2a2a2a; border-color: #FF4444; color: #fff; }
+
+  .watermark { text-align: right; padding: 8px 32px 24px; color: #222; font-size: 0.75rem; font-style: italic; }
+
+  @media (max-width: 600px) {
+    .controls { flex-direction: column; align-items: flex-start; }
+    .score-comparison { flex-direction: column; align-items: center; }
+    #chart { height: 55vh; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../">← RankMint Home</a>
+  <a href="index.html">← Back to Rankings</a>
+</nav>
+
+<div class="header">
+  <h1>Head-to-Head Survival Radar</h1>
+  <p>Pick any two horror characters and compare their 6 survival metrics. Default: Ripley vs Micah. The widest gap in the dataset. Maximum comedy. You're welcome.</p>
+</div>
+
+<div class="controls">
+  <div>
+    <label>Character 1</label><br>
+    <select id="item1"></select>
+  </div>
+  <div class="vs-label">VS</div>
+  <div>
+    <label>Character 2</label><br>
+    <select id="item2"></select>
+  </div>
+</div>
+
+<div class="score-comparison" id="score-comparison"></div>
+
+<div class="combo-suggestions">
+  <h3>Suggested matchups:</h3>
+  <div class="combo-btns">
+    <button class="combo-btn" data-a="Ellen Ripley" data-b="Micah">Ripley vs Micah (widest gap)</button>
+    <button class="combo-btn" data-a="Laurie Strode" data-b="Sidney Prescott">Laurie vs Sidney</button>
+    <button class="combo-btn" data-a="Ash Williams" data-b="Tree Gelbman">Ash vs Tree</button>
+    <button class="combo-btn" data-a="Grace" data-b="Erin">Grace vs Erin</button>
+    <button class="combo-btn" data-a="Jack Torrance" data-b="Georgie">Jack vs Georgie</button>
+    <button class="combo-btn" data-a="Georgie" data-b="Micah">Georgie vs Micah</button>
+    <button class="combo-btn" data-a="Chris Washington" data-b="Nancy Thompson">Chris vs Nancy</button>
+  </div>
+</div>
+
+<div id="chart"></div>
+<div class="watermark">RankMint</div>
+
+<script>
+const DATA = [
+  { name: "Ellen Ripley",          film: "Alien/Aliens",                        sa: 9, dq: 9, wp: 10, gl: 9, fo: 10, pr: 9,  score: 93.3, tier: "S" },
+  { name: "Erin",                   film: "You're Next",                          sa: 9, dq: 9, wp: 9,  gl: 8, fo: 10, pr: 9,  score: 90.0, tier: "S" },
+  { name: "Grace",                  film: "Ready or Not",                         sa: 8, dq: 8, wp: 8,  gl: 7, fo: 10, pr: 9,  score: 83.3, tier: "S" },
+  { name: "Laurie Strode",          film: "Halloween (2018)",                     sa: 9, dq: 8, wp: 9,  gl: 7, fo: 9,  pr: 8,  score: 83.3, tier: "S" },
+  { name: "Sidney Prescott",        film: "Scream",                               sa: 8, dq: 8, wp: 7,  gl: 7, fo: 10, pr: 8,  score: 80.0, tier: "S" },
+  { name: "Adelaide",               film: "Us",                                   sa: 8, dq: 7, wp: 8,  gl: 6, fo: 9,  pr: 8,  score: 76.7, tier: "A" },
+  { name: "Chris Washington",       film: "Get Out",                              sa: 7, dq: 8, wp: 7,  gl: 5, fo: 9,  pr: 7,  score: 71.7, tier: "A" },
+  { name: "Nancy Thompson",         film: "A Nightmare on Elm Street",            sa: 7, dq: 7, wp: 7,  gl: 6, fo: 9,  pr: 7,  score: 71.7, tier: "A" },
+  { name: "Sam",                    film: "Trick 'r Treat",                       sa: 7, dq: 7, wp: 6,  gl: 6, fo: 8,  pr: 7,  score: 68.3, tier: "A" },
+  { name: "Dana",                   film: "The Cabin in the Woods",               sa: 6, dq: 7, wp: 6,  gl: 6, fo: 7,  pr: 7,  score: 65.0, tier: "A" },
+  { name: "Marty",                  film: "The Cabin in the Woods",               sa: 6, dq: 6, wp: 5,  gl: 5, fo: 7,  pr: 7,  score: 60.0, tier: "B" },
+  { name: "Tree Gelbman",           film: "Happy Death Day",                      sa: 5, dq: 6, wp: 5,  gl: 5, fo: 8,  pr: 6,  score: 58.3, tier: "B" },
+  { name: "Tommy Jarvis",           film: "Friday the 13th",                      sa: 5, dq: 5, wp: 6,  gl: 5, fo: 7,  pr: 6,  score: 56.7, tier: "B" },
+  { name: "Ash Williams",           film: "Evil Dead",                            sa: 4, dq: 4, wp: 7,  gl: 4, fo: 6,  pr: 8,  score: 55.0, tier: "B" },
+  { name: "Mia",                    film: "Evil Dead (2013)",                     sa: 5, dq: 5, wp: 5,  gl: 4, fo: 6,  pr: 5,  score: 50.0, tier: "B" },
+  { name: "Dennis",                 film: "Scream (1996)",                        sa: 4, dq: 4, wp: 3,  gl: 3, fo: 4,  pr: 4,  score: 36.7, tier: "C" },
+  { name: "Paxton",                 film: "Hostel",                               sa: 3, dq: 3, wp: 4,  gl: 3, fo: 3,  pr: 3,  score: 31.7, tier: "D" },
+  { name: "Rod Lane",               film: "A Nightmare on Elm Street",            sa: 4, dq: 3, wp: 3,  gl: 2, fo: 3,  pr: 3,  score: 30.0, tier: "D" },
+  { name: "Jack Torrance",          film: "The Shining",                          sa: 3, dq: 2, wp: 4,  gl: 1, fo: 2,  pr: 5,  score: 28.3, tier: "D" },
+  { name: "Tatum Riley",            film: "Scream (1996)",                        sa: 3, dq: 3, wp: 3,  gl: 2, fo: 2,  pr: 3,  score: 26.7, tier: "D" },
+  { name: "Carol Anne",             film: "Poltergeist",                          sa: 3, dq: 3, wp: 1,  gl: 2, fo: 4,  pr: 2,  score: 25.0, tier: "D" },
+  { name: "Barb",                   film: "Black Christmas",                      sa: 3, dq: 3, wp: 2,  gl: 2, fo: 2,  pr: 3,  score: 25.0, tier: "D" },
+  { name: "Tina",                   film: "A Nightmare on Elm Street",            sa: 3, dq: 2, wp: 2,  gl: 2, fo: 1,  pr: 2,  score: 20.0, tier: "D" },
+  { name: "Freddy's Early Victims", film: "Nightmare on Elm St. (archetype)",    sa: 3, dq: 2, wp: 2,  gl: 2, fo: 1,  pr: 2,  score: 20.0, tier: "D" },
+  { name: "Heather Donahue",        film: "The Blair Witch Project",              sa: 3, dq: 2, wp: 2,  gl: 2, fo: 1,  pr: 2,  score: 20.0, tier: "D" },
+  { name: "Generic Blonde",         film: "1980s Slasher (archetype)",            sa: 2, dq: 2, wp: 2,  gl: 2, fo: 1,  pr: 2,  score: 18.3, tier: "D" },
+  { name: "Georgie",                film: "IT",                                   sa: 3, dq: 2, wp: 1,  gl: 1, fo: 1,  pr: 2,  score: 16.7, tier: "D" },
+  { name: "Micah",                  film: "Paranormal Activity",                  sa: 2, dq: 1, wp: 2,  gl: 1, fo: 1,  pr: 2,  score: 15.0, tier: "D" },
+  { name: "Let's Split Up Guy",     film: "Generic Horror (archetype)",           sa: 2, dq: 1, wp: 2,  gl: 1, fo: 1,  pr: 2,  score: 15.0, tier: "D" },
+  { name: "Runs Upstairs",          film: "Generic Horror (archetype)",           sa: 2, dq: 1, wp: 1,  gl: 1, fo: 1,  pr: 1,  score: 11.7, tier: "D" },
+];
+
+const CONFIG = {
+  nameField: "name",
+  metrics: ["sa", "dq", "wp", "gl", "fo", "pr"],
+  metricLabels: ["Situational\nAwareness", "Decision\nQuality", "Weapon\nProficiency", "Group\nLeadership", "Final\nOutcome", "Panic\nResistance"],
+  colors: ["#FFD700", "#FF4444"],
+};
+
+const TIER_COLORS = { S: "#c0392b", A: "#d35400", B: "#2980b9", C: "#8e44ad", D: "#4a4a4a" };
+const TIER_NAMES = {
+  S: "The Professionals", A: "The Functional Adults",
+  B: "The Plot Armor Recipients", C: "The Walking Warning Labels",
+  D: "Congratulations, You Played Yourself"
+};
+
+// Populate selects
+const sel1 = document.getElementById("item1");
+const sel2 = document.getElementById("item2");
+DATA.forEach((d, i) => {
+  const o1 = document.createElement("option");
+  o1.value = i;
+  o1.textContent = `${d.name} (${d.score.toFixed(1)})`;
+  sel1.appendChild(o1);
+  const o2 = o1.cloneNode(true);
+  sel2.appendChild(o2);
+});
+
+// Default: Ripley (0) vs Micah (27)
+const ripleyIdx = DATA.findIndex(d => d.name === "Ellen Ripley");
+const micahIdx = DATA.findIndex(d => d.name === "Micah");
+sel1.value = ripleyIdx;
+sel2.value = micahIdx;
+
+const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
+
+function updateScoreCards(d1, d2) {
+  const sc = document.getElementById("score-comparison");
+  sc.innerHTML = [d1, d2].map((d, i) => `
+    <div class="score-card" style="border-color:${CONFIG.colors[i]}33">
+      <div class="sc-name" style="color:${CONFIG.colors[i]}">${d.name}</div>
+      <div class="sc-film">${d.film}</div>
+      <div class="sc-iq" style="color:${CONFIG.colors[i]}">${d.score.toFixed(1)}</div>
+      <div class="sc-tier" style="background:${TIER_COLORS[d.tier]};color:#fff">${d.tier}: ${TIER_NAMES[d.tier]}</div>
+    </div>
+  `).join('');
+}
+
+function render() {
+  const d1 = DATA[+sel1.value];
+  const d2 = DATA[+sel2.value];
+  updateScoreCards(d1, d2);
+
+  chart.setOption({
+    backgroundColor: "#0d0d0d",
+    legend: {
+      data: [d1.name, d2.name],
+      top: 16,
+      textStyle: { color: "#ccc", fontSize: 13 },
+      inactiveColor: "#444",
+    },
+    radar: {
+      indicator: CONFIG.metrics.map((m, i) => ({
+        name: CONFIG.metricLabels[i],
+        max: 10,
+      })),
+      center: ["50%", "54%"],
+      radius: "62%",
+      shape: "polygon",
+      splitNumber: 5,
+      axisName: {
+        color: "#aaa",
+        fontSize: 11,
+      },
+      splitArea: {
+        areaStyle: {
+          color: ["rgba(255,255,255,0.02)", "rgba(255,255,255,0.04)"],
+        },
+      },
+      splitLine: {
+        lineStyle: { color: "#2a2a2a" },
+      },
+      axisLine: {
+        lineStyle: { color: "#333" },
+      },
+    },
+    tooltip: {
+      trigger: "item",
+      backgroundColor: "#1a1a1a",
+      borderColor: "#333",
+      textStyle: { color: "#eee", fontSize: 12 },
+      formatter: p => {
+        let tip = `<b style="color:${p.color}">${p.name}</b>`;
+        p.value.forEach((v, i) => {
+          const label = CONFIG.metricLabels[i].replace("\n", " ");
+          tip += `<br/><span style="color:#888">${label}:</span> <b>${v}</b>/10`;
+        });
+        return tip;
+      },
+    },
+    series: [{
+      type: "radar",
+      data: [
+        {
+          name: d1.name,
+          value: CONFIG.metrics.map(m => d1[m]),
+          areaStyle: { opacity: 0.15, color: CONFIG.colors[0] },
+          lineStyle: { color: CONFIG.colors[0], width: 2.5 },
+          itemStyle: { color: CONFIG.colors[0] },
+          symbolSize: 5,
+        },
+        {
+          name: d2.name,
+          value: CONFIG.metrics.map(m => d2[m]),
+          areaStyle: { opacity: 0.15, color: CONFIG.colors[1] },
+          lineStyle: { color: CONFIG.colors[1], width: 2.5 },
+          itemStyle: { color: CONFIG.colors[1] },
+          symbolSize: 5,
+        },
+      ],
+      animationDuration: 1200,
+      animationEasing: "cubicOut",
+    }],
+    graphic: [{
+      type: "text", right: 20, bottom: 10,
+      style: { text: "RankMint", fontSize: 12, fill: "#333", fontStyle: "italic" },
+    }],
+  }, true);
+}
+
+sel1.addEventListener("change", render);
+sel2.addEventListener("change", render);
+
+// Suggested combo buttons
+document.querySelectorAll(".combo-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const aName = btn.dataset.a;
+    const bName = btn.dataset.b;
+    const aIdx = DATA.findIndex(d => d.name === aName);
+    const bIdx = DATA.findIndex(d => d.name === bName);
+    if (aIdx >= 0) sel1.value = aIdx;
+    if (bIdx >= 0) sel2.value = bIdx;
+    render();
+  });
+});
+
+render();
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

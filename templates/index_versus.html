@@ -1,0 +1,417 @@
+<!--
+  Versus / Bracket Landing Page Template
+  - Tournament bracket or head-to-head comparison layout.
+  - Hero shows the "final matchup" (top 2 items).
+  - Items paired in rounds based on score proximity.
+  - Click a matchup to see detailed metric comparison.
+  - Best for: competitive/confrontational topics.
+  - Storyteller MUST replace all DATA, CONFIG, and CONTENT sections with actual values.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><!-- REPLACE: Index Name | RankMint --></title>
+<meta property="og:title" content="<!-- REPLACE: Index Name -->">
+<meta property="og:description" content="<!-- REPLACE: One-line hook -->">
+<meta property="og:image" content="card.png">
+<meta property="og:url" content="<!-- REPLACE: canonical URL -->">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<!-- REPLACE: Index Name -->">
+<meta name="twitter:description" content="<!-- REPLACE: One-line hook -->">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #0d0d0d; --text: #e0e0e0; --muted: #888; --accent: #FF4444;
+    --card-bg: #1a1a1a; --border: #333; --gold: #FFD700; --win: #4CAF50; --lose: #666;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+  /* Hero — Final Matchup */
+  .hero-versus { text-align: center; padding: 60px 20px 40px; background: linear-gradient(135deg, #1a0000 0%, #0d0d0d 50%, #00001a 100%); }
+  .hero-versus h1 { font-size: 2rem; margin-bottom: 8px; color: #fff; }
+  .hero-versus .hook { font-size: 1rem; color: var(--muted); max-width: 600px; margin: 0 auto 32px; }
+  .final-matchup { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
+  .final-fighter { background: var(--card-bg); border-radius: 16px; padding: 28px 36px; text-align: center; min-width: 200px;
+    border: 2px solid var(--border); transition: all 0.3s; }
+  .final-fighter.winner { border-color: var(--gold); box-shadow: 0 0 30px rgba(255,215,0,0.15); }
+  .final-fighter .fighter-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
+  .final-fighter .fighter-score { font-size: 2rem; font-weight: 900; }
+  .final-fighter.winner .fighter-score { color: var(--gold); }
+  .final-fighter .fighter-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+  .vs-badge { font-size: 2rem; font-weight: 900; color: var(--accent); text-shadow: 0 0 20px rgba(255,68,68,0.5); }
+
+  /* Commentary */
+  .commentary { margin: 40px auto; max-width: 700px; padding: 24px; }
+  .commentary p { font-size: 1rem; line-height: 1.8; margin-bottom: 1em; color: #ccc; }
+  .commentary strong { color: var(--accent); }
+
+  /* Bracket Section */
+  .bracket-section { margin: 40px auto; }
+  .bracket-section h2 { font-size: 1.3rem; margin-bottom: 20px; text-align: center; color: #fff; }
+  .bracket-rounds { display: flex; flex-direction: column; gap: 16px; max-width: 900px; margin: 0 auto; }
+  .matchup { display: flex; align-items: stretch; background: var(--card-bg); border-radius: 12px; overflow: hidden;
+    cursor: pointer; transition: all 0.2s; border: 1px solid var(--border); }
+  .matchup:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .matchup-fighters { flex: 1; display: flex; }
+  .matchup-side { flex: 1; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .matchup-side.left { border-right: 2px solid var(--accent); }
+  .matchup-side .m-name { font-size: 0.95rem; font-weight: 600; }
+  .matchup-side .m-score { font-size: 1.1rem; font-weight: 700; }
+  .matchup-side.winner .m-name { color: var(--gold); }
+  .matchup-side.winner .m-score { color: var(--gold); }
+  .matchup-side.loser { opacity: 0.5; }
+  .matchup-round-label { width: 60px; display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px;
+    writing-mode: vertical-rl; transform: rotate(180deg); background: rgba(255,255,255,0.03); }
+  .matchup-commentary { font-size: 0.8rem; color: var(--muted); padding: 8px 20px; border-top: 1px solid var(--border);
+    display: none; line-height: 1.5; }
+  .matchup.expanded .matchup-commentary { display: block; }
+
+  /* Detail Panel */
+  .detail-panel { display: none; margin: -8px auto 16px; max-width: 900px; background: #111; border-radius: 0 0 12px 12px;
+    padding: 20px; border: 1px solid var(--border); border-top: none; }
+  .detail-panel.active { display: block; }
+  .detail-bars { display: flex; flex-direction: column; gap: 10px; }
+  .detail-metric { display: flex; align-items: center; gap: 12px; }
+  .detail-metric .metric-label { width: 120px; font-size: 0.8rem; color: var(--muted); text-align: right; flex-shrink: 0; }
+  .detail-metric .bar-container { flex: 1; display: flex; align-items: center; gap: 4px; }
+  .detail-metric .bar-left { height: 20px; border-radius: 4px 0 0 4px; transition: width 0.6s ease; }
+  .detail-metric .bar-right { height: 20px; border-radius: 0 4px 4px 0; transition: width 0.6s ease; }
+  .detail-metric .bar-val { font-size: 0.75rem; width: 40px; text-align: center; color: var(--muted); }
+
+  /* Tier Summary */
+  .tier-summary { margin: 40px auto; }
+  .tier-summary h2 { font-size: 1.3rem; margin-bottom: 20px; text-align: center; }
+
+  /* Find Yourself */
+  .find-yourself { margin: 40px auto; text-align: center; padding: 40px 20px; background: var(--card-bg);
+    border-radius: 12px; }
+  .find-yourself h2 { font-size: 1.3rem; margin-bottom: 16px; }
+  .find-yourself select { padding: 10px 20px; font-size: 1rem; border: 2px solid var(--accent); border-radius: 8px;
+    background: var(--card-bg); color: var(--text); min-width: 250px; }
+  .result-card { display: none; margin: 24px auto 0; max-width: 400px; padding: 24px; background: linear-gradient(135deg, #1a0000, #0d0d0d);
+    border: 1px solid var(--gold); border-radius: 12px; text-align: center; }
+  .result-card .rank { font-size: 3rem; font-weight: 900; color: var(--gold); }
+  .result-card .name { font-size: 1.2rem; margin: 8px auto; }
+  .result-card .score { font-size: 0.9rem; color: var(--muted); }
+
+  /* Full Table */
+  .full-table { margin: 40px auto; }
+  .full-table h2 { font-size: 1.3rem; margin-bottom: 12px; }
+  .table-search { width: 100%; padding: 10px 16px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 0.9rem; margin-bottom: 12px; background: var(--card-bg); color: var(--text); }
+  .full-table table { width: 100%; border-collapse: collapse; font-size: 0.85rem; background: var(--card-bg);
+    border-radius: 8px; overflow: hidden; }
+  .full-table th { background: #111; color: #fff; padding: 10px 12px; text-align: left; cursor: pointer; user-select: none; }
+  .full-table th:hover { background: #222; }
+  .full-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  .full-table tr:hover td { background: #222; }
+
+  /* Methodology */
+  .methodology { margin: 40px auto; padding: 24px; background: var(--card-bg); border-radius: 12px;
+    font-size: 0.85rem; color: var(--muted); }
+  .methodology h2 { font-size: 1.1rem; color: var(--text); margin-bottom: 12px; }
+
+  /* Share Bar */
+  .share-bar { display: flex; justify-content: center; gap: 12px; padding: 30px 0; flex-wrap: wrap; }
+  .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 8px;
+    text-decoration: none; font-size: 0.85rem; font-weight: 600; color: #fff; transition: transform 0.2s; }
+  .share-btn:hover { transform: translateY(-2px); }
+  .share-twitter { background: #000; border: 1px solid #333; }
+  .share-linkedin { background: #0A66C2; }
+  .share-copy { background: #333; cursor: pointer; border: none; color: #fff; font-size: 0.85rem; font-weight: 600; }
+
+  .footer { text-align: center; padding: 20px; color: var(--muted); font-size: 0.75rem; font-style: italic; }
+
+  @media (max-width: 600px) {
+    .hero-versus h1 { font-size: 1.5rem; }
+    .final-matchup { flex-direction: column; }
+    .matchup-fighters { flex-direction: column; }
+    .matchup-side.left { border-right: none; border-bottom: 2px solid var(--accent); }
+    .matchup-round-label { writing-mode: horizontal-tb; transform: none; width: auto; padding: 4px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top Navigation -->
+<nav style="background:#111;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
+  <a href="../" style="color:#FFD700;text-decoration:none;font-weight:600;font-size:0.9rem;">← RankMint Home</a>
+  <span style="color:#666;font-size:0.75rem;">rankmint.io</span>
+</nav>
+
+<!-- Hero: Final Matchup -->
+<section class="hero-versus">
+  <div class="container">
+    <h1 id="hero-title"><!-- REPLACE: Index Name --></h1>
+    <p class="hook" id="hero-hook"><!-- REPLACE: One-line hook --></p>
+    <div class="final-matchup" id="final-matchup">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- Commentary -->
+<section class="commentary container" id="commentary">
+  <!-- REPLACE: Storyteller writes matchup commentary here -->
+</section>
+
+<!-- Bracket Matchups -->
+<section class="bracket-section container">
+  <h2>The Bracket</h2>
+  <div class="bracket-rounds" id="bracket-rounds">
+    <!-- Filled by JS -->
+  </div>
+</section>
+
+<!-- Find Yourself -->
+<section class="find-yourself container" id="find-section">
+  <h2>Find Yourself</h2>
+  <select id="find-select">
+    <option value="">-- Select an item --</option>
+  </select>
+  <div class="result-card" id="result-card">
+    <div class="rank" id="result-rank"></div>
+    <div class="name" id="result-name"></div>
+    <div class="score" id="result-score"></div>
+  </div>
+</section>
+
+<!-- Full Table -->
+<section class="full-table container">
+  <h2>Full Rankings</h2>
+  <input type="text" class="table-search" id="table-search" placeholder="Search...">
+  <table id="ranking-table">
+    <thead id="table-head"></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</section>
+
+<!-- Methodology -->
+<section class="methodology container" id="methodology">
+  <!-- REPLACE: Storyteller fills methodology details -->
+</section>
+
+<!-- Share Bar -->
+<div class="share-bar">
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on X</a>
+  <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">LinkedIn</a>
+  <button class="share-btn share-copy" id="share-copy">Copy Link</button>
+</div>
+
+<div class="footer">Generated by RankMint</div>
+
+<script>
+// ===== DATA — storyteller replaces this =====
+const DATA = [
+  // { rank: 1, name: "Item A", score: 94.2, metric1: 80, metric2: 95 },
+];
+
+// ===== CONFIG — storyteller customizes these =====
+const CONFIG = {
+  title: "Index Name",
+  hook: "One-line hook",
+  nameField: "name",
+  scoreField: "score",
+  topN: 16,
+  tableColumns: ["rank", "name", "score"],
+  tableHeaders: ["Rank", "Name", "Score"],
+  // Metrics to show in head-to-head detail bars
+  comparisonMetrics: ["metric1", "metric2"],
+  comparisonLabels: ["Metric 1", "Metric 2"],
+  // Matchup commentary — storyteller fills these with witty one-liners
+  matchupCommentary: {},  // { "Item A vs Item B": "Commentary here" }
+  shareUrl: "",
+  shareText: "",
+};
+
+// ===== RENDERING =====
+const sorted = [...DATA].sort((a, b) => b[CONFIG.scoreField] - a[CONFIG.scoreField]);
+
+// Final matchup hero
+const finalDiv = document.getElementById("final-matchup");
+if (sorted.length >= 2) {
+  const [champ, runner] = sorted;
+  finalDiv.innerHTML = `
+    <div class="final-fighter winner">
+      <div class="fighter-label">CHAMPION</div>
+      <div class="fighter-name">${champ[CONFIG.nameField]}</div>
+      <div class="fighter-score">${champ[CONFIG.scoreField].toFixed(1)}</div>
+    </div>
+    <div class="vs-badge">VS</div>
+    <div class="final-fighter">
+      <div class="fighter-label">RUNNER-UP</div>
+      <div class="fighter-name">${runner[CONFIG.nameField]}</div>
+      <div class="fighter-score">${runner[CONFIG.scoreField].toFixed(1)}</div>
+    </div>
+  `;
+}
+
+// Build bracket — pair items by rank (1v2, 3v4, 5v6, ...)
+const bracketDiv = document.getElementById("bracket-rounds");
+const topItems = sorted.slice(0, CONFIG.topN);
+for (let i = 0; i < topItems.length - 1; i += 2) {
+  const a = topItems[i];
+  const b = topItems[i + 1];
+  const aWins = a[CONFIG.scoreField] >= b[CONFIG.scoreField];
+  const roundNum = Math.floor(i / 2) + 1;
+  const matchKey = `${a[CONFIG.nameField]} vs ${b[CONFIG.nameField]}`;
+  const commentary = CONFIG.matchupCommentary[matchKey] || "";
+
+  const matchup = document.createElement("div");
+  matchup.className = "matchup";
+  matchup.innerHTML = `
+    <div class="matchup-round-label">R${roundNum}</div>
+    <div style="flex:1;">
+      <div class="matchup-fighters">
+        <div class="matchup-side left ${aWins ? 'winner' : 'loser'}">
+          <span class="m-name">${a[CONFIG.nameField]}</span>
+          <span class="m-score">${a[CONFIG.scoreField].toFixed(1)}</span>
+        </div>
+        <div class="matchup-side ${!aWins ? 'winner' : 'loser'}">
+          <span class="m-name">${b[CONFIG.nameField]}</span>
+          <span class="m-score">${b[CONFIG.scoreField].toFixed(1)}</span>
+        </div>
+      </div>
+      ${commentary ? `<div class="matchup-commentary">${commentary}</div>` : ''}
+      <div class="detail-panel" id="detail-${roundNum}">
+        <div class="detail-bars" id="bars-${roundNum}"></div>
+      </div>
+    </div>
+  `;
+
+  matchup.addEventListener("click", () => {
+    matchup.classList.toggle("expanded");
+    const panel = matchup.querySelector(".detail-panel");
+    panel.classList.toggle("active");
+    if (panel.classList.contains("active")) {
+      renderDetailBars(panel.querySelector(".detail-bars"), a, b);
+    }
+  });
+
+  bracketDiv.appendChild(matchup);
+}
+
+function renderDetailBars(container, a, b) {
+  if (container.children.length > 0) return; // already rendered
+  CONFIG.comparisonMetrics.forEach((m, idx) => {
+    const aVal = a[m] || 0;
+    const bVal = b[m] || 0;
+    const max = Math.max(aVal, bVal, 1);
+    const label = CONFIG.comparisonLabels[idx] || m;
+    const row = document.createElement("div");
+    row.className = "detail-metric";
+    row.innerHTML = `
+      <div class="metric-label">${label}</div>
+      <div class="bar-container">
+        <div class="bar-val">${typeof aVal === 'number' ? aVal.toFixed(1) : aVal}</div>
+        <div class="bar-left" style="width:${(aVal/max)*40}%;background:${aVal>=bVal?'#FFD700':'#444'}"></div>
+        <div class="bar-right" style="width:${(bVal/max)*40}%;background:${bVal>aVal?'#FF4444':'#444'}"></div>
+        <div class="bar-val">${typeof bVal === 'number' ? bVal.toFixed(1) : bVal}</div>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+// Find Yourself
+const findSelect = document.getElementById("find-select");
+DATA.forEach(d => {
+  const opt = document.createElement("option");
+  opt.value = d[CONFIG.nameField]; opt.textContent = d[CONFIG.nameField];
+  findSelect.appendChild(opt);
+});
+findSelect.addEventListener("change", () => {
+  const selected = DATA.find(d => d[CONFIG.nameField] === findSelect.value);
+  if (!selected) { document.getElementById("result-card").style.display = "none"; return; }
+  document.getElementById("result-card").style.display = "block";
+  document.getElementById("result-rank").textContent = `#${selected.rank || sorted.indexOf(selected) + 1}`;
+  document.getElementById("result-name").textContent = selected[CONFIG.nameField];
+  document.getElementById("result-score").textContent = `Score: ${selected[CONFIG.scoreField].toFixed(1)}`;
+});
+
+// Full Table
+const thead = document.getElementById("table-head");
+const tbody = document.getElementById("table-body");
+const headerRow = document.createElement("tr");
+CONFIG.tableHeaders.forEach((h, i) => {
+  const th = document.createElement("th");
+  th.textContent = h;
+  th.addEventListener("click", () => sortTable(i));
+  headerRow.appendChild(th);
+});
+thead.appendChild(headerRow);
+
+let tableData = [...DATA].sort((a, b) => (a.rank || 0) - (b.rank || 0));
+function renderTable(data) {
+  tbody.innerHTML = "";
+  data.forEach(d => {
+    const tr = document.createElement("tr");
+    CONFIG.tableColumns.forEach(col => {
+      const td = document.createElement("td");
+      const v = d[col];
+      td.textContent = typeof v === "number" ? (v % 1 === 0 ? v : v.toFixed(1)) : v;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+renderTable(tableData);
+
+let sortDir = {};
+function sortTable(colIdx) {
+  const col = CONFIG.tableColumns[colIdx];
+  sortDir[col] = !(sortDir[col] || false);
+  tableData.sort((a, b) => {
+    const va = a[col], vb = b[col];
+    const cmp = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb));
+    return sortDir[col] ? cmp : -cmp;
+  });
+  renderTable(tableData);
+}
+
+document.getElementById("table-search").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  renderTable(tableData.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q))));
+});
+
+// Share
+const url = CONFIG.shareUrl || window.location.href;
+const text = CONFIG.shareText || CONFIG.hook;
+document.getElementById("share-twitter").href = `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+document.getElementById("share-linkedin").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+document.getElementById("share-copy").addEventListener("click", () => {
+  navigator.clipboard.writeText(url).then(() => {
+    document.getElementById("share-copy").textContent = "Copied!";
+    setTimeout(() => document.getElementById("share-copy").textContent = "Copy Link", 2000);
+  });
+});
+
+// Entrance animation
+document.querySelectorAll(".matchup").forEach((el, i) => {
+  el.style.opacity = "0";
+  el.style.transform = "translateX(-20px)";
+  setTimeout(() => {
+    el.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+    el.style.opacity = "1";
+    el.style.transform = "translateX(0)";
+  }, 100 + i * 80);
+});
+</script>
+</body>
+</html>

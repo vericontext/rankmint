@@ -1,0 +1,31 @@
+rank,character,film,sa,dq,wp,gl,fo,pr,survival_iq,tier
+1,Ellen Ripley,Alien/Aliens,9,9,10,9,10,9,93.3,S
+2,Erin,You're Next,9,9,9,8,10,9,90.0,S
+3,Grace,Ready or Not,8,8,8,7,10,9,83.3,S
+4,Laurie Strode,Halloween (2018),9,8,9,7,9,8,83.3,S
+5,Sidney Prescott,Scream,8,8,7,7,10,8,80.0,S
+6,Adelaide,Us,8,7,8,6,9,8,76.7,A
+7,Chris Washington,Get Out,7,8,7,5,9,7,71.7,A
+8,Nancy Thompson,A Nightmare on Elm Street,7,7,7,6,9,7,71.7,A
+9,Sam,Trick 'r Treat,7,7,6,6,8,7,68.3,A
+10,Dana,The Cabin in the Woods,6,7,6,6,7,7,65.0,A
+11,Marty,The Cabin in the Woods,6,6,5,5,7,7,60.0,B
+12,Tree Gelbman,Happy Death Day,5,6,5,5,8,6,58.3,B
+13,Tommy Jarvis,Friday the 13th,5,5,6,5,7,6,56.7,B
+14,Ash Williams,Evil Dead,4,4,7,4,6,8,55.0,B
+15,Mia,Evil Dead (2013),5,5,5,4,6,5,50.0,B
+16,Dennis,Scream (1996),4,4,3,3,4,4,36.7,C
+17,Paxton,Hostel,3,3,4,3,3,3,31.7,C
+18,Rod Lane,Get Out,4,3,3,2,3,3,30.0,C
+19,Jack Torrance,The Shining,3,2,4,1,2,5,28.3,D
+20,Tatum Riley,Scream (1996),3,3,3,2,2,3,26.7,D
+21,Carol Anne,Poltergeist,3,3,1,2,4,2,25.0,D
+22,Barb,Black Christmas,3,3,2,2,2,3,25.0,D
+23,Tina,A Nightmare on Elm Street,3,2,2,2,1,2,20.0,D
+24,Freddy's Early Victims,Nightmare on Elm Street (archetype),3,2,2,2,1,2,20.0,D
+25,Heather Donahue,The Blair Witch Project,3,2,2,2,1,2,20.0,D
+26,Generic Blonde,1980s Slasher (archetype),2,2,2,2,1,2,18.3,D
+27,Georgie,IT,3,2,1,1,1,2,16.7,D
+28,Micah,Paranormal Activity,2,1,2,1,1,2,15.0,D
+29,Let's Split Up Guy,Generic Horror (archetype),2,1,2,1,1,2,15.0,D
+30,Runs Upstairs,Generic Horror (archetype),2,1,1,1,1,1,11.7,D

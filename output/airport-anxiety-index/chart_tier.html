@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Airport Anxiety Index — Tier List | RankMint</title>
+<meta property="og:title" content="Airport Anxiety Index — Tier List (S/A/B/C/D)">
+<meta property="og:description" content="From Hellscape to Zen Master: 30 major airports ranked by passenger anxiety. Which tier is your airport?">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Airport Anxiety Index — Tier List (S/A/B/C/D)">
+<meta name="twitter:description" content="From Hellscape to Zen Master: 30 major airports ranked by passenger anxiety. Which tier is your airport?">
+<meta name="twitter:image" content="card.png">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8PE9R1YX4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-L8PE9R1YX4');
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #e0e0e0; }
+  .header { padding: 24px 32px 8px; }
+  .header h1 { font-size: 1.6rem; color: #fff; }
+  .header p { font-size: 0.85rem; color: #888; margin-top: 4px; }
+  .tier-container { max-width: 1000px; margin: 20px auto; padding: 0 16px; }
+  .tier-row { display: flex; margin-bottom: 6px; min-height: 72px; border-radius: 8px; overflow: visible; }
+  .tier-label { width: 90px; min-width: 90px; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; font-size: 1.8rem; font-weight: 900; color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.4); border-radius: 8px 0 0 8px; }
+  .tier-sublabel { font-size: 0.55rem; font-weight: 600; letter-spacing: 0.04em; color: rgba(255,255,255,0.75); margin-top: 2px; text-align: center; padding: 0 4px; }
+  .tier-items { flex: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    padding: 12px 16px; background: rgba(255,255,255,0.05); border-radius: 0 8px 8px 0; }
+  .tier-item { background: rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 14px;
+    font-size: 0.85rem; cursor: default; transition: all 0.2s; position: relative; }
+  .tier-item:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+  .tier-item .item-name { font-weight: 600; }
+  .tier-item .item-code { font-size: 0.7rem; color: #bbb; }
+  .tier-item .score { font-size: 0.7rem; color: #aaa; margin-top: 2px; }
+  .tooltip { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+    background: #222; color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 0.75rem;
+    white-space: nowrap; z-index: 10; margin-bottom: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.1); }
+  .tier-item:hover .tooltip { display: block; }
+  .watermark { text-align: right; padding: 12px 32px; color: #555; font-size: 0.75rem; font-style: italic; }
+  .legend { max-width: 1000px; margin: 0 auto 8px; padding: 0 16px;
+    font-size: 0.75rem; color: #666; display: flex; gap: 16px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<!-- Navigation -->
+<nav style="background:#111827;padding:10px 20px;display:flex;gap:16px;align-items:center;">
+  <a href="../" style="color:#FFD700;text-decoration:none;font-size:0.85rem;font-weight:600;">← RankMint Home</a>
+  <a href="index.html" style="color:#aaa;text-decoration:none;font-size:0.85rem;">← Back to Rankings</a>
+</nav>
+<div class="header">
+  <h1>Airport Anxiety Index — Tier List</h1>
+  <p>30 major hubs classified by composite anxiety score (0–100) | Hover for metric breakdown</p>
+</div>
+<div class="legend">
+  <span>S ≥ 70 — Hellscape</span>
+  <span>A 55–69 — Consistently Stressful</span>
+  <span>B 40–54 — Rough But Survivable</span>
+  <span>C 25–39 — Manageable</span>
+  <span>D &lt;25 — Zen Masters</span>
+</div>
+<div class="tier-container" id="tiers"></div>
+<div class="watermark">RankMint</div>
+<script>
+// ===== DATA =====
+const DATA = [
+  { name: "Delhi", code: "DEL", city: "Delhi", score: 81.4, delay: 87.0, security: 100.0, congestion: 90.1, wayfinding: 71.4, wifi: 82.3, amenity: 35.0, immigration: 75.0, tier_raw: "S" },
+  { name: "Sao Paulo", code: "GRU", city: "Sao Paulo", score: 70.6, delay: 65.2, security: 80.0, congestion: 39.3, wayfinding: 71.4, wifi: 85.2, amenity: 100.0, immigration: 62.5, tier_raw: "S" },
+  { name: "Miami", code: "MIA", city: "Miami", score: 69.2, delay: 91.3, security: 66.7, congestion: 50.8, wayfinding: 57.1, wifi: 55.5, amenity: 100.0, immigration: 25.0, tier_raw: "A" },
+  { name: "New York", code: "JFK", city: "New York", score: 66.5, delay: 100.0, security: 33.3, congestion: 64.0, wayfinding: 85.7, wifi: 13.0, amenity: 92.0, immigration: 37.5, tier_raw: "A" },
+  { name: "Beijing", code: "PEK", city: "Beijing", score: 64.1, delay: 65.2, security: 66.7, congestion: 0.0, wayfinding: 85.7, wifi: 97.4, amenity: 100.0, immigration: 37.5, tier_raw: "A" },
+  { name: "Bangkok", code: "BKK", city: "Bangkok", score: 62.3, delay: 52.2, security: 66.7, congestion: 72.7, wayfinding: 42.9, wifi: 79.3, amenity: 57.0, immigration: 100.0, tier_raw: "A" },
+  { name: "Chicago", code: "ORD", city: "Chicago", score: 62.3, delay: 95.7, security: 13.3, congestion: 43.4, wayfinding: 71.4, wifi: 64.4, amenity: 100.0, immigration: 40.0, tier_raw: "A" },
+  { name: "Los Angeles", code: "LAX", city: "Los Angeles", score: 57.2, delay: 43.5, security: 80.0, congestion: 26.8, wayfinding: 85.7, wifi: 58.5, amenity: 59.0, immigration: 35.0, tier_raw: "A" },
+  { name: "Dallas", code: "DFW", city: "Dallas", score: 57.1, delay: 100.0, security: 66.7, congestion: 26.8, wayfinding: 28.6, wifi: 31.8, amenity: 63.0, immigration: 20.0, tier_raw: "A" },
+  { name: "Paris", code: "CDG", city: "Paris", score: 56.3, delay: 47.8, security: 53.3, congestion: 86.8, wayfinding: 100.0, wifi: 39.4, amenity: 5.0, immigration: 25.0, tier_raw: "A" },
+  { name: "Amsterdam", code: "AMS", city: "Amsterdam", score: 55.1, delay: 52.2, security: 100.0, congestion: 42.5, wayfinding: 42.9, wifi: 64.4, amenity: 22.0, immigration: 12.5, tier_raw: "A" },
+  { name: "Atlanta", code: "ATL", city: "Atlanta", score: 52.4, delay: 73.9, security: 26.7, congestion: 81.3, wayfinding: 14.3, wifi: 67.4, amenity: 69.0, immigration: 12.5, tier_raw: "B" },
+  { name: "London", code: "LHR", city: "London", score: 51.9, delay: 56.5, security: 53.3, congestion: 48.5, wayfinding: 57.1, wifi: 73.3, amenity: 20.0, immigration: 37.5, tier_raw: "B" },
+  { name: "Frankfurt", code: "FRA", city: "Frankfurt", score: 50.8, delay: 43.5, security: 66.7, congestion: 48.7, wayfinding: 57.1, wifi: 67.4, amenity: 33.0, immigration: 12.5, tier_raw: "B" },
+  { name: "Guangzhou", code: "CAN", city: "Guangzhou", score: 45.2, delay: 56.5, security: 53.3, congestion: 18.0, wayfinding: 42.9, wifi: 70.4, amenity: 24.0, immigration: 37.5, tier_raw: "B" },
+  { name: "Tokyo Narita", code: "NRT", city: "Tokyo", score: 42.8, delay: 30.4, security: 46.7, congestion: 57.3, wayfinding: 57.1, wifi: 70.4, amenity: 4.0, immigration: 25.0, tier_raw: "B" },
+  { name: "Sydney", code: "SYD", city: "Sydney", score: 42.7, delay: 30.4, security: 26.7, congestion: 78.5, wayfinding: 28.6, wifi: 70.4, amenity: 54.0, immigration: 25.0, tier_raw: "B" },
+  { name: "Mexico City", code: "MEX", city: "Mexico City", score: 41.8, delay: 4.3, security: 33.3, congestion: 17.8, wayfinding: 71.4, wifi: 100.0, amenity: 100.0, immigration: 12.5, tier_raw: "B" },
+  { name: "Seoul", code: "ICN", city: "Seoul", score: 40.3, delay: 73.9, security: 33.3, congestion: 48.3, wayfinding: 14.3, wifi: 49.6, amenity: 2.0, immigration: 12.5, tier_raw: "B" },
+  { name: "Madrid", code: "MAD", city: "Madrid", score: 36.5, delay: 39.1, security: 33.3, congestion: 25.6, wayfinding: 42.9, wifi: 73.3, amenity: 14.0, immigration: 20.0, tier_raw: "C" },
+  { name: "Hong Kong", code: "HKG", city: "Hong Kong", score: 35.5, delay: 43.5, security: 26.7, congestion: 62.4, wayfinding: 14.3, wifi: 58.5, amenity: 10.0, immigration: 20.0, tier_raw: "C" },
+  { name: "Rome", code: "FCO", city: "Rome", score: 31.7, delay: 21.7, security: 26.7, congestion: 46.0, wayfinding: 28.6, wifi: 76.3, amenity: 11.0, immigration: 20.0, tier_raw: "C" },
+  { name: "San Francisco", code: "SFO", city: "San Francisco", score: 30.7, delay: 21.7, security: 20.0, congestion: 61.9, wayfinding: 42.9, wifi: 0.0, amenity: 46.0, immigration: 20.0, tier_raw: "C" },
+  { name: "Dubai", code: "DXB", city: "Dubai", score: 29.2, delay: 21.7, security: 33.3, congestion: 40.4, wayfinding: 28.6, wifi: 55.5, amenity: 6.0, immigration: 12.5, tier_raw: "C" },
+  { name: "Tokyo Haneda", code: "HND", city: "Tokyo", score: 25.6, delay: 0.0, security: 0.0, congestion: 100.0, wayfinding: 0.0, wifi: 96.3, amenity: 3.0, immigration: 12.5, tier_raw: "C" },
+  { name: "Seattle", code: "SEA", city: "Seattle", score: 25.3, delay: 13.0, security: 6.7, congestion: 90.1, wayfinding: 14.3, wifi: 21.5, amenity: 23.0, immigration: 12.5, tier_raw: "C" },
+  { name: "Istanbul", code: "IST", city: "Istanbul", score: 24.7, delay: 30.4, security: 26.7, congestion: 4.4, wayfinding: 28.6, wifi: 46.6, amenity: 9.0, immigration: 25.0, tier_raw: "D" },
+  { name: "Singapore", code: "SIN", city: "Singapore", score: 20.3, delay: 39.1, security: 0.0, congestion: 34.6, wayfinding: 0.0, wifi: 52.6, amenity: 1.0, immigration: 0.0, tier_raw: "D" },
+  { name: "Munich", code: "MUC", city: "Munich", score: 16.2, delay: 13.0, security: 13.3, congestion: 6.9, wayfinding: 14.3, wifi: 61.5, amenity: 7.0, immigration: 5.0, tier_raw: "D" },
+  { name: "Doha", code: "DOH", city: "Doha", score: 12.3, delay: 4.3, security: 0.0, congestion: 43.9, wayfinding: 0.0, wifi: 43.7, amenity: 0.0, immigration: 5.0, tier_raw: "D" },
+];
+
+const CONFIG = {
+  nameField: "name",
+  scoreField: "score",
+  tiers: [
+    { label: "S", sublabel: "HELLSCAPE", min: 70, color: "#C0392B" },
+    { label: "A", sublabel: "STRESSFUL", min: 55, color: "#E67E22" },
+    { label: "B", sublabel: "SURVIVABLE", min: 40, color: "#D4AC0D" },
+    { label: "C", sublabel: "MANAGEABLE", min: 25, color: "#27AE60" },
+    { label: "D", sublabel: "ZEN MASTER", min: 0,  color: "#2980B9" },
+  ],
+  tooltipFields: ["delay", "security", "congestion", "wayfinding", "wifi", "amenity", "immigration"],
+  tooltipLabels: ["Delay", "Security", "Congestion", "Wayfinding", "Wi-Fi (inv)", "Amenity (inv)", "Immigration"],
+};
+
+// Sort TIERS descending by min for correct assignment
+const sortedTiers = [...CONFIG.tiers].sort((a, b) => b.min - a.min);
+const sorted = [...DATA].sort((a, b) => b[CONFIG.scoreField] - a[CONFIG.scoreField]);
+const container = document.getElementById("tiers");
+
+CONFIG.tiers.forEach(tier => {
+  const tierItems = sorted.filter(d => {
+    const s = d[CONFIG.scoreField];
+    const assigned = sortedTiers.find(t => s >= t.min);
+    return assigned && assigned.label === tier.label;
+  });
+
+  const row = document.createElement("div");
+  row.className = "tier-row";
+  row.innerHTML = `<div class="tier-label" style="background:${tier.color}">${tier.label}<div class="tier-sublabel">${tier.sublabel}</div></div>`;
+  const itemsDiv = document.createElement("div");
+  itemsDiv.className = "tier-items";
+
+  tierItems.forEach(d => {
+    const el = document.createElement("div");
+    el.className = "tier-item";
+    let tooltipHtml = `<b>${d.name} (${d.code})</b><br/>Score: ${d[CONFIG.scoreField].toFixed(1)}<hr style="border:none;border-top:1px solid #444;margin:4px 0"/>`;
+    CONFIG.tooltipFields.forEach((f, i) => {
+      if (d[f] !== undefined) {
+        tooltipHtml += `${CONFIG.tooltipLabels[i]}: ${typeof d[f] === "number" ? d[f].toFixed(1) : d[f]}<br/>`;
+      }
+    });
+    el.innerHTML = `
+      <div class="item-name">${d.name}</div>
+      <div class="item-code">${d.code} &middot; ${d.city}</div>
+      <div class="score">${d[CONFIG.scoreField].toFixed(1)}</div>
+      <div class="tooltip">${tooltipHtml}</div>
+    `;
+    itemsDiv.appendChild(el);
+  });
+
+  row.appendChild(itemsDiv);
+  container.appendChild(row);
+});
+
+// Entrance animation
+document.querySelectorAll(".tier-item").forEach((el, i) => {
+  el.style.opacity = "0";
+  el.style.transform = "translateY(10px)";
+  setTimeout(() => {
+    el.style.transition = "opacity 0.4s, transform 0.4s";
+    el.style.opacity = "1";
+    el.style.transform = "translateY(0)";
+  }, 50 + i * 25);
+});
+</script>
+</body>
+</html>

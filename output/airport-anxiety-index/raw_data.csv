@@ -1,0 +1,31 @@
+airport_code,airport_name,city,region,delay_rate_pct,security_wait_min,annual_passengers_M,total_gates,pax_per_gate,wayfinding_raw,wifi_speed_mbps,skytrax_rank_2024,immigration_wait_min,data_notes
+JFK,John F. Kennedy International,New York,North America,38,15,63.3,130,487000,8,151.59,93,25,confirmed|confirmed|confirmed|confirmed|confirmed
+LAX,Los Angeles International,Los Angeles,North America,25,22,76.6,235,326000,8,75,60,24,confirmed|estimated|confirmed|confirmed|confirmed
+ORD,O'Hare International,Chicago,North America,37,12,80,201,398000,7,65,101,26,confirmed|confirmed|confirmed|confirmed|confirmed
+ATL,Hartsfield-Jackson Atlanta International,Atlanta,North America,32,14,108.1,192,562000,3,60,70,15,confirmed|estimated|confirmed|confirmed|estimated
+DFW,Dallas/Fort Worth International,Dallas,North America,38,20,73,224,326000,4,119.92,64,18,confirmed|estimated|confirmed|confirmed|estimated
+MIA,Miami International,Miami,North America,36,20,55.9,130,430000,6,80,101,20,confirmed|estimated|confirmed|estimated|estimated
+SFO,San Francisco International,San Francisco,North America,20,13,55,115,478000,5,173.55,47,18,estimated|estimated|confirmed|confirmed|estimated
+SEA,Seattle-Tacoma International,Seattle,North America,18,11,51,85,600000,3,137.31,24,15,estimated|estimated|confirmed|estimated|estimated
+LHR,Heathrow,London,Europe,28,18,83.9,200,420000,6,50,21,25,estimated|estimated|confirmed|confirmed|estimated
+CDG,Charles de Gaulle,Paris,Europe,26,18,70.3,120,586000,9,107.13,6,20,estimated|estimated|confirmed|confirmed|estimated
+FRA,Frankfurt Airport,Frankfurt,Europe,25,20,61,145,421000,6,60,34,15,estimated|estimated|confirmed|estimated|estimated
+AMS,Amsterdam Schiphol,Amsterdam,Europe,27,25,61,155,394000,5,65,23,15,estimated|estimated|confirmed|estimated|estimated
+FCO,Leonardo da Vinci,Rome,Europe,20,14,45,110,409000,4,45,12,18,estimated|estimated|confirmed|estimated|estimated
+MAD,Adolfo Suarez Madrid-Barajas,Madrid,Europe,24,15,61,190,321000,5,50,15,18,estimated|estimated|confirmed|estimated|estimated
+IST,Istanbul Airport,Istanbul,Europe/Middle East,22,14,80,350,229000,4,95,10,20,estimated|estimated|estimated|estimated|estimated
+MUC,Munich Airport,Munich,Europe,18,12,48,200,240000,3,70,8,12,estimated|estimated|confirmed|estimated|estimated
+NRT,Narita International,Tokyo,Asia,22,17,38,83,458000,6,55,5,20,estimated|estimated|confirmed|confirmed|estimated
+HND,Haneda International,Tokyo,Asia,15,10,90,140,643000,2,11.37,4,15,estimated|estimated|confirmed|estimated|confirmed
+ICN,Incheon International,Seoul,Asia,32,15,71.2,170,419000,3,90,3,15,estimated|estimated|confirmed|estimated|estimated
+SIN,Changi Airport,Singapore,Asia,24,10,61.2,170,360000,2,85,2,10,estimated|estimated|confirmed|estimated|estimated
+HKG,Hong Kong International,Hong Kong,Asia,25,14,48,100,480000,3,75,11,18,estimated|estimated|confirmed|estimated|estimated
+PEK,Beijing Capital International,Beijing,Asia,30,20,65,310,210000,8,9.45,101,25,estimated|estimated|confirmed|estimated|confirmed
+BKK,Suvarnabhumi,Bangkok,Asia,27,20,63,120,525000,5,40,58,50,estimated|estimated|estimated|estimated|confirmed
+DEL,Indira Gandhi International,Delhi,Asia,35,25,72,120,600000,7,35,36,40,estimated|estimated|confirmed|estimated|estimated
+CAN,Guangzhou Baiyun International,Guangzhou,Asia,28,18,75,260,288000,5,55,25,25,estimated|estimated|estimated|estimated|estimated
+DXB,Dubai International,Dubai,Middle East,20,15,92.3,240,385000,4,80,7,15,estimated|estimated|confirmed|estimated|estimated
+DOH,Hamad International,Doha,Middle East,16,10,52,130,400000,2,100,1,12,estimated|estimated|confirmed|estimated|estimated
+SYD,Kingsford Smith,Sydney,Oceania,22,14,44,80,550000,4,55,55,20,estimated|estimated|confirmed|estimated|estimated
+GRU,Guarulhos International,Sao Paulo,Latin America,30,22,38,100,380000,7,30,101,35,estimated|estimated|confirmed|estimated|estimated
+MEX,Benito Juarez International,Mexico City,Latin America,16,15,43,150,287000,7,5.11,101,15,confirmed|estimated|confirmed|estimated|confirmed
