@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Nap Culture Index — Quadrant Analysis | RankMint</title>
+<meta property="og:title" content="Global Nap Culture Index — Quadrant Analysis">
+<meta property="og:description" content="Culture Score vs Work-Life Score: which countries have both the tradition AND the time?">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Global Nap Culture Index — Quadrant Analysis">
+<meta name="twitter:description" content="Culture Score vs Work-Life Score: which countries have both the tradition AND the time?">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; }
+  #chart { width: 100%; height: 88vh; min-height: 600px; }
+  .header { padding: 24px 36px 8px; background: #161b22; border-bottom: 1px solid #30363d; }
+  .header h1 { font-size: 1.4rem; color: #e6edf3; }
+  .header p { font-size: 0.82rem; color: #8b949e; margin-top: 5px; }
+  .nav { padding: 10px 36px; background: #161b22; display: flex; gap: 16px; font-size: 0.78rem; border-bottom: 1px solid #30363d; }
+  .nav a { color: #58a6ff; text-decoration: none; }
+  .nav a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Nap Quadrant: Culture vs Work-Life Balance</h1>
+  <p>X-axis: Nap Culture Score (0–10) &nbsp;|&nbsp; Y-axis: Work-Life Score (inverted hours, higher = fewer hours worked) &nbsp;|&nbsp; Bubble size: Climate Score</p>
+</div>
+<div class="nav">
+  <a href="index.html">Overview</a>
+  <a href="chart.html">Primary Rankings</a>
+  <a href="chart_heatmap.html">Metric Heatmap</a>
+  <a href="chart_race.html">Weight Simulator</a>
+</div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { name: "Spain",          CultureScore: 8,    WorkloadScore: 7.18,  ClimateScore: 5.56,  SleepScore: 6.73, InfraScore: 7, NOS: 7.07,  rank: 1  },
+  { name: "Netherlands",    CultureScore: 4,    WorkloadScore: 10.00, ClimateScore: 4.13,  SleepScore: 9.68, InfraScore: 8, NOS: 6.96,  rank: 2  },
+  { name: "Greece",         CultureScore: 8,    WorkloadScore: 3.89,  ClimateScore: 5.72,  SleepScore: 6.53, InfraScore: 7, NOS: 6.39,  rank: 3  },
+  { name: "France",         CultureScore: 5,    WorkloadScore: 7.76,  ClimateScore: 4.62,  SleepScore: 8.63, InfraScore: 6, NOS: 6.37,  rank: 4  },
+  { name: "Italy",          CultureScore: 7,    WorkloadScore: 6.16,  ClimateScore: 5.05,  SleepScore: 6.53, InfraScore: 6, NOS: 6.30,  rank: 5  },
+  { name: "Japan",          CultureScore: 9,    WorkloadScore: 7.63,  ClimateScore: 4.54,  SleepScore: 0.00, InfraScore: 9, NOS: 6.26,  rank: 6  },
+  { name: "Australia",      CultureScore: 2,    WorkloadScore: 7.53,  ClimateScore: 8.79,  SleepScore: 9.26, InfraScore: 5, NOS: 6.03,  rank: 7  },
+  { name: "Denmark",        CultureScore: 3,    WorkloadScore: 8.78,  ClimateScore: 3.47,  SleepScore: 8.63, InfraScore: 7, NOS: 5.95,  rank: 8  },
+  { name: "New Zealand",    CultureScore: 3,    WorkloadScore: 6.38,  ClimateScore: 4.01,  SleepScore: 10.00,InfraScore: 7, NOS: 5.83,  rank: 9  },
+  { name: "Germany",        CultureScore: 3,    WorkloadScore: 8.39,  ClimateScore: 3.77,  SleepScore: 7.90, InfraScore: 7, NOS: 5.77,  rank: 10 },
+  { name: "Norway",         CultureScore: 3,    WorkloadScore: 9.99,  ClimateScore: 0.69,  SleepScore: 8.10, InfraScore: 7, NOS: 5.67,  rank: 11 },
+  { name: "Finland",        CultureScore: 3,    WorkloadScore: 8.68,  ClimateScore: 0.96,  SleepScore: 9.57, InfraScore: 6, NOS: 5.60,  rank: 12 },
+  { name: "Portugal",       CultureScore: 4,    WorkloadScore: 6.40,  ClimateScore: 6.19,  SleepScore: 7.05, InfraScore: 5, NOS: 5.57,  rank: 13 },
+  { name: "Sweden",         CultureScore: 3,    WorkloadScore: 8.63,  ClimateScore: 1.02,  SleepScore: 8.74, InfraScore: 6, NOS: 5.43,  rank: 14 },
+  { name: "United Kingdom", CultureScore: 2,    WorkloadScore: 7.59,  ClimateScore: 3.62,  SleepScore: 9.47, InfraScore: 5, NOS: 5.31,  rank: 15 },
+  { name: "Taiwan",         CultureScore: 6,    WorkloadScore: 3.55,  ClimateScore: 9.40,  SleepScore: 3.05, InfraScore: 4, NOS: 5.13,  rank: 16 },
+  { name: "Mexico",         CultureScore: 6,    WorkloadScore: 2.42,  ClimateScore: 8.48,  SleepScore: 4.74, InfraScore: 4, NOS: 5.10,  rank: 17 },
+  { name: "Brazil",         CultureScore: 4,    WorkloadScore: 3.99,  ClimateScore: 9.80,  SleepScore: 5.05, InfraScore: 4, NOS: 5.08,  rank: 18 },
+  { name: "China",          CultureScore: 9,    WorkloadScore: 0.57,  ClimateScore: 2.82,  SleepScore: 5.37, InfraScore: 5, NOS: 5.06,  rank: 19 },
+  { name: "Colombia",       CultureScore: 6,    WorkloadScore: 1.75,  ClimateScore: 9.89,  SleepScore: 4.74, InfraScore: 3, NOS: 5.03,  rank: 20 },
+  { name: "Nigeria",        CultureScore: 5,    WorkloadScore: 3.23,  ClimateScore: 9.09,  SleepScore: 6.10, InfraScore: 2, NOS: 5.03,  rank: 21 },
+  { name: "Argentina",      CultureScore: 4,    WorkloadScore: 5.62,  ClimateScore: 5.83,  SleepScore: 5.05, InfraScore: 4, NOS: 4.81,  rank: 22 },
+  { name: "India",          CultureScore: 6,    WorkloadScore: 0.00,  ClimateScore: 9.82,  SleepScore: 4.52, InfraScore: 3, NOS: 4.63,  rank: 23 },
+  { name: "Thailand",       CultureScore: 4,    WorkloadScore: 1.85,  ClimateScore: 9.32,  SleepScore: 5.26, InfraScore: 4, NOS: 4.62,  rank: 24 },
+  { name: "Egypt",          CultureScore: 5,    WorkloadScore: 0.83,  ClimateScore: 9.22,  SleepScore: 5.58, InfraScore: 2, NOS: 4.47,  rank: 25 },
+  { name: "Canada",         CultureScore: 2,    WorkloadScore: 7.23,  ClimateScore: 0.00,  SleepScore: 8.31, InfraScore: 5, NOS: 4.46,  rank: 26 },
+  { name: "United States",  CultureScore: 2,    WorkloadScore: 4.93,  ClimateScore: 3.05,  SleepScore: 7.79, InfraScore: 4, NOS: 4.20,  rank: 27 },
+  { name: "Turkey",         CultureScore: 4,    WorkloadScore: 1.52,  ClimateScore: 4.67,  SleepScore: 4.52, InfraScore: 4, NOS: 3.71,  rank: 28 },
+  { name: "Singapore",      CultureScore: 2,    WorkloadScore: 0.55,  ClimateScore: 8.88,  SleepScore: 4.42, InfraScore: 3, NOS: 3.38,  rank: 29 },
+  { name: "South Korea",    CultureScore: 2,    WorkloadScore: 4.39,  ClimateScore: 4.59,  SleepScore: 1.05, InfraScore: 4, NOS: 2.98,  rank: 30 },
+];
+
+// Fixed midpoints for quadrant dividers (cultural midpoint at 5.5, workload midpoint at 5)
+const xMid = 5.5;
+const yMid = 5.0;
+
+const xMin = -0.3, xMax = 10.5;
+const yMin = -0.5, yMax = 11.2;
+
+// Quadrant color scheme — dark-mode friendly
+const QUADRANT_COLORS = {
+  topRight:    { bg: "rgba(74,222,128,0.07)",  point: "#4ade80" },  // Enlightened Nappers
+  topLeft:     { bg: "rgba(96,165,250,0.07)",  point: "#60a5fa" },  // Accidental Resters
+  bottomRight: { bg: "rgba(251,146,60,0.07)",  point: "#fb923c" },  // Exhausted Believers
+  bottomLeft:  { bg: "rgba(248,113,113,0.07)", point: "#f87171" },  // Productivity Martyrs
+};
+
+function getQuadrant(d) {
+  if (d.CultureScore >= xMid && d.WorkloadScore >= yMid) return "topRight";
+  if (d.CultureScore < xMid  && d.WorkloadScore >= yMid) return "topLeft";
+  if (d.CultureScore >= xMid && d.WorkloadScore < yMid)  return "bottomRight";
+  return "bottomLeft";
+}
+
+const maxClimate = Math.max(...DATA.map(d => d.ClimateScore));
+const seriesData = DATA.map(d => {
+  const q = getQuadrant(d);
+  return {
+    value: [d.CultureScore, d.WorkloadScore],
+    name: d.name,
+    symbolSize: 12 + (d.ClimateScore / maxClimate) * 28,
+    itemStyle: {
+      color: QUADRANT_COLORS[q].point,
+      opacity: 0.85,
+      borderColor: "rgba(255,255,255,0.15)",
+      borderWidth: 1,
+    },
+    _raw: d,
+  };
+});
+
+const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
+chart.setOption({
+  backgroundColor: "#0d1117",
+  tooltip: {
+    backgroundColor: "#161b22",
+    borderColor: "#30363d",
+    textStyle: { color: "#e6edf3", fontSize: 12 },
+    formatter: p => {
+      const d = p.data._raw;
+      const q = getQuadrant(d);
+      const labels = { topRight: "The Enlightened Nappers", topLeft: "The Accidental Resters", bottomRight: "The Exhausted Believers", bottomLeft: "The Productivity Martyrs" };
+      return `<b style="font-size:13px">#${d.rank} ${d.name}</b><br/>
+        <span style="color:#aaa">Category: </span>${labels[q]}<br/>
+        <span style="color:#aaa">Culture: </span>${d.CultureScore.toFixed(1)}&nbsp;&nbsp;
+        <span style="color:#aaa">Workload: </span>${d.WorkloadScore.toFixed(1)}<br/>
+        <span style="color:#aaa">Climate: </span>${d.ClimateScore.toFixed(1)}&nbsp;&nbsp;
+        <span style="color:#aaa">Sleep: </span>${d.SleepScore.toFixed(1)}<br/>
+        <span style="color:#aaa">NOS: </span><b style="color:#FFD700">${d.NOS.toFixed(2)}</b>`;
+    }
+  },
+  grid: { left: "10%", right: "6%", top: 60, bottom: 70 },
+  xAxis: {
+    type: "value",
+    name: "Nap Culture Score (tradition strength)",
+    nameLocation: "center",
+    nameGap: 36,
+    nameTextStyle: { color: "#8b949e", fontSize: 11 },
+    min: xMin, max: xMax,
+    axisLine: { lineStyle: { color: "#30363d" } },
+    splitLine: { lineStyle: { color: "#21262d" } },
+    axisLabel: { color: "#8b949e" },
+  },
+  yAxis: {
+    type: "value",
+    name: "Work-Life Score (higher = fewer hours worked)",
+    nameLocation: "center",
+    nameGap: 52,
+    nameTextStyle: { color: "#8b949e", fontSize: 11 },
+    min: yMin, max: yMax,
+    axisLine: { lineStyle: { color: "#30363d" } },
+    splitLine: { lineStyle: { color: "#21262d" } },
+    axisLabel: { color: "#8b949e" },
+  },
+  dataZoom: [
+    { type: "inside", xAxisIndex: 0 },
+    { type: "inside", yAxisIndex: 0 },
+  ],
+  series: [{
+    type: "scatter",
+    data: seriesData,
+    label: {
+      show: true,
+      formatter: p => p.data.name,
+      position: "right",
+      fontSize: 9.5,
+      color: "#8b949e",
+    },
+    emphasis: {
+      label: { fontSize: 12, fontWeight: "bold", color: "#e6edf3" },
+      itemStyle: { borderColor: "#fff", borderWidth: 2, opacity: 1 },
+    },
+    animationDuration: 2000,
+    animationEasing: "cubicOut",
+    markArea: {
+      silent: true,
+      data: [
+        [{ coord: [xMin, yMid], itemStyle: { color: QUADRANT_COLORS.topLeft.bg } }, { coord: [xMid, yMax] }],
+        [{ coord: [xMid, yMid], itemStyle: { color: QUADRANT_COLORS.topRight.bg } }, { coord: [xMax, yMax] }],
+        [{ coord: [xMin, yMin], itemStyle: { color: QUADRANT_COLORS.bottomLeft.bg } }, { coord: [xMid, yMid] }],
+        [{ coord: [xMid, yMin], itemStyle: { color: QUADRANT_COLORS.bottomRight.bg } }, { coord: [xMax, yMid] }],
+      ]
+    },
+    markLine: {
+      silent: true,
+      lineStyle: { color: "#30363d", type: "dashed", width: 1.5 },
+      data: [{ xAxis: xMid }, { yAxis: yMid }],
+      label: { show: false },
+    },
+  }],
+  graphic: [
+    { type: "text", left: "11%", top: 68, style: { text: "The Accidental Resters", fontSize: 12, fill: "#60a5fa", fontStyle: "italic", fontWeight: "bold" } },
+    { type: "text", right: "7%", top: 68, style: { text: "The Enlightened Nappers", fontSize: 12, fill: "#4ade80", fontStyle: "italic", fontWeight: "bold" } },
+    { type: "text", left: "11%", bottom: 72, style: { text: "The Productivity Martyrs", fontSize: 12, fill: "#f87171", fontStyle: "italic", fontWeight: "bold" } },
+    { type: "text", right: "7%", bottom: 72, style: { text: "The Exhausted Believers", fontSize: 12, fill: "#fb923c", fontStyle: "italic", fontWeight: "bold" } },
+    { type: "text", right: 24, bottom: 10, style: { text: "RankMint | bubble size = Climate Score", fontSize: 10, fill: "#30363d", fontStyle: "italic" } },
+  ],
+});
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

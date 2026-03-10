@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Nap Culture Index — Rankings | RankMint</title>
+<meta property="og:title" content="Global Nap Culture Index">
+<meta property="og:description" content="Spain invented the siesta. Japan perfected it. 30 countries ranked by how structurally optimized they are for the art of the nap.">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Global Nap Culture Index">
+<meta name="twitter:description" content="Spain invented the siesta. Japan perfected it. 30 countries ranked by how structurally optimized they are for the art of the nap.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; }
+  #chart { width: 100%; height: 90vh; min-height: 680px; }
+  .header { padding: 28px 36px 10px; background: #161b22; border-bottom: 1px solid #30363d; }
+  .header h1 { font-size: 1.5rem; color: #e6edf3; letter-spacing: -0.3px; }
+  .header p { font-size: 0.82rem; color: #8b949e; margin-top: 6px; }
+  .nav { padding: 10px 36px; background: #161b22; display: flex; gap: 16px; font-size: 0.78rem; border-bottom: 1px solid #30363d; }
+  .nav a { color: #58a6ff; text-decoration: none; }
+  .nav a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Global Nap Culture Index — Primary Rankings</h1>
+  <p>Nap Optimization Score (NOS) — weighted composite of Sleep, Culture, Workload, Climate, and Infrastructure (0–10 scale)</p>
+</div>
+<div class="nav">
+  <a href="index.html">Overview</a>
+  <a href="chart_matrix.html">Quadrant Analysis</a>
+  <a href="chart_heatmap.html">Metric Heatmap</a>
+  <a href="chart_race.html">Weight Simulator</a>
+</div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { rank: 1,  name: "Spain",          SleepScore: 6.73, CultureScore: 8, WorkloadScore: 7.18, ClimateScore: 5.56, InfraScore: 7, NOS: 7.07 },
+  { rank: 2,  name: "Netherlands",    SleepScore: 9.68, CultureScore: 4, WorkloadScore: 10.00, ClimateScore: 4.13, InfraScore: 8, NOS: 6.96 },
+  { rank: 3,  name: "Greece",         SleepScore: 6.53, CultureScore: 8, WorkloadScore: 3.89, ClimateScore: 5.72, InfraScore: 7, NOS: 6.39 },
+  { rank: 4,  name: "France",         SleepScore: 8.63, CultureScore: 5, WorkloadScore: 7.76, ClimateScore: 4.62, InfraScore: 6, NOS: 6.37 },
+  { rank: 5,  name: "Italy",          SleepScore: 6.53, CultureScore: 7, WorkloadScore: 6.16, ClimateScore: 5.05, InfraScore: 6, NOS: 6.30 },
+  { rank: 6,  name: "Japan",          SleepScore: 0.00, CultureScore: 9, WorkloadScore: 7.63, ClimateScore: 4.54, InfraScore: 9, NOS: 6.26 },
+  { rank: 7,  name: "Australia",      SleepScore: 9.26, CultureScore: 2, WorkloadScore: 7.53, ClimateScore: 8.79, InfraScore: 5, NOS: 6.03 },
+  { rank: 8,  name: "Denmark",        SleepScore: 8.63, CultureScore: 3, WorkloadScore: 8.78, ClimateScore: 3.47, InfraScore: 7, NOS: 5.95 },
+  { rank: 9,  name: "New Zealand",    SleepScore: 10.00, CultureScore: 3, WorkloadScore: 6.38, ClimateScore: 4.01, InfraScore: 7, NOS: 5.83 },
+  { rank: 10, name: "Germany",        SleepScore: 7.90, CultureScore: 3, WorkloadScore: 8.39, ClimateScore: 3.77, InfraScore: 7, NOS: 5.77 },
+  { rank: 11, name: "Norway",         SleepScore: 8.10, CultureScore: 3, WorkloadScore: 9.99, ClimateScore: 0.69, InfraScore: 7, NOS: 5.67 },
+  { rank: 12, name: "Finland",        SleepScore: 9.57, CultureScore: 3, WorkloadScore: 8.68, ClimateScore: 0.96, InfraScore: 6, NOS: 5.60 },
+  { rank: 13, name: "Portugal",       SleepScore: 7.05, CultureScore: 4, WorkloadScore: 6.40, ClimateScore: 6.19, InfraScore: 5, NOS: 5.57 },
+  { rank: 14, name: "Sweden",         SleepScore: 8.74, CultureScore: 3, WorkloadScore: 8.63, ClimateScore: 1.02, InfraScore: 6, NOS: 5.43 },
+  { rank: 15, name: "United Kingdom", SleepScore: 9.47, CultureScore: 2, WorkloadScore: 7.59, ClimateScore: 3.62, InfraScore: 5, NOS: 5.31 },
+  { rank: 16, name: "Taiwan",         SleepScore: 3.05, CultureScore: 6, WorkloadScore: 3.55, ClimateScore: 9.40, InfraScore: 4, NOS: 5.13 },
+  { rank: 17, name: "Mexico",         SleepScore: 4.74, CultureScore: 6, WorkloadScore: 2.42, ClimateScore: 8.48, InfraScore: 4, NOS: 5.10 },
+  { rank: 18, name: "Brazil",         SleepScore: 5.05, CultureScore: 4, WorkloadScore: 3.99, ClimateScore: 9.80, InfraScore: 4, NOS: 5.08 },
+  { rank: 19, name: "China",          SleepScore: 5.37, CultureScore: 9, WorkloadScore: 0.57, ClimateScore: 2.82, InfraScore: 5, NOS: 5.06 },
+  { rank: 20, name: "Colombia",       SleepScore: 4.74, CultureScore: 6, WorkloadScore: 1.75, ClimateScore: 9.89, InfraScore: 3, NOS: 5.03 },
+  { rank: 21, name: "Nigeria",        SleepScore: 6.10, CultureScore: 5, WorkloadScore: 3.23, ClimateScore: 9.09, InfraScore: 2, NOS: 5.03 },
+  { rank: 22, name: "Argentina",      SleepScore: 5.05, CultureScore: 4, WorkloadScore: 5.62, ClimateScore: 5.83, InfraScore: 4, NOS: 4.81 },
+  { rank: 23, name: "India",          SleepScore: 4.52, CultureScore: 6, WorkloadScore: 0.00, ClimateScore: 9.82, InfraScore: 3, NOS: 4.63 },
+  { rank: 24, name: "Thailand",       SleepScore: 5.26, CultureScore: 4, WorkloadScore: 1.85, ClimateScore: 9.32, InfraScore: 4, NOS: 4.62 },
+  { rank: 25, name: "Egypt",          SleepScore: 5.58, CultureScore: 5, WorkloadScore: 0.83, ClimateScore: 9.22, InfraScore: 2, NOS: 4.47 },
+  { rank: 26, name: "Canada",         SleepScore: 8.31, CultureScore: 2, WorkloadScore: 7.23, ClimateScore: 0.00, InfraScore: 5, NOS: 4.46 },
+  { rank: 27, name: "United States",  SleepScore: 7.79, CultureScore: 2, WorkloadScore: 4.93, ClimateScore: 3.05, InfraScore: 4, NOS: 4.20 },
+  { rank: 28, name: "Turkey",         SleepScore: 4.52, CultureScore: 4, WorkloadScore: 1.52, ClimateScore: 4.67, InfraScore: 4, NOS: 3.71 },
+  { rank: 29, name: "Singapore",      SleepScore: 4.42, CultureScore: 2, WorkloadScore: 0.55, ClimateScore: 8.88, InfraScore: 3, NOS: 3.38 },
+  { rank: 30, name: "South Korea",    SleepScore: 1.05, CultureScore: 2, WorkloadScore: 4.39, ClimateScore: 4.59, InfraScore: 4, NOS: 2.98 },
+];
+
+// Category color coding
+const CATEGORY_COLORS = {
+  "The Enlightened Nappers":  "#4ade80",   // green — culture + work-life balance
+  "The Accidental Resters":   "#60a5fa",   // blue — short hours, no culture
+  "The Exhausted Believers":  "#f97316",   // orange — culture but overworked
+  "The Productivity Martyrs": "#f87171",   // red — worst of both worlds
+  "The Tropical Dreamers":    "#c084fc",   // purple — climate only
+};
+
+function getCategory(d) {
+  const name = d.name;
+  if (["Spain", "Greece", "Italy", "Japan", "France"].includes(name)) return "The Enlightened Nappers";
+  if (["Netherlands", "Germany", "Denmark", "Norway", "Finland", "Sweden", "New Zealand", "Australia", "United Kingdom", "Portugal"].includes(name)) return "The Accidental Resters";
+  if (["China", "Taiwan", "Mexico", "Colombia", "Nigeria", "India", "Egypt"].includes(name)) return "The Exhausted Believers";
+  if (["South Korea", "Singapore", "United States", "Canada", "Turkey"].includes(name)) return "The Productivity Martyrs";
+  return "The Tropical Dreamers";
+}
+
+const sorted = [...DATA].sort((a, b) => b.NOS - a.NOS);
+const names = sorted.map(d => d.name).reverse();
+const scores = sorted.map(d => d.NOS).reverse();
+const categories = sorted.map(d => getCategory(d)).reverse();
+const colors = categories.map(c => CATEGORY_COLORS[c]);
+
+const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
+chart.setOption({
+  backgroundColor: "#0d1117",
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    backgroundColor: "#161b22",
+    borderColor: "#30363d",
+    textStyle: { color: "#e6edf3", fontSize: 12 },
+    formatter: params => {
+      const idx = scores.length - 1 - params[0].dataIndex;
+      const d = sorted[idx];
+      return `<b style="font-size:13px">${d.name}</b><br/>
+        <span style="color:#aaa">NOS: </span><b style="color:#FFD700">${d.NOS.toFixed(2)}</b><br/>
+        <span style="color:#aaa">Sleep: </span>${d.SleepScore.toFixed(1)}&nbsp;&nbsp;
+        <span style="color:#aaa">Culture: </span>${d.CultureScore.toFixed(1)}<br/>
+        <span style="color:#aaa">Workload: </span>${d.WorkloadScore.toFixed(1)}&nbsp;&nbsp;
+        <span style="color:#aaa">Climate: </span>${d.ClimateScore.toFixed(1)}<br/>
+        <span style="color:#aaa">Infra: </span>${d.InfraScore.toFixed(1)}`;
+    }
+  },
+  legend: {
+    data: Object.keys(CATEGORY_COLORS),
+    top: 8,
+    textStyle: { color: "#8b949e", fontSize: 11 },
+    itemWidth: 12, itemHeight: 12,
+  },
+  grid: { left: "18%", right: "12%", top: 50, bottom: 24 },
+  xAxis: {
+    type: "value",
+    name: "Nap Optimization Score (0–10)",
+    nameLocation: "center",
+    nameGap: 28,
+    nameTextStyle: { color: "#8b949e", fontSize: 11 },
+    max: 8,
+    axisLine: { lineStyle: { color: "#30363d" } },
+    splitLine: { lineStyle: { color: "#21262d" } },
+    axisLabel: { color: "#8b949e" },
+  },
+  yAxis: {
+    type: "category",
+    data: names,
+    axisLabel: { fontSize: 11, color: "#e6edf3" },
+    axisLine: { lineStyle: { color: "#30363d" } },
+    axisTick: { show: false },
+  },
+  dataZoom: [{ type: "inside", yAxisIndex: 0, filterMode: "none", zoomOnMouseWheel: true }],
+  series: [{
+    type: "bar",
+    data: scores.map((v, i) => ({
+      value: v,
+      itemStyle: {
+        color: colors[i],
+        borderRadius: [0, 4, 4, 0],
+        opacity: 0.9,
+      },
+    })),
+    barWidth: "65%",
+    label: {
+      show: true,
+      position: "right",
+      formatter: p => p.value.toFixed(2),
+      fontSize: 10,
+      color: "#8b949e",
+    },
+    animationDuration: 1800,
+    animationEasing: "elasticOut",
+    animationDelay: idx => idx * 30,
+  }],
+  graphic: [
+    { type: "text", right: 24, bottom: 10, style: { text: "RankMint", fontSize: 11, fill: "#30363d", fontStyle: "italic" } },
+  ],
+});
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>

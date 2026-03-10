@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Nap Culture Index | RankMint</title>
+<meta property="og:title" content="Global Nap Culture Index">
+<meta property="og:description" content="Spain invented the siesta. Japan perfected it. The Netherlands nearly beat them both — with no nap tradition at all. 30 countries ranked.">
+<meta property="og:image" content="card.png">
+<meta property="og:url" content="https://rankmint.io/global-nap-culture-index/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Global Nap Culture Index">
+<meta name="twitter:description" content="Spain invented the siesta. Japan perfected it. The Netherlands nearly beat them both — with no nap tradition at all.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #0d1117; --surface: #161b22; --border: #30363d;
+    --text: #e6edf3; --muted: #8b949e; --accent: #58a6ff;
+    --gold: #FFD700; --orange: #fb923c; --green: #4ade80; --red: #f87171;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+  /* Hero */
+  .hero {
+    text-align: center; padding: 72px 20px 52px;
+    background: linear-gradient(160deg, #0d1117 0%, #141d2e 50%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--orange), var(--accent), var(--green));
+  }
+  .hero .badge {
+    display: inline-block;
+    background: rgba(88,166,255,0.12); border: 1px solid rgba(88,166,255,0.25);
+    color: var(--accent); font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 20px; margin-bottom: 20px;
+  }
+  .hero h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 14px; letter-spacing: -0.5px; line-height: 1.15; }
+  .hero .hook { font-size: 1.1rem; color: var(--muted); max-width: 580px; margin: 0 auto 32px; }
+  .hero .counter { font-size: 4rem; font-weight: 900; color: var(--gold); letter-spacing: -1px; }
+  .hero .counter-label { font-size: 0.82rem; color: var(--muted); margin-top: 5px; }
+
+  /* Surprise Callout */
+  .surprise {
+    background: linear-gradient(135deg, #1a2035 0%, #1e2d1a 100%);
+    border: 1px solid rgba(74,222,128,0.2);
+    color: var(--text); padding: 30px 36px;
+    border-radius: 14px; margin: -30px auto 48px;
+    max-width: 720px; position: relative; z-index: 1;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  }
+  .surprise .label {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--green); margin-bottom: 8px;
+  }
+  .surprise h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+  .surprise p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+  /* Chart Links bar */
+  .chart-links { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .chart-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 16px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 8px;
+    text-decoration: none; color: var(--accent);
+    font-size: 0.8rem; font-weight: 600; transition: border-color 0.15s, background 0.15s;
+  }
+  .chart-link:hover { border-color: var(--accent); background: rgba(88,166,255,0.06); }
+
+  /* Chart Section */
+  .chart-section { margin: 40px 0; }
+  .chart-section h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; }
+  #main-chart { width: 100%; height: 560px; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 2px 20px rgba(0,0,0,0.2); }
+
+  /* Taxonomy */
+  .taxonomy { margin: 48px 0; }
+  .taxonomy > h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+  .taxonomy > p { font-size: 0.85rem; color: var(--muted); margin-bottom: 24px; }
+  .tax-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .tax-card {
+    background: var(--surface); border-radius: 12px; padding: 22px 24px;
+    border: 1px solid var(--border); border-top: 3px solid;
+  }
+  .tax-card.green { border-top-color: var(--green); }
+  .tax-card.blue { border-top-color: var(--accent); }
+  .tax-card.orange { border-top-color: var(--orange); }
+  .tax-card.red { border-top-color: var(--red); }
+  .tax-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+  .tax-card.green h3 { color: var(--green); }
+  .tax-card.blue h3 { color: var(--accent); }
+  .tax-card.orange h3 { color: var(--orange); }
+  .tax-card.red h3 { color: var(--red); }
+  .tax-card p { font-size: 0.8rem; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+  .tax-card table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  .tax-card th { color: var(--muted); font-weight: 600; padding: 5px 6px; text-align: left; border-bottom: 1px solid var(--border); }
+  .tax-card td { padding: 5px 6px; border-bottom: 1px solid rgba(48,54,61,0.5); color: var(--text); }
+
+  /* Surprise findings */
+  .findings { margin: 48px 0; }
+  .findings h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; }
+  .finding-card {
+    background: var(--surface); border-radius: 12px; padding: 24px 28px;
+    border: 1px solid var(--border); margin-bottom: 16px;
+  }
+  .finding-card .num {
+    display: inline-block; background: rgba(88,166,255,0.1); color: var(--accent);
+    font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 12px; margin-bottom: 10px;
+  }
+  .finding-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+  .finding-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+  .finding-card .stat { font-size: 1.4rem; font-weight: 900; color: var(--gold); display: block; margin-top: 10px; }
+
+  /* Find Yourself */
+  .find-yourself {
+    margin: 48px 0; text-align: center; padding: 44px 24px;
+    background: var(--surface); border-radius: 16px; border: 1px solid var(--border);
+  }
+  .find-yourself h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+  .find-yourself p { font-size: 0.85rem; color: var(--muted); margin-bottom: 22px; }
+  .find-yourself select {
+    padding: 11px 22px; font-size: 0.95rem;
+    border: 2px solid var(--border); border-radius: 10px;
+    background: var(--bg); color: var(--text); min-width: 260px;
+    cursor: pointer; transition: border-color 0.15s;
+  }
+  .find-yourself select:focus { outline: none; border-color: var(--accent); }
+  .result-card {
+    display: none; margin: 24px auto 0; max-width: 380px; padding: 28px 24px;
+    background: linear-gradient(135deg, #141d2e 0%, #1a2035 100%);
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: 14px; text-align: center;
+  }
+  .result-card .rank { font-size: 3.5rem; font-weight: 900; color: var(--gold); line-height: 1; }
+  .result-card .name { font-size: 1.3rem; font-weight: 700; margin: 10px 0 4px; }
+  .result-card .score { font-size: 0.85rem; color: var(--muted); }
+  .result-card .cat { font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 10px; }
+
+  /* Full Table */
+  .full-table { margin: 48px 0; }
+  .full-table h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 14px; }
+  .table-search {
+    width: 100%; padding: 10px 16px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--surface); color: var(--text);
+    font-size: 0.88rem; margin-bottom: 14px;
+  }
+  .table-search:focus { outline: none; border-color: var(--accent); }
+  .full-table table {
+    width: 100%; border-collapse: collapse; font-size: 0.82rem;
+    background: var(--surface); border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .full-table th {
+    background: #1c2128; color: var(--muted); padding: 10px 12px;
+    text-align: left; cursor: pointer; user-select: none;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .full-table th:hover { color: var(--accent); }
+  .full-table td { padding: 9px 12px; border-bottom: 1px solid rgba(48,54,61,0.5); color: var(--text); }
+  .full-table tr:last-child td { border-bottom: none; }
+  .full-table tr:hover td { background: rgba(88,166,255,0.04); }
+
+  /* Methodology */
+  .methodology {
+    margin: 48px 0; padding: 28px 32px;
+    background: var(--surface); border-radius: 12px;
+    border: 1px solid var(--border); font-size: 0.83rem; color: var(--muted);
+  }
+  .methodology h2 { font-size: 1.1rem; color: var(--text); font-weight: 700; margin-bottom: 14px; }
+  .methodology p { margin-bottom: 8px; line-height: 1.7; }
+  .methodology a { color: var(--accent); text-decoration: none; }
+  .methodology a:hover { text-decoration: underline; }
+  .formula {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px 16px; font-family: 'Courier New', monospace; font-size: 0.82rem;
+    color: var(--green); margin: 12px 0; overflow-x: auto; white-space: nowrap;
+  }
+
+  /* Share Bar */
+  .share-bar { display: flex; justify-content: center; gap: 12px; padding: 36px 0 20px; flex-wrap: wrap; }
+  .share-btn {
+    display: inline-flex; align-items: center; gap: 7px; padding: 10px 22px;
+    border-radius: 8px; text-decoration: none; font-size: 0.82rem; font-weight: 700;
+    color: #fff; transition: transform 0.15s, opacity 0.15s; border: none; cursor: pointer;
+  }
+  .share-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+  .share-twitter { background: #1DA1F2; }
+  .share-linkedin { background: #0A66C2; }
+  .share-copy { background: #21262d; border: 1px solid var(--border); }
+
+  /* Footer */
+  .footer { text-align: center; padding: 24px 20px 36px; color: var(--muted); font-size: 0.73rem; }
+
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 1.7rem; }
+    .hero .counter { font-size: 2.8rem; }
+    .tax-grid { grid-template-columns: 1fr; }
+    .surprise { padding: 22px 20px; margin-left: 12px; margin-right: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="badge">RankMint — Global Rankings 2026</div>
+    <h1>Global Nap Culture Index</h1>
+    <p class="hook">30 countries ranked by how structurally, culturally, and climatically optimized they are for the art of the nap.</p>
+    <div class="counter" id="hero-counter">0.0</div>
+    <div class="counter-label">#1: Spain — 7.07 / 10</div>
+  </div>
+</section>
+
+<!-- Surprise Callout -->
+<section class="container">
+  <div class="surprise">
+    <div class="label">The Surprise</div>
+    <h2>Japan has the world's best nap culture and the world's worst sleep. The Netherlands has no nap tradition at all and nearly beat Spain.</h2>
+    <p>Japan's inemuri culture (score 9/10) is the world's strongest — but its workers average just 5.87 hours of sleep per night, yielding a SleepScore of 0.00. Meanwhile, the Netherlands scores 4/10 on culture but has the world's shortest workweek (26.57 hours), earning a perfect WorkloadScore of 10.0. It finished just 0.11 points behind Spain.</p>
+  </div>
+</section>
+
+<!-- Chart -->
+<section class="chart-section container">
+  <h2>The Rankings</h2>
+  <div class="chart-links">
+    <a class="chart-link" href="chart.html">Full Bar Chart</a>
+    <a class="chart-link" href="chart_matrix.html">Quadrant Analysis</a>
+    <a class="chart-link" href="chart_heatmap.html">Metric Heatmap</a>
+    <a class="chart-link" href="chart_race.html">Weight Simulator</a>
+  </div>
+  <div id="main-chart"></div>
+</section>
+
+<!-- Taxonomy -->
+<section class="taxonomy container">
+  <h2>The Taxonomy</h2>
+  <p>Four archetypes emerge from the data — defined by whether a country has the cultural permission for rest, the structural time for it, or neither.</p>
+  <div class="tax-grid">
+    <div class="tax-card green">
+      <h3>The Enlightened Nappers</h3>
+      <p>Both the tradition and the time. Countries that have genuinely solved the rest problem — culturally and structurally.</p>
+      <table>
+        <tr><th>Rank</th><th>Country</th><th>NOS</th></tr>
+        <tr><td>1</td><td>Spain</td><td>7.1</td></tr>
+        <tr><td>3</td><td>Greece</td><td>6.4</td></tr>
+        <tr><td>4</td><td>France</td><td>6.4</td></tr>
+        <tr><td>5</td><td>Italy</td><td>6.3</td></tr>
+        <tr><td>6</td><td>Japan</td><td>6.3</td></tr>
+      </table>
+    </div>
+    <div class="tax-card blue">
+      <h3>The Accidental Resters</h3>
+      <p>Short workweeks, no napping vocabulary. They have the structural time — they just never named what they do with it.</p>
+      <table>
+        <tr><th>Rank</th><th>Country</th><th>NOS</th></tr>
+        <tr><td>2</td><td>Netherlands</td><td>7.0</td></tr>
+        <tr><td>7</td><td>Australia</td><td>6.0</td></tr>
+        <tr><td>8</td><td>Denmark</td><td>6.0</td></tr>
+        <tr><td>10</td><td>Germany</td><td>5.8</td></tr>
+        <tr><td>11</td><td>Norway</td><td>5.7</td></tr>
+      </table>
+    </div>
+    <div class="tax-card orange">
+      <h3>The Exhausted Believers</h3>
+      <p>Strong nap traditions, crushing workloads. They love the idea of the nap. They simply never have time for one.</p>
+      <table>
+        <tr><th>Rank</th><th>Country</th><th>NOS</th></tr>
+        <tr><td>16</td><td>Taiwan</td><td>5.1</td></tr>
+        <tr><td>17</td><td>Mexico</td><td>5.1</td></tr>
+        <tr><td>19</td><td>China</td><td>5.1</td></tr>
+        <tr><td>23</td><td>India</td><td>4.6</td></tr>
+        <tr><td>25</td><td>Egypt</td><td>4.5</td></tr>
+      </table>
+    </div>
+    <div class="tax-card red">
+      <h3>The Productivity Martyrs</h3>
+      <p>Long hours, no cultural permission, minimal infrastructure. Sleep deprivation as identity. Rest as weakness.</p>
+      <table>
+        <tr><th>Rank</th><th>Country</th><th>NOS</th></tr>
+        <tr><td>27</td><td>United States</td><td>4.2</td></tr>
+        <tr><td>28</td><td>Turkey</td><td>3.7</td></tr>
+        <tr><td>29</td><td>Singapore</td><td>3.4</td></tr>
+        <tr><td>30</td><td>South Korea</td><td>3.0</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Surprise Findings -->
+<section class="findings container">
+  <h2>Counter-Intuitive Findings</h2>
+  <div class="finding-card">
+    <div class="num">Finding 1</div>
+    <h3>Japan: The world's best nap culture built on the world's worst sleep</h3>
+    <p>Inemuri — sleeping whilst present — frames unconsciousness at your desk as a sign of total dedication. Japan has nap pods in train stations, rest rooms in office buildings, and a CultureScore of 9. Yet Japanese workers average just 5.87 hours of sleep per night, the absolute floor of the dataset. Japan built its nap infrastructure not as a luxury, but as a response to systemic deprivation.</p>
+    <span class="stat">SleepScore 0.00 / CultureScore 9 / InfraScore 9</span>
+  </div>
+  <div class="finding-card">
+    <div class="num">Finding 2</div>
+    <h3>Netherlands: 0.11 points from #1 with a CultureScore of 4</h3>
+    <p>The Netherlands has no named nap tradition. Its CultureScore is 4 out of 10. And yet it finished 0.11 points behind Spain — the country that invented the siesta — because it has the world's shortest average workweek (26.57 hours) and some of the best rest infrastructure in Europe. Structural efficiency nearly beat six centuries of siesta culture.</p>
+    <span class="stat">WorkloadScore 10.0 / CultureScore 4 / Total NOS 6.96</span>
+  </div>
+  <div class="finding-card">
+    <div class="num">Finding 3</div>
+    <h3>China: State-mandated nap rights, 44.6-hour workweeks</h3>
+    <p>Xiuxi is literally written into Chinese labor law. Workers have the legal right to a midday rest period. The CultureScore is 9 — tied with Japan for the highest in the survey. China still ranks 19th because its workers average 44.6 hours per week, yielding a WorkloadScore of 0.57 — the third lowest in the dataset. The state gives the time. The employer takes it back.</p>
+    <span class="stat">CultureScore 9 / WorkloadScore 0.57 / Overall Rank: 19th</span>
+  </div>
+</section>
+
+<!-- Find Yourself -->
+<section class="find-yourself container" id="find-section">
+  <h2>Where Do You Rank?</h2>
+  <p>Select your country to find your nap optimization score and category.</p>
+  <select id="find-select">
+    <option value="">-- Select your country --</option>
+  </select>
+  <div class="result-card" id="result-card">
+    <div class="rank" id="result-rank"></div>
+    <div class="name" id="result-name"></div>
+    <div class="score" id="result-score"></div>
+    <div class="cat" id="result-cat"></div>
+  </div>
+</section>
+
+<!-- Full Table -->
+<section class="full-table container">
+  <h2>Full Rankings</h2>
+  <input type="text" class="table-search" id="table-search" placeholder="Search countries...">
+  <table id="ranking-table">
+    <thead id="table-head"></thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</section>
+
+<!-- Methodology -->
+<section class="methodology container">
+  <h2>Methodology</h2>
+  <p><strong>Index name:</strong> Global Nap Culture Index (Nap Optimization Score, NOS)</p>
+  <p><strong>Sample size:</strong> 30 countries &nbsp;|&nbsp; <strong>Collection date:</strong> March 2026</p>
+  <div class="formula">NOS = (SleepScore × 0.20) + (CultureScore × 0.30) + (WorkloadScore × 0.20) + (ClimateScore × 0.15) + (InfraScore × 0.15)</div>
+  <p><strong>Sleep Duration (20%):</strong> Normalized from OECD time-use / WorldPopulationReview data. Range: Japan 5.87h (score 0) to New Zealand 7.47h (score 10). Source: <a href="https://worldpopulationreview.com/country-rankings/average-sleep-time-by-country" target="_blank">worldpopulationreview.com</a></p>
+  <p><strong>Nap Culture (30%):</strong> Qualitative rubric (0–10) assessing named nap traditions, legal protections, social stigma, and institutional embedding. Most heavily weighted because cultural permission is the gating factor for all other conditions.</p>
+  <p><strong>Work-Life Balance (20%):</strong> Inverted weekly working hours. Formula: (45.69 − hours) / (45.69 − 26.57) × 10. Source: <a href="https://worldpopulationreview.com/country-rankings/average-work-week-by-country" target="_blank">worldpopulationreview.com</a> (ILO/OECD data)</p>
+  <p><strong>Climate (15%):</strong> Closeness to optimal nap temperature (25°C). Formula: max(0, 10 − |avg_temp − 25| × 0.4). Source: <a href="https://www.fittotravel.net/international-data/348-countries-by-average-temperature" target="_blank">fittotravel.net</a> (World Bank 1991–2016 normals)</p>
+  <p><strong>Infrastructure (15%):</strong> Qualitative rubric (0–10) assessing nap pods, park density per capita, quiet-hour laws, and cafe lingering culture.</p>
+</section>
+
+<!-- Share Bar -->
+<div class="share-bar container">
+  <a class="share-btn share-twitter" id="share-twitter" href="#" target="_blank">Share on Twitter</a>
+  <a class="share-btn share-linkedin" id="share-linkedin" href="#" target="_blank">Share on LinkedIn</a>
+  <button class="share-btn share-copy" id="share-copy">Copy Link</button>
+</div>
+
+<div class="footer">Generated by RankMint &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; Data sources cited in Methodology</div>
+
+<script>
+// ===== DATA =====
+const DATA = [
+  { rank: 1,  name: "Spain",          SleepScore: 6.73, CultureScore: 8, WorkloadScore: 7.18, ClimateScore: 5.56, InfraScore: 7, NOS: 7.07 },
+  { rank: 2,  name: "Netherlands",    SleepScore: 9.68, CultureScore: 4, WorkloadScore: 10.00,ClimateScore: 4.13, InfraScore: 8, NOS: 6.96 },
+  { rank: 3,  name: "Greece",         SleepScore: 6.53, CultureScore: 8, WorkloadScore: 3.89, ClimateScore: 5.72, InfraScore: 7, NOS: 6.39 },
+  { rank: 4,  name: "France",         SleepScore: 8.63, CultureScore: 5, WorkloadScore: 7.76, ClimateScore: 4.62, InfraScore: 6, NOS: 6.37 },
+  { rank: 5,  name: "Italy",          SleepScore: 6.53, CultureScore: 7, WorkloadScore: 6.16, ClimateScore: 5.05, InfraScore: 6, NOS: 6.30 },
+  { rank: 6,  name: "Japan",          SleepScore: 0.00, CultureScore: 9, WorkloadScore: 7.63, ClimateScore: 4.54, InfraScore: 9, NOS: 6.26 },
+  { rank: 7,  name: "Australia",      SleepScore: 9.26, CultureScore: 2, WorkloadScore: 7.53, ClimateScore: 8.79, InfraScore: 5, NOS: 6.03 },
+  { rank: 8,  name: "Denmark",        SleepScore: 8.63, CultureScore: 3, WorkloadScore: 8.78, ClimateScore: 3.47, InfraScore: 7, NOS: 5.95 },
+  { rank: 9,  name: "New Zealand",    SleepScore: 10.00,CultureScore: 3, WorkloadScore: 6.38, ClimateScore: 4.01, InfraScore: 7, NOS: 5.83 },
+  { rank: 10, name: "Germany",        SleepScore: 7.90, CultureScore: 3, WorkloadScore: 8.39, ClimateScore: 3.77, InfraScore: 7, NOS: 5.77 },
+  { rank: 11, name: "Norway",         SleepScore: 8.10, CultureScore: 3, WorkloadScore: 9.99, ClimateScore: 0.69, InfraScore: 7, NOS: 5.67 },
+  { rank: 12, name: "Finland",        SleepScore: 9.57, CultureScore: 3, WorkloadScore: 8.68, ClimateScore: 0.96, InfraScore: 6, NOS: 5.60 },
+  { rank: 13, name: "Portugal",       SleepScore: 7.05, CultureScore: 4, WorkloadScore: 6.40, ClimateScore: 6.19, InfraScore: 5, NOS: 5.57 },
+  { rank: 14, name: "Sweden",         SleepScore: 8.74, CultureScore: 3, WorkloadScore: 8.63, ClimateScore: 1.02, InfraScore: 6, NOS: 5.43 },
+  { rank: 15, name: "United Kingdom", SleepScore: 9.47, CultureScore: 2, WorkloadScore: 7.59, ClimateScore: 3.62, InfraScore: 5, NOS: 5.31 },
+  { rank: 16, name: "Taiwan",         SleepScore: 3.05, CultureScore: 6, WorkloadScore: 3.55, ClimateScore: 9.40, InfraScore: 4, NOS: 5.13 },
+  { rank: 17, name: "Mexico",         SleepScore: 4.74, CultureScore: 6, WorkloadScore: 2.42, ClimateScore: 8.48, InfraScore: 4, NOS: 5.10 },
+  { rank: 18, name: "Brazil",         SleepScore: 5.05, CultureScore: 4, WorkloadScore: 3.99, ClimateScore: 9.80, InfraScore: 4, NOS: 5.08 },
+  { rank: 19, name: "China",          SleepScore: 5.37, CultureScore: 9, WorkloadScore: 0.57, ClimateScore: 2.82, InfraScore: 5, NOS: 5.06 },
+  { rank: 20, name: "Colombia",       SleepScore: 4.74, CultureScore: 6, WorkloadScore: 1.75, ClimateScore: 9.89, InfraScore: 3, NOS: 5.03 },
+  { rank: 21, name: "Nigeria",        SleepScore: 6.10, CultureScore: 5, WorkloadScore: 3.23, ClimateScore: 9.09, InfraScore: 2, NOS: 5.03 },
+  { rank: 22, name: "Argentina",      SleepScore: 5.05, CultureScore: 4, WorkloadScore: 5.62, ClimateScore: 5.83, InfraScore: 4, NOS: 4.81 },
+  { rank: 23, name: "India",          SleepScore: 4.52, CultureScore: 6, WorkloadScore: 0.00, ClimateScore: 9.82, InfraScore: 3, NOS: 4.63 },
+  { rank: 24, name: "Thailand",       SleepScore: 5.26, CultureScore: 4, WorkloadScore: 1.85, ClimateScore: 9.32, InfraScore: 4, NOS: 4.62 },
+  { rank: 25, name: "Egypt",          SleepScore: 5.58, CultureScore: 5, WorkloadScore: 0.83, ClimateScore: 9.22, InfraScore: 2, NOS: 4.47 },
+  { rank: 26, name: "Canada",         SleepScore: 8.31, CultureScore: 2, WorkloadScore: 7.23, ClimateScore: 0.00, InfraScore: 5, NOS: 4.46 },
+  { rank: 27, name: "United States",  SleepScore: 7.79, CultureScore: 2, WorkloadScore: 4.93, ClimateScore: 3.05, InfraScore: 4, NOS: 4.20 },
+  { rank: 28, name: "Turkey",         SleepScore: 4.52, CultureScore: 4, WorkloadScore: 1.52, ClimateScore: 4.67, InfraScore: 4, NOS: 3.71 },
+  { rank: 29, name: "Singapore",      SleepScore: 4.42, CultureScore: 2, WorkloadScore: 0.55, ClimateScore: 8.88, InfraScore: 3, NOS: 3.38 },
+  { rank: 30, name: "South Korea",    SleepScore: 1.05, CultureScore: 2, WorkloadScore: 4.39, ClimateScore: 4.59, InfraScore: 4, NOS: 2.98 },
+];
+
+function getCategory(d) {
+  const enlightened = ["Spain", "Greece", "Italy", "Japan", "France"];
+  const accidental = ["Netherlands", "Germany", "Denmark", "Norway", "Finland", "Sweden", "New Zealand", "Australia", "United Kingdom", "Portugal"];
+  const exhausted = ["China", "Taiwan", "Mexico", "Colombia", "Nigeria", "India", "Egypt", "Brazil", "Thailand"];
+  const martyrs = ["South Korea", "Singapore", "United States", "Canada", "Turkey", "Argentina", "Singapore"];
+  if (enlightened.includes(d.name)) return { label: "The Enlightened Nappers", color: "#4ade80" };
+  if (accidental.includes(d.name)) return { label: "The Accidental Resters", color: "#60a5fa" };
+  if (exhausted.includes(d.name)) return { label: "The Exhausted Believers", color: "#fb923c" };
+  return { label: "The Productivity Martyrs", color: "#f87171" };
+}
+
+// ===== Counter Animation =====
+const counterEl = document.getElementById("hero-counter");
+const target = 7.07;
+let count = 0;
+function animateCounter() {
+  count += target / 60;
+  if (count >= target) { counterEl.textContent = target.toFixed(2); return; }
+  counterEl.textContent = count.toFixed(2);
+  requestAnimationFrame(animateCounter);
+}
+animateCounter();
+
+// ===== Main Bar Chart =====
+const sorted = [...DATA].sort((a, b) => b.NOS - a.NOS);
+const names = sorted.map(d => d.name).reverse();
+const scores = sorted.map(d => d.NOS).reverse();
+const barColors = sorted.map(d => getCategory(d).color).reverse();
+
+const chart = echarts.init(document.getElementById("main-chart"), null, { renderer: "canvas" });
+chart.setOption({
+  backgroundColor: "#161b22",
+  tooltip: {
+    trigger: "axis",
+    axisPointer: { type: "shadow" },
+    backgroundColor: "#0d1117",
+    borderColor: "#30363d",
+    textStyle: { color: "#e6edf3", fontSize: 12 },
+    formatter: params => {
+      const idx = scores.length - 1 - params[0].dataIndex;
+      const d = sorted[idx];
+      const cat = getCategory(d);
+      return `<b style="font-size:13px">#${d.rank} ${d.name}</b><br/>
+        <span style="color:${cat.color};font-size:10px">${cat.label}</span><br/>
+        <span style="color:#aaa">NOS: </span><b style="color:#FFD700">${d.NOS.toFixed(2)}</b><br/>
+        <span style="color:#aaa">Sleep:</span> ${d.SleepScore.toFixed(1)} &nbsp;
+        <span style="color:#aaa">Culture:</span> ${d.CultureScore}<br/>
+        <span style="color:#aaa">Work-Life:</span> ${d.WorkloadScore.toFixed(1)} &nbsp;
+        <span style="color:#aaa">Climate:</span> ${d.ClimateScore.toFixed(1)}<br/>
+        <span style="color:#aaa">Infra:</span> ${d.InfraScore}`;
+    }
+  },
+  grid: { left: "19%", right: "11%", top: 14, bottom: 30 },
+  xAxis: {
+    type: "value",
+    name: "Nap Optimization Score (0–10)",
+    nameLocation: "center",
+    nameGap: 26,
+    nameTextStyle: { color: "#8b949e", fontSize: 10 },
+    max: 8,
+    axisLine: { lineStyle: { color: "#30363d" } },
+    splitLine: { lineStyle: { color: "#21262d" } },
+    axisLabel: { color: "#8b949e", fontSize: 10 },
+  },
+  yAxis: {
+    type: "category",
+    data: names,
+    axisLabel: { fontSize: 10.5, color: "#c9d1d9" },
+    axisLine: { lineStyle: { color: "#30363d" } },
+    axisTick: { show: false },
+  },
+  dataZoom: [{ type: "inside", yAxisIndex: 0, filterMode: "none" }],
+  series: [{
+    type: "bar",
+    data: scores.map((v, i) => ({
+      value: v,
+      itemStyle: { color: barColors[i], borderRadius: [0, 4, 4, 0], opacity: 0.88 },
+    })),
+    barWidth: "64%",
+    label: {
+      show: true, position: "right",
+      formatter: p => p.value.toFixed(2),
+      fontSize: 10, color: "#8b949e",
+    },
+    animationDuration: 1800,
+    animationEasing: "elasticOut",
+    animationDelay: idx => idx * 28,
+  }],
+  graphic: [
+    { type: "text", right: 12, bottom: 10, style: { text: "RankMint", fontSize: 10, fill: "#21262d", fontStyle: "italic" } },
+  ],
+});
+window.addEventListener("resize", () => chart.resize());
+
+// ===== Find Yourself =====
+const findSelect = document.getElementById("find-select");
+[...DATA].sort((a, b) => a.name.localeCompare(b.name)).forEach(d => {
+  const opt = document.createElement("option");
+  opt.value = d.name; opt.textContent = d.name;
+  findSelect.appendChild(opt);
+});
+findSelect.addEventListener("change", () => {
+  const selected = DATA.find(d => d.name === findSelect.value);
+  if (!selected) { document.getElementById("result-card").style.display = "none"; return; }
+  const cat = getCategory(selected);
+  document.getElementById("result-card").style.display = "block";
+  document.getElementById("result-rank").textContent = `#${selected.rank}`;
+  document.getElementById("result-name").textContent = selected.name;
+  document.getElementById("result-score").textContent = `NOS: ${selected.NOS.toFixed(2)} / 10 — Sleep ${selected.SleepScore.toFixed(1)}, Culture ${selected.CultureScore}, Work-Life ${selected.WorkloadScore.toFixed(1)}`;
+  document.getElementById("result-cat").textContent = cat.label;
+  document.getElementById("result-cat").style.color = cat.color;
+});
+
+// ===== Full Table =====
+const tableColumns = ["rank", "name", "NOS", "SleepScore", "CultureScore", "WorkloadScore", "ClimateScore", "InfraScore"];
+const tableHeaders = ["Rank", "Country", "NOS", "Sleep", "Culture", "Work-Life", "Climate", "Infra"];
+
+const thead = document.getElementById("table-head");
+const tbody = document.getElementById("table-body");
+const headerRow = document.createElement("tr");
+tableHeaders.forEach((h, i) => {
+  const th = document.createElement("th");
+  th.textContent = h;
+  th.addEventListener("click", () => sortTable(i));
+  headerRow.appendChild(th);
+});
+thead.appendChild(headerRow);
+
+let tableData = [...DATA].sort((a, b) => a.rank - b.rank);
+function renderTable(data) {
+  tbody.innerHTML = "";
+  data.forEach(d => {
+    const tr = document.createElement("tr");
+    tableColumns.forEach(col => {
+      const td = document.createElement("td");
+      const v = d[col];
+      td.textContent = typeof v === "number" ? (Number.isInteger(v) ? v : v.toFixed(2)) : v;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+}
+renderTable(tableData);
+let sortDir = {};
+function sortTable(colIdx) {
+  const col = tableColumns[colIdx];
+  sortDir[col] = !sortDir[col];
+  tableData.sort((a, b) => {
+    const va = a[col], vb = b[col];
+    const cmp = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb));
+    return sortDir[col] ? cmp : -cmp;
+  });
+  renderTable(tableData);
+}
+document.getElementById("table-search").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  renderTable(tableData.filter(d => Object.values(d).some(v => String(v).toLowerCase().includes(q))));
+});
+
+// ===== Share =====
+const shareUrl = window.location.href;
+const shareText = "Japan has the world's best nap culture and the world's worst sleep. The Netherlands nearly beat Spain for #1. The Global Nap Culture Index: #RankMint";
+document.getElementById("share-twitter").href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+document.getElementById("share-linkedin").href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+document.getElementById("share-copy").addEventListener("click", () => {
+  navigator.clipboard.writeText(shareUrl).then(() => {
+    document.getElementById("share-copy").textContent = "Copied!";
+    setTimeout(() => document.getElementById("share-copy").textContent = "Copy Link", 2000);
+  });
+});
+</script>
+</body>
+</html>

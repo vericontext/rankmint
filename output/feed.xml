@@ -2,25 +2,33 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
   <title>RankMint — Data-Driven Rankings</title>
-  <link>https://rankmint.com</link>
+  <link>https://rankmint.io</link>
   <description>Surprising, data-driven ranking indices on topics you never knew you cared about.</description>
   <language>en</language>
   <lastBuildDate>Tue, 10 Mar 2026 00:00:00 +0000</lastBuildDate>
 
   <item>
+    <title>Global Nap Culture Index</title>
+    <link>https://rankmint.io/global-nap-culture-index/</link>
+    <description>Japan has the world's best nap culture and the world's worst sleep. The Netherlands has no nap culture at all and nearly beat Spain for #1. #1: Spain with 7.07 points.</description>
+    <pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate>
+    <guid>https://rankmint.io/global-nap-culture-index/</guid>
+  </item>
+
+  <item>
     <title>Global Hangover Recovery Index</title>
-    <link>https://rankmint.com/hangover-recovery-index/</link>
+    <link>https://rankmint.io/hangover-recovery-index/</link>
     <description>The world's best hangover country isn't Ireland, Germany, or Australia — it's the place that turned recovery into a billion-dollar science. #1: Japan with 81.8 points.</description>
     <pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate>
-    <guid>https://rankmint.com/hangover-recovery-index/</guid>
+    <guid>https://rankmint.io/hangover-recovery-index/</guid>
   </item>
 
   <item>
     <title>Disney Villain CEO Index</title>
-    <link>https://rankmint.com/disney-villain-ceo-index/</link>
+    <link>https://rankmint.io/disney-villain-ceo-index/</link>
     <description>Your company's next board seat might be best filled by the god of the dead — and the data backs it up. #1: Hades with 86.9 points.</description>
     <pubDate>Tue, 10 Mar 2026 00:00:00 +0000</pubDate>
-    <guid>https://rankmint.com/disney-villain-ceo-index/</guid>
+    <guid>https://rankmint.io/disney-villain-ceo-index/</guid>
   </item>
 
 </channel>

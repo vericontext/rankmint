@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Nap Culture Index — Weight Simulator | RankMint</title>
+<meta property="og:title" content="Global Nap Culture Index — Weight Simulator">
+<meta property="og:description" content="Drag the sliders to change metric weights and watch rankings shift in real time. What matters most to you?">
+<meta property="og:image" content="card.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RankMint">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Global Nap Culture Index — Weight Simulator">
+<meta name="twitter:description" content="Drag the sliders to change metric weights and watch rankings shift in real time.">
+<meta name="twitter:image" content="card.png">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; }
+  #chart { width: 100%; height: 72vh; min-height: 520px; }
+  .header { padding: 22px 36px 8px; background: #161b22; border-bottom: 1px solid #30363d; }
+  .header h1 { font-size: 1.4rem; color: #e6edf3; }
+  .header p { font-size: 0.82rem; color: #8b949e; margin-top: 5px; }
+  .nav { padding: 10px 36px; background: #161b22; display: flex; gap: 16px; font-size: 0.78rem; border-bottom: 1px solid #30363d; }
+  .nav a { color: #58a6ff; text-decoration: none; }
+  .nav a:hover { text-decoration: underline; }
+  .controls {
+    padding: 16px 36px;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: center;
+  }
+  .slider-group { display: flex; flex-direction: column; gap: 5px; min-width: 180px; }
+  .slider-group label {
+    font-size: 0.75rem;
+    color: #8b949e;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .slider-group label span { font-weight: 700; color: #58a6ff; min-width: 34px; text-align: right; }
+  .slider-group input[type="range"] {
+    width: 100%;
+    accent-color: #58a6ff;
+    cursor: pointer;
+  }
+  .btn-reset {
+    padding: 8px 18px;
+    background: #21262d;
+    color: #e6edf3;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.78rem;
+    align-self: flex-end;
+    margin-bottom: 2px;
+    transition: background 0.15s;
+  }
+  .btn-reset:hover { background: #30363d; }
+  .hint {
+    padding: 10px 36px;
+    background: #0d1117;
+    font-size: 0.75rem;
+    color: #8b949e;
+    border-bottom: 1px solid #21262d;
+  }
+  .hint b { color: #58a6ff; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Nap Weight Simulator — Drag to Reshape the Rankings</h1>
+  <p>Adjust the importance of each metric and watch countries rise or fall in real time.</p>
+</div>
+<div class="nav">
+  <a href="index.html">Overview</a>
+  <a href="chart.html">Primary Rankings</a>
+  <a href="chart_matrix.html">Quadrant Analysis</a>
+  <a href="chart_heatmap.html">Metric Heatmap</a>
+</div>
+<div class="controls" id="sliders"></div>
+<div class="hint">
+  Try: <b>Max Culture</b> — Japan dominates. &nbsp;|&nbsp; <b>Max Work-Life</b> — Netherlands wins. &nbsp;|&nbsp; <b>Max Climate</b> — Colombia and India surge. &nbsp;|&nbsp; <b>Max Sleep</b> — New Zealand and UK rise.
+</div>
+<div id="chart"></div>
+<script>
+const DATA = [
+  { name: "Spain",          SleepScore: 6.73, CultureScore: 8, WorkloadScore: 7.18, ClimateScore: 5.56, InfraScore: 7, NOS: 7.07 },
+  { name: "Netherlands",    SleepScore: 9.68, CultureScore: 4, WorkloadScore: 10.00, ClimateScore: 4.13, InfraScore: 8, NOS: 6.96 },
+  { name: "Greece",         SleepScore: 6.53, CultureScore: 8, WorkloadScore: 3.89, ClimateScore: 5.72, InfraScore: 7, NOS: 6.39 },
+  { name: "France",         SleepScore: 8.63, CultureScore: 5, WorkloadScore: 7.76, ClimateScore: 4.62, InfraScore: 6, NOS: 6.37 },
+  { name: "Italy",          SleepScore: 6.53, CultureScore: 7, WorkloadScore: 6.16, ClimateScore: 5.05, InfraScore: 6, NOS: 6.30 },
+  { name: "Japan",          SleepScore: 0.00, CultureScore: 9, WorkloadScore: 7.63, ClimateScore: 4.54, InfraScore: 9, NOS: 6.26 },
+  { name: "Australia",      SleepScore: 9.26, CultureScore: 2, WorkloadScore: 7.53, ClimateScore: 8.79, InfraScore: 5, NOS: 6.03 },
+  { name: "Denmark",        SleepScore: 8.63, CultureScore: 3, WorkloadScore: 8.78, ClimateScore: 3.47, InfraScore: 7, NOS: 5.95 },
+  { name: "New Zealand",    SleepScore: 10.00,CultureScore: 3, WorkloadScore: 6.38, ClimateScore: 4.01, InfraScore: 7, NOS: 5.83 },
+  { name: "Germany",        SleepScore: 7.90, CultureScore: 3, WorkloadScore: 8.39, ClimateScore: 3.77, InfraScore: 7, NOS: 5.77 },
+  { name: "Norway",         SleepScore: 8.10, CultureScore: 3, WorkloadScore: 9.99, ClimateScore: 0.69, InfraScore: 7, NOS: 5.67 },
+  { name: "Finland",        SleepScore: 9.57, CultureScore: 3, WorkloadScore: 8.68, ClimateScore: 0.96, InfraScore: 6, NOS: 5.60 },
+  { name: "Portugal",       SleepScore: 7.05, CultureScore: 4, WorkloadScore: 6.40, ClimateScore: 6.19, InfraScore: 5, NOS: 5.57 },
+  { name: "Sweden",         SleepScore: 8.74, CultureScore: 3, WorkloadScore: 8.63, ClimateScore: 1.02, InfraScore: 6, NOS: 5.43 },
+  { name: "United Kingdom", SleepScore: 9.47, CultureScore: 2, WorkloadScore: 7.59, ClimateScore: 3.62, InfraScore: 5, NOS: 5.31 },
+  { name: "Taiwan",         SleepScore: 3.05, CultureScore: 6, WorkloadScore: 3.55, ClimateScore: 9.40, InfraScore: 4, NOS: 5.13 },
+  { name: "Mexico",         SleepScore: 4.74, CultureScore: 6, WorkloadScore: 2.42, ClimateScore: 8.48, InfraScore: 4, NOS: 5.10 },
+  { name: "Brazil",         SleepScore: 5.05, CultureScore: 4, WorkloadScore: 3.99, ClimateScore: 9.80, InfraScore: 4, NOS: 5.08 },
+  { name: "China",          SleepScore: 5.37, CultureScore: 9, WorkloadScore: 0.57, ClimateScore: 2.82, InfraScore: 5, NOS: 5.06 },
+  { name: "Colombia",       SleepScore: 4.74, CultureScore: 6, WorkloadScore: 1.75, ClimateScore: 9.89, InfraScore: 3, NOS: 5.03 },
+  { name: "Nigeria",        SleepScore: 6.10, CultureScore: 5, WorkloadScore: 3.23, ClimateScore: 9.09, InfraScore: 2, NOS: 5.03 },
+  { name: "Argentina",      SleepScore: 5.05, CultureScore: 4, WorkloadScore: 5.62, ClimateScore: 5.83, InfraScore: 4, NOS: 4.81 },
+  { name: "India",          SleepScore: 4.52, CultureScore: 6, WorkloadScore: 0.00, ClimateScore: 9.82, InfraScore: 3, NOS: 4.63 },
+  { name: "Thailand",       SleepScore: 5.26, CultureScore: 4, WorkloadScore: 1.85, ClimateScore: 9.32, InfraScore: 4, NOS: 4.62 },
+  { name: "Egypt",          SleepScore: 5.58, CultureScore: 5, WorkloadScore: 0.83, ClimateScore: 9.22, InfraScore: 2, NOS: 4.47 },
+  { name: "Canada",         SleepScore: 8.31, CultureScore: 2, WorkloadScore: 7.23, ClimateScore: 0.00, InfraScore: 5, NOS: 4.46 },
+  { name: "United States",  SleepScore: 7.79, CultureScore: 2, WorkloadScore: 4.93, ClimateScore: 3.05, InfraScore: 4, NOS: 4.20 },
+  { name: "Turkey",         SleepScore: 4.52, CultureScore: 4, WorkloadScore: 1.52, ClimateScore: 4.67, InfraScore: 4, NOS: 3.71 },
+  { name: "Singapore",      SleepScore: 4.42, CultureScore: 2, WorkloadScore: 0.55, ClimateScore: 8.88, InfraScore: 3, NOS: 3.38 },
+  { name: "South Korea",    SleepScore: 1.05, CultureScore: 2, WorkloadScore: 4.39, ClimateScore: 4.59, InfraScore: 4, NOS: 2.98 },
+];
+
+const CONFIG = {
+  nameField: "name",
+  topN: 20,
+  metrics: [
+    { field: "SleepScore",    label: "Sleep Duration",  weight: 0.20, color: "#60a5fa" },
+    { field: "CultureScore",  label: "Nap Culture",     weight: 0.30, color: "#4ade80" },
+    { field: "WorkloadScore", label: "Work-Life Balance",weight: 0.20, color: "#fb923c" },
+    { field: "ClimateScore",  label: "Climate",         weight: 0.15, color: "#f59e0b" },
+    { field: "InfraScore",    label: "Infrastructure",  weight: 0.15, color: "#c084fc" },
+  ],
+};
+
+// Pre-normalize each metric 0-100 from raw scores (already on 0-10 scale, so just ×10)
+const normalized = {};
+CONFIG.metrics.forEach(m => {
+  const vals = DATA.map(d => d[m.field]);
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const range = max - min || 1;
+  normalized[m.field] = DATA.map(d => ((d[m.field] - min) / range) * 100);
+});
+
+let weights = CONFIG.metrics.map(m => m.weight);
+
+// Build sliders
+const slidersDiv = document.getElementById("sliders");
+CONFIG.metrics.forEach((m, i) => {
+  const group = document.createElement("div");
+  group.className = "slider-group";
+  group.innerHTML = `
+    <label style="color:${m.color}">${m.label} <span id="w${i}">${Math.round(weights[i] * 100)}%</span></label>
+    <input type="range" min="0" max="100" value="${Math.round(weights[i] * 100)}" data-idx="${i}" style="accent-color:${m.color}">
+  `;
+  slidersDiv.appendChild(group);
+});
+const resetBtn = document.createElement("button");
+resetBtn.className = "btn-reset";
+resetBtn.textContent = "Reset to Default";
+slidersDiv.appendChild(resetBtn);
+
+const chart = echarts.init(document.getElementById("chart"), null, { renderer: "canvas" });
+
+function computeScores() {
+  return DATA.map((d, di) => {
+    let score = 0;
+    CONFIG.metrics.forEach((m, mi) => {
+      score += normalized[m.field][di] * weights[mi];
+    });
+    return { name: d.name, score, _raw: d };
+  }).sort((a, b) => b.score - a.score).slice(0, CONFIG.topN);
+}
+
+const OCEAN_PALETTE = ["#00E5FF", "#0D47A1"];
+function interpolateColor(c1, c2, t) {
+  const hex = s => parseInt(s, 16);
+  const r = Math.round(hex(c1.slice(1,3)) + (hex(c2.slice(1,3)) - hex(c1.slice(1,3))) * t);
+  const g = Math.round(hex(c1.slice(3,5)) + (hex(c2.slice(3,5)) - hex(c1.slice(3,5))) * t);
+  const b = Math.round(hex(c1.slice(5,7)) + (hex(c2.slice(5,7)) - hex(c1.slice(5,7))) * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+function render(animate) {
+  const scored = computeScores();
+  const names = scored.map(d => d.name).reverse();
+  const scores = scored.map(d => d.score).reverse();
+  const colors = scores.map((_, i) => interpolateColor(OCEAN_PALETTE[1], OCEAN_PALETTE[0], i / Math.max(scores.length - 1, 1)));
+
+  chart.setOption({
+    backgroundColor: "#0d1117",
+    tooltip: {
+      trigger: "axis",
+      axisPointer: { type: "shadow" },
+      backgroundColor: "#161b22",
+      borderColor: "#30363d",
+      textStyle: { color: "#e6edf3", fontSize: 12 },
+      formatter: params => {
+        const idx = scores.length - 1 - params[0].dataIndex;
+        const d = scored[idx];
+        let tip = `<b style="font-size:13px">${d.name}</b><br/><span style="color:#aaa">Weighted Score: </span><b style="color:#00E5FF">${d.score.toFixed(1)}</b>`;
+        CONFIG.metrics.forEach(m => {
+          tip += `<br/><span style="color:${m.color}">${m.label}: </span>${d._raw[m.field].toFixed(1)}`;
+        });
+        return tip;
+      },
+    },
+    grid: { left: "22%", right: "12%", top: 16, bottom: 30 },
+    xAxis: {
+      type: "value",
+      name: "Weighted Score",
+      nameLocation: "center",
+      nameGap: 26,
+      nameTextStyle: { color: "#8b949e", fontSize: 10 },
+      max: 100,
+      axisLine: { lineStyle: { color: "#30363d" } },
+      splitLine: { lineStyle: { color: "#21262d" } },
+      axisLabel: { color: "#8b949e" },
+    },
+    yAxis: {
+      type: "category",
+      data: names,
+      axisLabel: { fontSize: 11, color: "#e6edf3" },
+      axisLine: { lineStyle: { color: "#30363d" } },
+      axisTick: { show: false },
+    },
+    series: [{
+      type: "bar",
+      data: scores.map((v, i) => ({
+        value: v,
+        itemStyle: { color: colors[i], borderRadius: [0, 4, 4, 0], opacity: 0.9 },
+      })),
+      barWidth: "62%",
+      label: {
+        show: true,
+        position: "right",
+        formatter: p => p.value.toFixed(1),
+        fontSize: 10,
+        color: "#8b949e",
+      },
+      animationDuration: animate ? 700 : 0,
+      animationEasing: "cubicOut",
+    }],
+    graphic: [{
+      type: "text", right: 24, bottom: 10,
+      style: { text: "RankMint", fontSize: 10, fill: "#30363d", fontStyle: "italic" },
+    }],
+  }, { notMerge: false, lazyUpdate: false });
+}
+
+document.querySelectorAll('input[type="range"]').forEach(slider => {
+  slider.addEventListener("input", () => {
+    const rawWeights = Array.from(document.querySelectorAll('input[type="range"]')).map(s => parseInt(s.value));
+    const sum = rawWeights.reduce((a, b) => a + b, 0) || 1;
+    weights = rawWeights.map(w => w / sum);
+    CONFIG.metrics.forEach((_, i) => {
+      document.getElementById(`w${i}`).textContent = `${Math.round(weights[i] * 100)}%`;
+    });
+    render(true);
+  });
+});
+
+resetBtn.addEventListener("click", () => {
+  CONFIG.metrics.forEach((m, i) => {
+    weights[i] = m.weight;
+    document.querySelectorAll('input[type="range"]')[i].value = Math.round(m.weight * 100);
+    document.getElementById(`w${i}`).textContent = `${Math.round(m.weight * 100)}%`;
+  });
+  render(true);
+});
+
+render(false);
+window.addEventListener("resize", () => chart.resize());
+</script>
+</body>
+</html>
