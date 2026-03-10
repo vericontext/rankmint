@@ -117,7 +117,8 @@ const sorted = [...DATA].sort((a, b) => b.score - a.score);
 const container = document.getElementById("tiers");
 
 TIERS.forEach(tier => {
-  const nextMin = TIERS.find(t => t.min > tier.min)?.min ?? Infinity;
+  const higherMins = TIERS.filter(t => t.min > tier.min).map(t => t.min);
+  const nextMin = higherMins.length ? Math.min(...higherMins) : Infinity;
   const items = sorted.filter(d => d.score >= tier.min && d.score < nextMin);
   if (items.length === 0) return;
 
